@@ -5,10 +5,18 @@ source "https://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-# Declare any dependencies that are still in development here instead of in
-# your gemspec. These might include edge Rails or gems from your path or
-# Git. Remember to move these dependencies to your gemspec before releasing
-# your gem to rubygems.org.
+gem 'pageflow', git: 'https://github.com/codevise/pageflow.git', :branch => 'master'
 
-# To use debugger
-# gem 'debugger'
+gem 'sqlite3'
+
+gem 'activeadmin', :git => 'https://github.com/codevise/active_admin.git', :branch => 'rails4'
+gem 'ransack'
+gem 'inherited_resources', '1.4.1'
+gem 'formtastic', '2.3.0.rc2'
+
+gem 'ejs'
+
+gem 'teaspoon', git: 'https://github.com/modeset/teaspoon'
+
+gem "spring-commands-rspec", group: :development
+gem "spring-commands-teaspoon", group: :development
