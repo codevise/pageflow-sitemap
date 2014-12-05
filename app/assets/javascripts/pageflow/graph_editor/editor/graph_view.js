@@ -1,4 +1,4 @@
-/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView*/
+/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page*/
 
 graphEditor.GraphView = function(graph) {
   var svg = d3.select("svg")
@@ -11,7 +11,7 @@ graphEditor.GraphView = function(graph) {
   var svgPages = svg.select("g.pages");
   var svgLinks = svg.select("g.links");
   var svgPlaceholders = svg.select("g.placeholders");
-  var svgControls = svg.select("g.controls");
+  // var svgControls = svg.select("g.controls");
 
   // this should go somewhere to be usable by D3Views
   graphEditor.pan = new graphEditor.PanHandler(svgGroup);

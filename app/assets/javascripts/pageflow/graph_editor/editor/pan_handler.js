@@ -1,11 +1,17 @@
-/*global graphEditor, d3, options*/
+/*global graphEditor, d3, options, pageflow*/
 graphEditor.PanHandler = function(svgGroup) {
   var svg = d3.select('svg');
   var zoomListener = new graphEditor.ZoomHandler(svgGroup).listener();
   svg.call(zoomListener);
 
-  var w = parseInt(svg.style('width'), 10);
-  var h = parseInt(svg.style('height'), 10);
+  var w, h;
+
+  this.resize = function() {
+    w = parseInt(svg.style('width'), 10);
+    h = parseInt(svg.style('height'), 10);
+  };
+
+  this.resize();
 
   this.update = function() {
     var relCoords = d3.mouse(svg.node());

@@ -133,6 +133,5 @@ graphEditor.Grid = function(data) {
         y: i * rowHeight
       });
     }
-
   });
 };
