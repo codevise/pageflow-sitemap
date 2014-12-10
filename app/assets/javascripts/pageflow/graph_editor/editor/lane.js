@@ -7,7 +7,9 @@ var Lane = Backbone.Collection.extend({
   addGroup: function (group, index) {
     var position = this.computeGroupInsertPosition(index);
 
+    // refactor me
     group.set('row', position.row);
+    group.get('chapter').configuration.set('row', position.row);
 
     if (position.index >= 0) {
       this.add(group, {at: position.index});

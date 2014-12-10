@@ -15,6 +15,13 @@ var Group = Backbone.Model.extend({
     this.get('pages').on('all', _.bind(this.trigger, this, 'change'));
   },
 
+  row: function(val) {
+    if (val) {
+      this.get('chapter').configuration.set('row', val);
+    }
+    return this.get('chapter').configuration.get('row');
+  },
+
   page: function (i) {
     return this.get('pages').at(i);
   },

@@ -22,19 +22,16 @@
 //= require ./editor/paths.js
 //= require ./editor/linkpath.js
 //= require ./editor/grid.js
-//= require ./editor/data.js
 //= require ./editor/zoom_handler.js
 //= require ./editor/pan_handler.js
 //= require ./editor/drag.js
 //= require ./editor/graph_view.js
 //= require ./editor/graph_editor_view.js
 //
-/*global $, graphEditor, JST, data, pageflow, Backbone, Marionette*/
-
+/*global $, graphEditor, JST, data, pageflow, Backbone, Marionette, Graph, GraphEditorView, console*/
 
 (function() {
   window.graphEditor = {};
-
 
   window.btn = function() {
     if (!$('#graphbtn').length) {
@@ -55,8 +52,31 @@
     });
   };
 
+  function getGraph() {
+    var graph = Graph.create();
+
+    pageflow.chapters.forEach(function(chapter) {
+      var group = graph.lane().group(chapter);
+      chapter.pages.forEach(function(page) {
+        group.page(page.configuration.get('title') || 'No Title').end();
+      });
+      group.end().end();
+    });
+
+    return graph.end();
+  }
+
   graphEditor.show = function () {
-    pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView());
+    pageflow.chapters.on('change', function() {
+      pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
+    });
+
+    pageflow.pages.on('all', function() {
+      pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
+    });
+
+
+    pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
   };
 
   graphEditor.hide = function () {

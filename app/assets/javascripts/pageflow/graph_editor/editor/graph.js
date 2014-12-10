@@ -1,4 +1,4 @@
-/*global Backbone, _, Group, PageCollection, Lane*/
+/*global Backbone, _, Group, PageCollection, Lane, Knob*/
 /*exported Graph*/
 
 var Graph = Backbone.Model.extend({
@@ -128,8 +128,9 @@ Graph.create = function () {
   graph.lane = function () {
     var lane = {
       groups: [],
-      group: function () {
+      group: function (chapter) {
         var group = {
+          chapter: chapter,
           pages: [],
           page: function (name) {
             var page = {
@@ -190,7 +191,7 @@ Graph.create = function () {
 
   graph.end = function () {
     var pagesMap = {}, groups = [];
-    var laneModels = lanes.map(function (lane) {
+    var laneModels = lanes.map(function (lane, laneIndex) {
       var groupModels = lane.groups.map(function (group) {
         var pageModels = group.pages.map(function (page) {
           var pageModel = new Page({
@@ -205,9 +206,12 @@ Graph.create = function () {
           return pageModel;
         });
         var groupModel = new Group({
+          chapter: group.chapter,
           row: group.rowIndex,
           pages: new PageCollection(pageModels)
         });
+
+        group.chapter.configuration.set({ row: group.rowIndex, lane: laneIndex });
 
         groups.push({
           data: group,

@@ -1,4 +1,4 @@
-/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm*/
+/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm, withSession*/
 
 graphEditor.GraphView = function(svgElement, graph) {
   var svg = d3.select(svgElement)

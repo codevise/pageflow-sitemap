@@ -1,7 +1,7 @@
-/*global Graph, Group, Lane, Page, PageCollection, _, Knob*/
+/*global Graph, Group, Lane, Page, PageCollection, _, Knob, pageflow*/
 /*exported data*/
 
-var data = Graph.create()
+var xdata = Graph.create()
     .lane()
       .group()
         .page('A1')
@@ -45,3 +45,5 @@ var data = Graph.create()
         .end()
       .end()
     .end();
+
+
