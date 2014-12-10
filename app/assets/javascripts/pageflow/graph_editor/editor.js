@@ -27,42 +27,39 @@
 //= require ./editor/pan_handler.js
 //= require ./editor/drag.js
 //= require ./editor/graph_view.js
+//= require ./editor/graph_editor_view.js
 //
-/*global $, graphEditor, JST, data, pageflow*/
+/*global $, graphEditor, JST, data, pageflow, Backbone, Marionette*/
 
 
 (function() {
   window.graphEditor = {};
 
-  var preview, graph_editor;
 
-  graphEditor.init = function() {
-    // pageflow.addContentForMainView('graph_editor', svg);  <- dreamcode
+  window.btn = function() {
+    if (!$('#graphbtn').length) {
+      $('sidebar .container').append($('<a class="add_chapter" id="graphbtn">Graph</div>'));
+    }
 
-    $('main .container').attr('id', 'pageflow_preview');
+    var on = false;
 
-    var svg = JST['pageflow/graph_editor/editor/templates/graph']();
-    $('main').append('<div class="container" id="graph_editor">' + svg + '</div>');
+    $('#graphbtn').click(function() {
+      if (on) {
+        graphEditor.hide();
+      }
+      else {
+        graphEditor.show();
+      }
 
-    preview = $('#pageflow_preview');
-    graph_editor = $('#graph_editor');
-
-    graph_editor.hide();
-
-    new graphEditor.GraphView(data);
-
-    pageflow.app.on('resize', graphEditor.pan.resize);
+      on = !on;
+    });
   };
 
   graphEditor.show = function () {
-    preview.hide();
-    graph_editor.show();
-    graphEditor.pan.resize();
+    pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView());
   };
 
   graphEditor.hide = function () {
-    preview.show();
-    graph_editor.hide();
+    pageflow.editor.showPreview();
   };
-
 }());

@@ -1,7 +1,7 @@
-/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page*/
+/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm*/
 
-graphEditor.GraphView = function(graph) {
-  var svg = d3.select("svg")
+graphEditor.GraphView = function(svgElement, graph) {
+  var svg = d3.select(svgElement)
     .attr("width", "100%")
     .attr("height", "100%");
 
@@ -14,7 +14,7 @@ graphEditor.GraphView = function(graph) {
   // var svgControls = svg.select("g.controls");
 
   // this should go somewhere to be usable by D3Views
-  graphEditor.pan = new graphEditor.PanHandler(svgGroup);
+  graphEditor.pan = new graphEditor.PanHandler(svgElement, svgGroup);
 
   var ix = 0;
 
