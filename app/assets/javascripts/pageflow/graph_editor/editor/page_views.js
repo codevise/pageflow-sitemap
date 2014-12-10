@@ -78,7 +78,7 @@
             .attr("transform", "translate(" + trX + "," + (-trY) + ")");
 
       g.append("svg:text")
-          .text(function(d){ return d.page.get('name'); });
+          .text(function(d){ return d.page.get('title'); });
     };
 
     function drag(opts) {

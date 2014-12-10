@@ -132,9 +132,10 @@ Graph.create = function () {
         var group = {
           chapter: chapter,
           pages: [],
-          page: function (name) {
+          page: function (name, title) {
             var page = {
               name: name,
+              title: title,
               knobs: [],
               knob: function (name) {
                 var knob = {
@@ -195,7 +196,8 @@ Graph.create = function () {
       var groupModels = lane.groups.map(function (group) {
         var pageModels = group.pages.map(function (page) {
           var pageModel = new Page({
-            name: page.name
+            name: page.name,
+            title: page.title
           });
 
           pagesMap[page.name] = {

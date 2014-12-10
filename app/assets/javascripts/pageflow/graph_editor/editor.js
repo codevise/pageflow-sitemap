@@ -58,7 +58,7 @@
     pageflow.chapters.forEach(function(chapter) {
       var group = graph.lane().group(chapter);
       chapter.pages.forEach(function(page) {
-        group.page(page.configuration.get('title') || 'No Title').end();
+        group.page(page.cid, page.configuration.get('title') || 'No Title').end();
       });
       group.end().end();
     });
