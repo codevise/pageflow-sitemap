@@ -189,6 +189,20 @@ marker {
   }
 }
 
+div.button {
+  display: block;
+  border: 2px solid black;
+  position: absolute;
+  z-index: 100000;
+
+  &.close {
+    height: 25px;
+    width: 80px;
+    top: 0;
+    right: 0;
+  }
+}
+
 div.svgcontainer {
   z-index: 10000;
   background: white;
