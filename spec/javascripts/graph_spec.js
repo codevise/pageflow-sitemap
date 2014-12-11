@@ -147,7 +147,7 @@ describe('Graph', function() {
 
       graph.moveGroupTo(lane, 2, group);
 
-      expect(group.get('row')).toEqual(2);
+      expect(group.row()).toEqual(2);
     });
   });
 

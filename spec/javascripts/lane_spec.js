@@ -9,7 +9,7 @@ describe('Lane', function() {
       lane.addGroup(group, 0);
 
       expect(lane.at(0)).toEqual(group);
-      expect(group.get('row')).toEqual(0);
+      expect(group.row()).toEqual(0);
     });
   });
 

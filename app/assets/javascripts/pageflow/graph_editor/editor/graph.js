@@ -91,6 +91,7 @@ var Graph = Backbone.Model.extend({
   enforceInternalState: function () {
     this.removeEmptyGroups();
     this.ensureEmptyLane();
+    this.addGraphToLanes();
   },
 
   removeEmptyGroups: function() {
@@ -110,10 +111,18 @@ var Graph = Backbone.Model.extend({
   ensureEmptyLane: function () {
     var lanes = this.get('lanes');
     if (!_.last(lanes).isEmpty()) {
-      var lane = new Lane();
+      var lane = new Lane([], {
+        graph: this
+      });
       this.forwardEventsOfLane(lane);
       lanes.push(lane);
     }
+  },
+
+  addGraphToLanes: function() {
+    this.get('lanes').forEach(function(lane) {
+      lane.graph = this;
+    }, this);
   },
 
   forwardEventsOfLane: function (lane) {

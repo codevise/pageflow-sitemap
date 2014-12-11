@@ -28,7 +28,7 @@
 //= require ./editor/graph_view.js
 //= require ./editor/graph_editor_view.js
 //
-/*global $, graphEditor, JST, data, pageflow, Backbone, Marionette, Graph, GraphEditorView, console*/
+/*global $, graphEditor, JST, data, pageflow, Backbone, Marionette, Graph, GraphEditorView, console, _*/
 
 (function() {
   window.graphEditor = {};
@@ -43,12 +43,31 @@
   function getGraph() {
     var graph = Graph.create();
 
-    pageflow.chapters.forEach(function(chapter) {
-      var group = graph.lane().group(chapter);
-      chapter.pages.forEach(function(page) {
-        group.page(page.cid, page.configuration.get('title') || 'No Title').end();
+    var lastLaneIndex = 0;
+    _(pageflow.chapters.groupBy(function(c) { return c.configuration.get('lane') || 0; })).forEach(function(chapters, laneIndex) {
+
+      for(;lastLaneIndex < laneIndex-1; lastLaneIndex++) {
+        graph.lane().end();
+      }
+      lastLaneIndex = laneIndex;
+
+      var lane = graph.lane();
+
+      _(chapters).sortBy(function(c) {
+        return c.configuration.get('row');
+      }).forEach(function(chapter) {
+        var group = lane.group(chapter);
+        var row = chapter.configuration.get('row');
+        if (_.isNumber(row)) {
+          group.row(row);
+        }
+        console.log('chapter', laneIndex, row);
+        chapter.pages.forEach(function(page) {
+          group.page(page.cid, page.configuration.get('title') || 'No Title').end();
+        });
+        group.end();
       });
-      group.end().end();
+      lane.end();
     });
 
     return graph.end();

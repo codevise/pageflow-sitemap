@@ -16,10 +16,23 @@ var Group = Backbone.Model.extend({
   },
 
   row: function(val) {
-    if (val) {
-      this.get('chapter').configuration.set('row', val);
+    return this.configuration('row', val);
+  },
+
+  lane: function(val) {
+    return this.configuration('lane', val);
+  },
+
+  configuration: function(name, value) {
+    if (name && !_.isUndefined(value)) {
+      this.get('chapter').configuration.set(name, value);
     }
-    return this.get('chapter').configuration.get('row');
+
+    if (name) {
+      return this.get('chapter').configuration.get(name);
+    }
+
+    return this.get('chapter').configuration;
   },
 
   page: function (i) {

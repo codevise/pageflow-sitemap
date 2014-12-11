@@ -1,15 +1,22 @@
-/*global Backbone, Group*/
+/*global Backbone, Group, _*/
 /*exported Lane*/
 
 var Lane = Backbone.Collection.extend({
   model: Group,
 
+  initialize: function(options) {
+    this.graph = options.graph;
+  },
+
+  index: function() {
+    return this.graph.get('lanes').indexOf(this);
+  },
+
   addGroup: function (group, index) {
     var position = this.computeGroupInsertPosition(index);
 
-    // refactor me
-    group.set('row', position.row);
-    group.get('chapter').configuration.set('row', position.row);
+    group.row(position.row);
+    group.lane(this.index());
 
     if (position.index >= 0) {
       this.add(group, {at: position.index});
@@ -26,7 +33,7 @@ var Lane = Backbone.Collection.extend({
 
     for (groupIndex = 0; groupIndex < this.length; groupIndex++) {
       group = this.at(groupIndex);
-      row = group.get('row');
+      row = group.row();
       currentRow = row ? Math.max(row, currentRow) : currentRow;
 
       end = currentRow + group.count();
