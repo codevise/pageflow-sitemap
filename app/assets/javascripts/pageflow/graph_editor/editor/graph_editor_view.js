@@ -6,11 +6,13 @@ graphEditor.GraphEditorView = Backbone.Marionette.ItemView.extend({
   initialize: function(options) {
     this.data = options.data;
   },
+
   events: {
     "click .close.button": function() {
       graphEditor.hide();
     }
   },
+
   onRender: function() {
     var svgElement = this.$el.find('svg')[0];
     new graphEditor.GraphView(svgElement, this.data);

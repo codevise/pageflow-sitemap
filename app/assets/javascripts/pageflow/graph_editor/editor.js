@@ -33,24 +33,12 @@
 (function() {
   window.graphEditor = {};
 
-  window.btn = function() {
-    if (!$('#graphbtn').length) {
-      $('sidebar .container').append($('<a class="add_chapter" id="graphbtn">Graph</div>'));
+  pageflow.editor.registerMainMenuItem({
+    translationKey: 'sitemap',
+    click: function() {
+      graphEditor.show();
     }
-
-    var on = false;
-
-    $('#graphbtn').click(function() {
-      if (on) {
-        graphEditor.hide();
-      }
-      else {
-        graphEditor.show();
-      }
-
-      on = !on;
-    });
-  };
+  });
 
   function getGraph() {
     var graph = Graph.create();
