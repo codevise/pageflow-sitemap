@@ -19,7 +19,6 @@ graphEditor.Grid = function(data) {
     lane.forEach(function(group) {
       var groupNodes = [];
       var groupRow = Math.max(group.row() ? group.row() : 0, rowIndex);
-      console.log(groupRow, group.row());
 
       for(; rowIndex < groupRow; rowIndex++) {
         placeholders.push({

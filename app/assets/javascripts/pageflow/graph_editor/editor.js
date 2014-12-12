@@ -61,9 +61,8 @@
         if (_.isNumber(row)) {
           group.row(row);
         }
-        console.log('chapter', laneIndex, row);
         chapter.pages.forEach(function(page) {
-          group.page(page.cid, page.configuration.get('title') || 'No Title').end();
+          group.page(page).end();
         });
         group.end();
       });
@@ -74,16 +73,29 @@
   }
 
   graphEditor.show = function () {
-    pageflow.chapters.on('change', function() {
+    var graph = getGraph();
+    var graphEditorView = new graphEditor.GraphEditorView({ data: graph });
+
+    pageflow.chapters.on('add', function(chapter) {
+      // TODO: Update graph when page is added in pageflow editor
+
+      // var found = _(graph.get('lanes')).find(function (lane) {
+      //   return lane.find(function (group) { return group.get('chapter') == chapter; });
+      // });
+
+      // if (!found) {
+      //    graph.addGroupForChapter(chapter);
+      // }
+
+      // pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
+    });
+
+    pageflow.pages.on('change:configuration', function() {
+      // TODO:  Just update appropriate page don't reconstruct whole graph.
       pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
     });
 
-    pageflow.pages.on('all', function() {
-      pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
-    });
-
-
-    pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
+    pageflow.editor.showViewInMainPanel(graphEditorView);
   };
 
   graphEditor.hide = function () {

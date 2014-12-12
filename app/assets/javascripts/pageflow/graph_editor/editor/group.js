@@ -1,4 +1,4 @@
-/*global Backbone, Page, _, PageCollection*/
+/*global Backbone, Page, _, PageCollection, pageflow*/
 /*exported Group*/
 
 var groupIdSeq = 0;
@@ -94,6 +94,7 @@ var Group = Backbone.Model.extend({
 
     newPage.removeFromGroup();
 
+    // add to sitemap group
     this.get('pages').add(newPage, {at: index});
 
     if(atPosition) {
@@ -101,11 +102,29 @@ var Group = Backbone.Model.extend({
     }
 
     newPage.set('group', this);
+
+    // update the pageflow models.
+    var chapter = this.get('chapter'),
+        page = newPage.page();
+
+    if (chapter.isNew()) {
+      chapter.once('sync', function() {
+        chapter.pages.saveOrder();
+      }, this);
+      chapter.pages.add(page, {at: index});
+    }
+    else {
+      chapter.pages.add(page, {at: index});
+      chapter.pages.saveOrder();
+    }
   },
 
   removePage: function(page) {
     this.get('pages').remove(page);
     page.set('group', null);
+
+    // update the pageflow model.
+    this.get('chapter').pages.remove(page.page());
   },
 
   removeFromLane: function () {
@@ -121,7 +140,7 @@ var Group = Backbone.Model.extend({
   splitAfter: function (page) {
     var pages = this.get('pages');
     if (pages.last() !== page) {
-      var group = new Group();
+      var group = Group.createGroup();
 
       _.forEach(pages.slice(pages.indexOf(page) + 1), function (page) {
         group.pushPage(page);
@@ -168,13 +187,15 @@ var Group = Backbone.Model.extend({
   }
 });
 
-Group.createGroup = function(data) {
-  var pages = data.pages.map(function(p) {
-    return new Page(p);
+Group.createGroup = function(lane, row) {
+  var group = new Group({
+    chapter: pageflow.entry.addChapter({
+      configuration: {
+        lane: lane,
+        row: row
+      }
+    })
   });
 
-  return new Group({
-    pages: new PageCollection(pages),
-    row: data.row
-  });
+  return group;
 };

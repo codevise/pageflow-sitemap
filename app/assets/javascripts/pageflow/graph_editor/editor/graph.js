@@ -1,4 +1,4 @@
-/*global Backbone, _, Group, PageCollection, Lane, Knob*/
+/*global Backbone, _, Group, PageCollection, Lane, Knob, Page*/
 /*exported Graph*/
 
 var Graph = Backbone.Model.extend({
@@ -69,7 +69,8 @@ var Graph = Backbone.Model.extend({
 
     page.removeFromGroup();
 
-    var newGroup = new Group({ row: rowIndex, pages: new PageCollection([page]) });
+    var newGroup = Group.createGroup(lane.index(), rowIndex);
+    newGroup.pushPage(page);
 
     this.moveGroupTo(lane, rowIndex, newGroup);
   },
@@ -141,10 +142,9 @@ Graph.create = function () {
         var group = {
           chapter: chapter,
           pages: [],
-          page: function (name, title) {
+          page: function (page) {
             var page = {
-              name: name,
-              title: title,
+              model: page,
               knobs: [],
               knob: function (name) {
                 var knob = {
@@ -205,8 +205,9 @@ Graph.create = function () {
       var groupModels = lane.groups.map(function (group) {
         var pageModels = group.pages.map(function (page) {
           var pageModel = new Page({
-            name: page.name,
-            title: page.title
+            page: page.model,
+            name: page.model.id,
+            title: page.model.configuration.get('title') || "Kein Titel"
           });
 
           pagesMap[page.name] = {
@@ -216,13 +217,14 @@ Graph.create = function () {
 
           return pageModel;
         });
+
         var groupModel = new Group({
           chapter: group.chapter,
-          row: group.rowIndex,
           pages: new PageCollection(pageModels)
         });
 
-        group.chapter.configuration.set({ row: group.rowIndex, lane: laneIndex });
+        groupModel.lane(laneIndex);
+        groupModel.row(group.rowIndex);
 
         groups.push({
           data: group,

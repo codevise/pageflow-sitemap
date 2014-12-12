@@ -18,6 +18,10 @@ var Page = Backbone.Model.extend({
     this.get('knobs').on('all', this._collectionChanged, this);
   },
 
+  page: function() {
+    return this.get('page');
+  },
+
   group: function () {
     return this.get('group');
   },
