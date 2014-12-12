@@ -1,10 +1,6 @@
 /*global graphEditor, d3, options, console*/
 
 (function() {
-
-  var linkFrom; // when the 'link' button of a page is clicked, the page is stored here
-  // var phalf = window.options.page.height / 2;
-
   graphEditor.pagesView = graphEditor.D3View(function(svg) {
     svg.update = function(node) {
       node
