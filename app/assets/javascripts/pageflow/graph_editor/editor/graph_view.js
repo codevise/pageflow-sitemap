@@ -175,9 +175,19 @@ graphEditor.GraphView = function(svgElement, graph) {
 
     placeholdersView(svgPlaceholders, '.placeholder', grid.placeholders, {
       clicked: function(d) {
-        var group = new Group({ pages: new PageCollection(page("X", d)) });
+        // TODO create new group (with pageflow chapter)
+        // create new page in that group. With pageflow page
+        window.alert('TODO');
 
-        d.lane.addGroup(group, d.row);
+        // var group = new Group({ pages: new PageCollection(page("X", d)) });
+
+        // var group = Group.createGroup();
+        // var page = Page.createPage({ group: group });
+        // page.set({ x0: d.x, y0: d.y });
+
+        // group.pushPage(page);
+
+        // d.lane.addGroup(group, d.row);
       }
     });
 
