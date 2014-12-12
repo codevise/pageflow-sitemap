@@ -1,4 +1,4 @@
-/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm, withSession, var*/
+/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm, withSession, var, pageflow*/
 
 graphEditor.GraphView = function(svgElement, graph) {
   var svg = d3.select(svgElement)
@@ -60,6 +60,10 @@ graphEditor.GraphView = function(svgElement, graph) {
               selector: '.page',
               data: function(d) { return [d]; },
               options: {
+                click: function(source) {
+                  var pageId = source.page.get('page').get('id');
+                  pageflow.editor.navigate('/pages/' + pageId, {trigger: true});
+                },
                 droppedOnArea: function(source, target) {
                   if(target.position == 'before') {
                     graph.movePageBefore(source.page, target.target);

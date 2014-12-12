@@ -1,4 +1,4 @@
-/*global graphEditor, d3, options, console*/
+/*global graphEditor, d3, options, console, _*/
 
 (function() {
   graphEditor.pagesView = graphEditor.D3View(function(svg) {
@@ -60,7 +60,7 @@
           .attr("height", options.page.height)
           .attr("transform", "translate(" + trX + "," + (-trY) + ")")
           .style("fill", "lightsteelblue")
-          .on('click', function(node) {
+          .on('click', function() {
             if (opts.click) {
               opts.click.apply(this, arguments);
             }
