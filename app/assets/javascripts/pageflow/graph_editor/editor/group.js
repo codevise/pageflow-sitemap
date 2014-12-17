@@ -129,7 +129,7 @@ var Group = Backbone.Model.extend({
 
   removeFromLane: function () {
     if(this.collection) {
-      this.collection.remove(this);
+      this.collection.removeGroup(this);
     }
   },
 

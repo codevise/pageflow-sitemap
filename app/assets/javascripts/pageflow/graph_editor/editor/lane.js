@@ -26,6 +26,24 @@ var Lane = Backbone.Collection.extend({
     }
   },
 
+  removeEmptyGroups: function() {
+    var toRemove = [];
+    this.forEach(function(group) {
+      if (group.isEmpty()) {
+        toRemove.push(group);
+      }
+    });
+    _.forEach(toRemove, function(group) {
+      this.removeGroup(group);
+    }, this);
+  },
+
+  removeGroup: function(group) {
+    console.log('removing group', group);
+    group.get('chapter').destroy();
+    this.remove(group);
+  },
+
   forEachWithPosition: function (fn, c) {
     var currentRow = 0, groupIndex, group, row, end;
 

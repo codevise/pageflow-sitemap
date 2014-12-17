@@ -77,7 +77,7 @@ var Graph = Backbone.Model.extend({
 
   moveGroupTo: function (lane, rowIndex, toMove) {
     this.get('lanes').forEach(function (lane) {
-      lane.remove(toMove);
+      lane.removeGroup(toMove);
     });
 
     lane.addGroup(toMove, rowIndex);
@@ -97,15 +97,7 @@ var Graph = Backbone.Model.extend({
 
   removeEmptyGroups: function() {
     this.get('lanes').forEach(function(groups) {
-      var toRemove = [];
-      groups.forEach(function(group) {
-        if (group.isEmpty()) {
-          toRemove.push(group);
-        }
-      });
-      _.forEach(toRemove, function(group) {
-        groups.remove(group);
-      });
+      groups.removeEmptyGroups();
     });
   },
 
