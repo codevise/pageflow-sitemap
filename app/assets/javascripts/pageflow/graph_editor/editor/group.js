@@ -131,7 +131,9 @@ var Group = Backbone.Model.extend({
     page.set('group', null);
 
     // update the pageflow model.
-    this.get('chapter').pages.remove(page.page());
+    var chapter = this.get('chapter');
+
+    chapter.pages.remove(page.page());
   },
 
   removeFromLane: function () {
