@@ -6,7 +6,6 @@ var Graph = Backbone.Model.extend({
   initialize: function () {
     this.get('lanes').forEach(this.forwardEventsOfLane, this);
     this.enforceInternalState();
-    this.on('change', this.enforceInternalState, this);
   },
 
   lane: function (i) {
@@ -24,7 +23,7 @@ var Graph = Backbone.Model.extend({
     sourceGroup.removePage(movedPage);
     targetGroup.addPageBefore(movedPage, targetPage);
 
-    this.triggerChange();
+    this.enforceInternalState();
   },
 
   movePageAfter: function(movedPage, targetPage) {
@@ -34,7 +33,7 @@ var Graph = Backbone.Model.extend({
     sourceGroup.removePage(movedPage);
     targetGroup.addPageAfter(movedPage, targetPage);
 
-    this.triggerChange();
+    this.enforceInternalState();
   },
 
   insertIntoGroupBefore: function (movedGroup, targetPage) {
@@ -42,7 +41,7 @@ var Graph = Backbone.Model.extend({
       targetPage.group().addPagesBefore(movedGroup.get('pages'), targetPage);
       movedGroup.removeFromLane();
 
-      this.triggerChange();
+      this.enforceInternalState();
     }
   },
 
@@ -51,7 +50,7 @@ var Graph = Backbone.Model.extend({
       targetPage.group().addPagesAfter(movedGroup.get('pages'), targetPage);
       movedGroup.removeFromLane();
 
-      this.triggerChange();
+      this.enforceInternalState();
     }
   },
 
@@ -67,8 +66,6 @@ var Graph = Backbone.Model.extend({
     }
     page.resetSuccessor();
 
-    page.removeFromGroup();
-
     var newGroup = Group.createGroup(lane.index(), rowIndex);
     newGroup.pushPage(page);
 
@@ -76,13 +73,14 @@ var Graph = Backbone.Model.extend({
   },
 
   moveGroupTo: function (lane, rowIndex, toMove) {
-    this.get('lanes').forEach(function (lane) {
+    // this removes the group from every lane, why?
+    this.get('lanes').forEach(function removeEachGroup(lane) {
       lane.removeGroup(toMove);
     });
 
     lane.addGroup(toMove, rowIndex);
 
-    this.triggerChange();
+    this.enforceInternalState();
   },
 
   triggerChange: function () {
@@ -96,7 +94,7 @@ var Graph = Backbone.Model.extend({
   },
 
   removeEmptyGroups: function() {
-    this.get('lanes').forEach(function(groups) {
+    this.get('lanes').forEach(function removeEachEmptyGroup(groups) {
       groups.removeEmptyGroups();
     });
   },
