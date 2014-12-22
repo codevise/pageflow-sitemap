@@ -197,13 +197,15 @@ var Group = Backbone.Model.extend({
 });
 
 Group.createGroup = function(lane, row) {
+  var chapter = pageflow.entry.addChapter({
+    configuration: {
+      lane: lane,
+      row: row
+    }
+  });
+
   var group = new Group({
-    chapter: pageflow.entry.addChapter({
-      configuration: {
-        lane: lane,
-        row: row
-      }
-    })
+    chapter: chapter
   });
 
   return group;
