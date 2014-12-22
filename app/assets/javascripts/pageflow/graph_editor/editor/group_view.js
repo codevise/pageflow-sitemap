@@ -42,7 +42,7 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
         .attr('transform', trBar);
 
     node.select('.group-highlight')
-        .attr('height', function (d) { return d.height + 20; })
+        .attr('height', function (d) { var h = d.height + 20; return h > 0 ? h : 0; })
         .attr('transform', trArea);
   };
 
