@@ -1,4 +1,4 @@
-/*global Backbone, Page, _, PageCollection, pageflow*/
+/*global Backbone, Page, _, PageCollection, pageflow, console*/
 /*exported Group*/
 
 var groupIdSeq = 0;
@@ -92,8 +92,6 @@ var Group = Backbone.Model.extend({
       predecessor.makePredecessorOf(newPage);
     }
 
-    newPage.removeFromGroup();
-
     // add to sitemap group
     this.get('pages').add(newPage, {at: index});
 
@@ -101,6 +99,7 @@ var Group = Backbone.Model.extend({
       newPage.makePredecessorOf(atPosition);
     }
 
+    var oldGroup = newPage.group();
     newPage.set('group', this);
 
     // update the pageflow models.
@@ -117,6 +116,14 @@ var Group = Backbone.Model.extend({
       chapter.pages.add(page, {at: index});
       chapter.pages.saveOrder();
     }
+
+    // remove from old group
+    if (oldGroup) {
+      oldGroup.get('pages').remove(newPage);
+      if (oldGroup.collection) oldGroup.collection.removeEmptyGroups();
+    }
+
+    if (this.collection) this.collection.removeEmptyGroups();
   },
 
   removePage: function(page) {
