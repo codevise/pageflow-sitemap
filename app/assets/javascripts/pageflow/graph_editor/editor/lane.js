@@ -34,13 +34,12 @@ var Lane = Backbone.Collection.extend({
       }
     });
     _.forEach(toRemove, function(group) {
-      this.removeGroup(group);
+      group.get('chapter').destroy();  // Fixme: should this be more explicit?
+      this.remove(group);
     }, this);
   },
 
   removeGroup: function(group) {
-    console.log('removing group', group);
-    group.get('chapter').destroy();
     this.remove(group);
   },
 
