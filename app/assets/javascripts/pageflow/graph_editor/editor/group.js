@@ -151,9 +151,14 @@ var Group = Backbone.Model.extend({
     if (pages.last() !== page) {
       var group = Group.createGroup();
 
-      _.forEach(pages.slice(pages.indexOf(page) + 1), function (page) {
+      var splitIndex = pages.indexOf(page) + 1;
+
+      // add pages after split page to new group
+      _.forEach(pages.slice(splitIndex), function (page) {
         group.pushPage(page);
-      });
+        this.removePage(page);
+      }, this);
+      // TODO: Save lane&row of new group
 
       this.collection.add(group);
     }

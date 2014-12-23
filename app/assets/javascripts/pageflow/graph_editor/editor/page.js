@@ -1,4 +1,4 @@
-/*global Backbone, LinkCollection, KnobCollection*/
+/*global Backbone, LinkCollection, KnobCollection, pageflow*/
 /*exported Page, PageCollection */
 
 var Page = Backbone.Model.extend({
@@ -24,6 +24,17 @@ var Page = Backbone.Model.extend({
 
   group: function () {
     return this.get('group');
+  },
+
+  index: function() {
+    return this.group().get('pages').indexOf(this);
+  },
+
+  select: function() {
+    var page = this.get('page'),
+    pageId = page.get('id');
+
+    pageflow.editor.navigate('/pages/' + pageId, {trigger: true});
   },
 
   successor: function () {

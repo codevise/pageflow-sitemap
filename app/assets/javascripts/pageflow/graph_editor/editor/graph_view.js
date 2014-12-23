@@ -61,8 +61,9 @@ graphEditor.GraphView = function(svgElement, graph) {
               data: function(d) { return [d]; },
               options: {
                 click: function(source) {
-                  var pageId = source.page.get('page').get('id');
-                  pageflow.editor.navigate('/pages/' + pageId, {trigger: true});
+                  source.page.select();
+
+                  window.p = page;
                 },
                 droppedOnArea: function(source, target) {
                   if(target.position == 'before') {
@@ -117,7 +118,23 @@ graphEditor.GraphView = function(svgElement, graph) {
                     },
                     options: {
                       clicked: function (source) {
-                        source.page.group().addPageAfter(page('after', source.data), source.page);
+                        var sitemapPage = page('after', source.data);
+                        var chapter = source.page.group().get('chapter');
+
+                        chapter.once('sync', function() {
+                          // chapter.pages.saveOrder();
+                          sitemapPage.select();
+                        }, this);
+
+                        var pageflowPage = chapter.addPage({
+                          position: source.page.index()
+                        });
+                        sitemapPage.set('page', pageflowPage);
+                        source.page.group().addPageAfter(sitemapPage, source.page);
+
+
+                        console.log('add after button', sitemapPage);
+                        // TODO set sitmapPage on pageflow page;
                       }
                     }
                   },
