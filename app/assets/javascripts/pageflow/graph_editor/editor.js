@@ -46,6 +46,7 @@
     var lastLaneIndex = 0;
     _(pageflow.chapters.groupBy(function(c) { return c.configuration.get('lane') || 0; })).forEach(function(chapters, laneIndex) {
 
+      // ensure empty lanes
       for(;lastLaneIndex < laneIndex-1; lastLaneIndex++) {
         graph.lane().end();
       }
@@ -57,12 +58,16 @@
         return c.configuration.get('row');
       }).forEach(function(chapter) {
         var group = lane.group(chapter);
+        chapter.sitemapGroup = group; // FIXME ?
+
         var row = chapter.configuration.get('row');
         if (_.isNumber(row)) {
           group.row(row);
         }
         chapter.pages.forEach(function(page) {
-          group.page(page).end();
+          var sitemapPage = group.page(page);
+          page.sitemapPage = sitemapPage.model;
+          sitemapPage.end();
         });
         group.end();
       });
@@ -77,7 +82,7 @@
     var graphEditorView = new graphEditor.GraphEditorView({ data: graph });
 
     pageflow.chapters.on('add', function(chapter) {
-      // TODO: Update graph when page is added in pageflow editor
+      // TODO: Update graph when a chapter is added in pageflow editor
 
       // var found = _(graph.get('lanes')).find(function (lane) {
       //   return lane.find(function (group) { return group.get('chapter') == chapter; });
@@ -90,12 +95,22 @@
       // pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
     });
 
-    pageflow.pages.on('change:configuration', function() {
+    pageflow.pages.on('change:configuration', function(page) {
       // TODO:  Just update appropriate page don't reconstruct whole graph.
+      var title = page.configuration.get('title');
+      console.log(title);
+      // This updates the title only.
+      // page.sitemapPage.configuration.set('title', title);
+      // But an update doesn't trigger a redraw. Needs to be fixed in svg code.
+      // graph.trigger('change');
       pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
     });
 
     pageflow.editor.showViewInMainPanel(graphEditorView);
+
+    pageflow.editor.refresh = function() {
+      pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
+    };
   };
 
   graphEditor.hide = function () {

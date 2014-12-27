@@ -196,19 +196,25 @@ graphEditor.GraphView = function(svgElement, graph) {
 
     placeholdersView(svgPlaceholders, '.placeholder', grid.placeholders, {
       clicked: function(d) {
-        // TODO create new group (with pageflow chapter)
-        // create new page in that group. With pageflow page
-        window.alert('TODO');
+        // Create sitemap group and pageflow chapter.
+        var group = Group.createGroup(d.lane.index(), d.row);
+        var chapter = group.get('chapter');
 
-        // var group = new Group({ pages: new PageCollection(page("X", d)) });
+        chapter.once('sync', function() {
+          // create pageflow page via chapter
+          var pageflowPage = chapter.addPage({ position: 0 });
 
-        // var group = Group.createGroup();
-        // var page = Page.createPage({ group: group });
-        // page.set({ x0: d.x, y0: d.y });
+          pageflowPage.once('sync', function() {
+            // create sitemapPage for pageflow Page
+            var sitemapPage = page('after', {x:0, y:0});
+            sitemapPage.set('page', pageflowPage);
+            group.addPageAt(sitemapPage, 0);
 
-        // group.pushPage(page);
-
-        // d.lane.addGroup(group, d.row);
+            // update UI
+            sitemapPage.select();
+            pageflow.editor.refresh();
+          }, this);
+        }, this);
       }
     });
 
