@@ -106,6 +106,8 @@
       pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
     });
 
+    pageflow.pages.on('add', pageflow.editor.refresh);
+
     pageflow.editor.showViewInMainPanel(graphEditorView);
 
     pageflow.editor.refresh = function() {
