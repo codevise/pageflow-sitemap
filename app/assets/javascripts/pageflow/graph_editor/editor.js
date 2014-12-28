@@ -107,6 +107,10 @@
     });
 
     pageflow.pages.on('add', pageflow.editor.refresh);
+    pageflow.pages.on('remove', function(page) {
+      page.once('sync', pageflow.editor.refresh);
+    });
+
 
     pageflow.editor.showViewInMainPanel(graphEditorView);
 
