@@ -108,7 +108,10 @@
 
     pageflow.pages.on('add', pageflow.editor.refresh);
     pageflow.pages.on('remove', function(page) {
-      page.once('sync', pageflow.editor.refresh);
+      page.once('sync', function() { pageflow.editor.refresh(); });
+    });
+    pageflow.chapters.on('remove', function(model) {
+      model.once('sync', function() { pageflow.editor.refresh(); });
     });
 
 
