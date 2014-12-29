@@ -28,6 +28,9 @@ graphEditor.GraphView = function(svgElement, graph) {
     var phalf = window.options.page.height / 2;
     // add svg elements for different types of things
     graphEditor.groupView(svgPages, '.group', grid.groups, {
+      clicked: function(source) {
+        source.group.select();
+      },
       droppedOnPlaceholder: function (source, target) {
         graph.moveGroupTo(target.lane, target.row, source.group);
       },
@@ -131,7 +134,6 @@ graphEditor.GraphView = function(svgElement, graph) {
                         });
                         sitemapPage.set('page', pageflowPage);
                         source.page.group().addPageAfter(sitemapPage, source.page);
-
 
                         console.log('add after button', sitemapPage);
                         // TODO set sitmapPage on pageflow page;

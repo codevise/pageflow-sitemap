@@ -22,6 +22,11 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
         })
         .on('mouseout', function() {
           d3.select(this.parentNode).classed('hover', false);
+        })
+        .on('click', function() {
+          if (opts.clicked) {
+            opts.clicked.apply(this, arguments);
+          }
         });
 
     representationNode.append('svg:rect')
