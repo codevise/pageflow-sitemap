@@ -7,7 +7,7 @@
       left: 60
     },
     page: {
-      height: 60,
+      height: 80,
       width: 80,
       verticalMargin: 20,
       horizontalMargin: 30
