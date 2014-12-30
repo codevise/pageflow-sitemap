@@ -29,6 +29,10 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
           }
         });
 
+    representationNode.append('svg:text')
+          .attr('transform', trBarText)
+          .text(function(d){ return d.group.get('chapter').get('title'); });
+
     representationNode.append('svg:rect')
         .attr('class', 'group-highlight')
         .attr('width', w)
@@ -46,11 +50,18 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
     node.select('.group-handle')
         .attr('transform', trBar);
 
+    node.select('text')
+        .transition().duration(options.duration)
+        .text(function(d){ return d.group.get('chapter').get('title'); })
+        .attr('transform', trBarText);
+
     node.select('.group-highlight')
         .attr('height', function (d) { var h = d.height + 20; return h > 0 ? h : 0; })
         .attr('transform', trArea);
   };
 
+
+  function trBarText(d) { return "translate(" + (d.x) + "," + (d.y - options.page.height / 2 - 15) + ")"; }
   function trBar(d) { return "translate(" + (d.x - options.page.width / 2 - 5) + "," + (d.y - options.page.height / 2 - 20) + ")"; }
   function trArea(d) { return "translate(" + (d.x - options.page.width / 2 - 5) + "," + (d.y - options.page.height / 2 - 10) + ")"; }
 

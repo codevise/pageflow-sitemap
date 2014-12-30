@@ -110,10 +110,15 @@
     pageflow.pages.on('remove', function(page) {
       page.once('sync', function() { pageflow.editor.refresh(); });
     });
+
     pageflow.chapters.on('remove', function(model) {
       model.once('sync', function() { pageflow.editor.refresh(); });
     });
 
+    pageflow.chapters.on('change:title', function(model, title) {
+      // graph needs no manual update as d3view takes data from backbone model.
+      graph.trigger('change');
+    });
 
     pageflow.editor.showViewInMainPanel(graphEditorView);
 
