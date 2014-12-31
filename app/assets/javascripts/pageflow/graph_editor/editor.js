@@ -58,16 +58,14 @@
         return c.configuration.get('row');
       }).forEach(function(chapter) {
         var group = lane.group(chapter);
-        chapter.sitemapGroup = group; // FIXME ?
+        chapter.sitemapGroup = group; // FIXME:  this need to be done in graph.js similar to sitemapPage
 
         var row = chapter.configuration.get('row');
         if (_.isNumber(row)) {
           group.row(row);
         }
         chapter.pages.forEach(function(page) {
-          var sitemapPage = group.page(page);
-          page.sitemapPage = sitemapPage.model;
-          sitemapPage.end();
+          group.page(page).end();
         });
         group.end();
       });
@@ -108,7 +106,12 @@
 
     pageflow.pages.on('add', pageflow.editor.refresh);
     pageflow.pages.on('remove', function(page) {
-      page.once('sync', function() { pageflow.editor.refresh(); });
+      page.once('sync', function() {
+        // pageflow page has been deleted. remove sitemap representation and refresh graph
+        var sp = page.sitemapPage;
+        sp.collection.remove(sp);
+        graph.trigger('change');
+      });
     });
 
     pageflow.chapters.on('remove', function(model) {

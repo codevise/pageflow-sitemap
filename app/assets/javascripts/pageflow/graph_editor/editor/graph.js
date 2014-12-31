@@ -200,6 +200,9 @@ Graph.create = function () {
             title: page.model.configuration.get('title') || "Kein Titel"
           });
 
+          // attach ref to sitemap model to pageflow model.
+          page.model.sitemapPage = pageModel;
+
           pagesMap[page.name] = {
             data: page,
             model: pageModel
