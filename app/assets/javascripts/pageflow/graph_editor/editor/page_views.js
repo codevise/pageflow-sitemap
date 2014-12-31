@@ -30,6 +30,7 @@
           trY = options.page.height / 2;
 
       var g = node.append("svg:g")
+          .attr('class', "pageview")
           .attr("id", function(d) { return d.id; })
           .call(drag(opts))
           .on('mouseover', function(d) {
@@ -64,7 +65,9 @@
             if (opts.click) {
               opts.click.apply(this, arguments);
             }
-          });
+          })
+      ;
+
 
       // thumbnail
       g.each(function(d) {
@@ -107,6 +110,11 @@
           .text(function(d){ return d.page.get('title'); })
           .attr("transform", "translate(" + 0 + "," + (-trY + 5) + ")")
       ;
+    };
+
+    svg.update = function(node) {
+      node.select('text')
+         .text(function(d){ return d.page.get('title'); });
     };
 
     function drag(opts) {

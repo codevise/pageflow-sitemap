@@ -94,14 +94,10 @@
     });
 
     pageflow.pages.on('change:configuration', function(page) {
-      // TODO:  Just update appropriate page don't reconstruct whole graph.
-      var title = page.configuration.get('title');
-      console.log(title);
       // This updates the title only.
-      // page.sitemapPage.configuration.set('title', title);
-      // But an update doesn't trigger a redraw. Needs to be fixed in svg code.
-      // graph.trigger('change');
-      pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
+      var title = page.configuration.get('title');
+      page.sitemapPage.set('title', title);
+      graph.trigger('change');
     });
 
     pageflow.pages.on('add', pageflow.editor.refresh);

@@ -60,7 +60,7 @@ graphEditor.GraphView = function(svgElement, graph) {
             },
             {
               view: graphEditor.pageView,
-              selector: '.page',
+              selector: '.pageview',
               data: function(d) { return [d]; },
               options: {
                 click: function(source) {
