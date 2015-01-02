@@ -125,18 +125,16 @@ graphEditor.GraphView = function(svgElement, graph) {
                         var chapter = source.page.group().get('chapter');
 
                         chapter.once('sync', function() {
-                          // chapter.pages.saveOrder();
                           sitemapPage.select();
                         }, this);
 
+                        // Create new pageflow page
                         var pageflowPage = chapter.addPage({
                           position: source.page.index()
                         });
                         sitemapPage.set('page', pageflowPage);
+                        pageflowPage.sitemapPage = sitemapPage;
                         source.page.group().addPageAfter(sitemapPage, source.page);
-
-                        console.log('add after button', sitemapPage);
-                        // TODO set sitmapPage on pageflow page;
                       }
                     }
                   },
