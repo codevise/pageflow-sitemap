@@ -218,6 +218,9 @@ Graph.create = function () {
           pages: new PageCollection(pageModels)
         });
 
+        // attach ref to sitemap model to pageflow model.
+        group.chapter.sitemapGroup = groupModel;
+
         groupModel.lane(laneIndex);
         groupModel.row(group.rowIndex);
 

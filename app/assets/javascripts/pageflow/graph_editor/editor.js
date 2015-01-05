@@ -60,7 +60,6 @@
         return c.configuration.get('row');
       }).forEach(function(chapter) {
         var group = lane.group(chapter);
-        chapter.sitemapGroup = group; // FIXME:  this need to be done in graph.js similar to sitemapPage
 
         var row = chapter.configuration.get('row');
         if (_.isNumber(row)) {
@@ -117,7 +116,9 @@
     });
 
     pageflow.chapters.on('change:title', function(model, title) {
-      // graph needs no manual update as d3view takes data from backbone model.
+      // d3view takes data directly from backbone model.
+      // sitemapGroup still seemingly needs to be updated so that d3 detects a change
+      model.sitemapGroup.set('title', title);
       graph.trigger('change');
     });
 
