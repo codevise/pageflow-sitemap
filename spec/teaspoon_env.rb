@@ -1,7 +1,7 @@
 # Set RAILS_ROOT and load the environment if it's not already loaded.
 unless defined?(Rails)
-  ENV["RAILS_ROOT"] = File.expand_path("../../test/dummy", __FILE__)
-  require File.expand_path("../../test/dummy/config/environment", __FILE__)
+  ENV["RAILS_ROOT"] = File.expand_path("../../spec/dummy", __FILE__)
+  require File.expand_path("../../spec/dummy/config/environment", __FILE__)
 end
 
 Teaspoon.configure do |config|
