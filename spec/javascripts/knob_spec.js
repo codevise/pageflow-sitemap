@@ -1,18 +1,18 @@
 describe('Knob', function () {
   describe('the links property', function () {
     it('defaults to the empty collection', function () {
-      expect(new Knob().get('links').isEmpty()).toBe(true);
+      expect(new Knob().get('links').isEmpty()).to.be.true;
     });
 
     it('triggers a change event if link is added', function () {
       var target = new Page(),
         source = knob(),
-        listener = jasmine.createSpy('listener');
+        listener = sinon.spy();
       source.on('change', listener);
 
       source.linkTo(target);
 
-      expect(listener).toHaveBeenCalled();
+      expect(listener.called).to.equal(true);
     });
   });
 
@@ -24,7 +24,7 @@ describe('Knob', function () {
 
         source.linkTo(target);
 
-        expect(source.get('links').length).toEqual(1);
+        expect(source.get('links')).to.have.length(1);
       });
 
       it('adds a link to the incommingLinks', function () {
@@ -33,7 +33,7 @@ describe('Knob', function () {
 
         source.linkTo(target);
 
-        expect(target.get('incommingLinks').length).toEqual(1);
+        expect(target.get('incommingLinks')).to.have.length(1);
       });
     });
 
@@ -44,8 +44,7 @@ describe('Knob', function () {
 
         var result = source.linkTo(target);
 
-        expect(result).toBeTruthy();
-        expect(target.get('incommingLinks').length).toEqual(1);
+        expect(target.get('incommingLinks')).to.have.length(1);
       });
 
       it('doesnot add a link if it exceeds limit', function () {
@@ -54,8 +53,8 @@ describe('Knob', function () {
 
         var result = source.linkTo(target);
 
-        expect(result).toBeFalsy();
-        expect(target.get('incommingLinks').length).toEqual(0);
+        expect(result).to.be.undefined;
+        expect(target.get('incommingLinks')).to.have.length(0);
       });
     });
   });

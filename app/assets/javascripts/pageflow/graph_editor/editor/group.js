@@ -15,6 +15,10 @@ var Group = Backbone.Model.extend({
     this.get('pages').on('all', _.bind(this.trigger, this, 'change'));
   },
 
+  chapter: function () {
+    return this.get('chapter');
+  },
+
   select: function() {
     var chapter = this.get('chapter'),
         id = chapter.get('id');

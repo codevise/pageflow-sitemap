@@ -8,7 +8,7 @@ describe('Link', function () {
 
       link.remove();
 
-      expect(knob).not.toBeLinkedTo(targetPage);
+      expect(knob).not.to.be.linkedTo(targetPage);
     });
   });
 });

@@ -101,13 +101,15 @@ var Graph = Backbone.Model.extend({
 
   ensureEmptyLane: function () {
     var lanes = this.get('lanes');
-    if (!_.last(lanes).isEmpty()) {
-      var lane = new Lane([], {
-        graph: this
-      });
-      this.forwardEventsOfLane(lane);
-      lanes.push(lane);
+    if (lanes.length == 0 || !_.last(lanes).isEmpty()) {
+      this.addLane(new Lane([]));
     }
+  },
+
+  addLane: function (lane) {
+    lane.graph = this;
+    this.forwardEventsOfLane(lane);
+    this.get('lanes').push(lane);
   },
 
   addGraphToLanes: function() {
