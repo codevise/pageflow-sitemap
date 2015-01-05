@@ -17,6 +17,11 @@ graphEditor.successorKnobView = graphEditor.D3View(function(svg) {
         .drag(function () {
           this.dropTarget('page')
               .dropped(opts.droppedOnPage);
+        })
+        .click(function() {
+          if (opts.clicked) {
+            opts.clicked();
+          }
         });
   };
 

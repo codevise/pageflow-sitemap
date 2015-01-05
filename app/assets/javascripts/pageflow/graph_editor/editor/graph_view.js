@@ -139,6 +139,9 @@ graphEditor.GraphView = function(svgElement, graph) {
                     selector: '.successor-knob',
                     data: function(d) { return d.successor ? [d.successor] : []; },
                     options: {
+                      clicked: function() {
+                        // Handler for click on successor button
+                      },
                       droppedOnPage: function (source, target) {
                         source.group.makePredecessorOf(target.page);
                         if (target.group.get('pages').first() === target.page) {

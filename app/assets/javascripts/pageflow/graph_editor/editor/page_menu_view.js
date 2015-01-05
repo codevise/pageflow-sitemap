@@ -63,6 +63,11 @@
           var dragBuilder = drag(parentNode);
           fn.call(dragBuilder);
           presentation.call(dragBuilder.listener());
+          return this;
+        },
+        click: function (fn) {
+          presentation.on('click', fn);
+          return this;
         }
       };
     };
