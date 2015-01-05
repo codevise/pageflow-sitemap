@@ -121,13 +121,6 @@
     });
   };
 
-  graphEditor.removeButtonView = buttonView('remove-button',
-                                            function () {
-                                              return "translate(" + -(options.page.width / 2 + 10) + ", " +
-                                                -(options.page.height / 2 + 10) + ")";
-                                            }
-                                           );
-
   graphEditor.addAfterButtonView = buttonView('add-after-button',
                                             function () {
                                               return "translate(" + -(options.page.width / 2 + 10) + ", " +

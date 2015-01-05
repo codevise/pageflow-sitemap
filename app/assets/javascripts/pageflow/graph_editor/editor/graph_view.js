@@ -93,22 +93,6 @@ graphEditor.GraphView = function(svgElement, graph) {
               options: {
                 subViews: [
                   {
-                    view: graphEditor.removeButtonView,
-                    selector: '.remove-button',
-                    data: function(d) {
-                      return [{
-                        id: 'remove-button:' + d.id,
-                        page: d.page,
-                        pid: d.id
-                      }];
-                    },
-                    options: {
-                      clicked: function (source) {
-                        source.page.remove();
-                      }
-                    }
-                  },
-                  {
                     view: graphEditor.addAfterButtonView,
                     selector: '.add-after-button',
                     data: function(d) {
