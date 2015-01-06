@@ -49,6 +49,7 @@ graphEditor.Grid = function(data) {
           availKnobs: knobs,
           visibleKnobs: []
         };
+
         groupNodes.push(node);
         nodes.push(node);
 
@@ -103,22 +104,30 @@ graphEditor.Grid = function(data) {
       var last = false;
       group.get('pages').forEach(function(page) {
         var pageName = page.get('name');
-        if(last) {
+        var target = nodesByName[pageName];
+
+        if (last && target) {
           followLinks.push({
             id: "follow:" + nodesByName[last].page.get('name') + '-' + pageName,
             source: nodesByName[last],
-            target: nodesByName[pageName]
+            target: target
           });
         }
         last = pageName;
       });
 
       if (group.successor()) {
-        successorLinks.push({
-          id: "successor:" + last + '-' + group.successor().get('name'),
-          source: nodesByName[last],
-          target: nodesByName[group.successor().get('name')]
-        });
+        var targetName = group.successor().get('name'),
+            source = nodesByName[last],
+            target = nodesByName[targetName];
+
+        if (source && target) {
+          successorLinks.push({
+            id: "successor:" + last + '-' + targetName,
+            source: source,
+            target: target
+          });
+        }
       }
     });
 
