@@ -30,13 +30,6 @@ var Page = Backbone.Model.extend({
     return this.group().get('pages').indexOf(this);
   },
 
-  select: function() {
-    var page = this.get('page'),
-    pageId = page.get('id');
-
-    pageflow.editor.navigate('/pages/' + pageId, {trigger: true});
-  },
-
   successor: function () {
     return this.get('successor');
   },

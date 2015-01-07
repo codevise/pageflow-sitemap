@@ -19,14 +19,6 @@ var Group = Backbone.Model.extend({
     return this.get('chapter');
   },
 
-  select: function() {
-    var chapter = this.get('chapter'),
-        id = chapter.get('id');
-
-    pageflow.editor.navigate('/chapters/' + id, {trigger: true});
-  },
-
-
   row: function(val) {
     return this.configuration('row', val);
   },

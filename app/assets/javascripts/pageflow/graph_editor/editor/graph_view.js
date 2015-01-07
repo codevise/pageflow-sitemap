@@ -1,6 +1,6 @@
-/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm, withSession, var, pageflow*/
+/*global d3, console, Group, options, graphEditor, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm, withSession, pageflow*/
 
-graphEditor.GraphView = function(svgElement, graph) {
+graphEditor.GraphView = function(svgElement, controller) {
   var svg = d3.select(svgElement)
     .attr("width", "100%")
     .attr("height", "100%");
@@ -18,29 +18,20 @@ graphEditor.GraphView = function(svgElement, graph) {
 
   var ix = 0;
 
-  function page(name, d) {
-    return new Page({ x0: d.x, y0: d.y, name: name + ix++ });
-  }
-
-  var update =  function () {
+  var update =  function (graph) {
     var grid = new graphEditor.Grid(graph);
 
     var phalf = window.options.page.height / 2;
     // add svg elements for different types of things
     graphEditor.groupView(svgPages, '.group', grid.groups, {
       clicked: function(source) {
-        source.group.select();
+        controller.groupSelected(source.group);
       },
       droppedOnPlaceholder: function (source, target) {
-        graph.moveGroupTo(target.lane, target.row, source.group);
+        controller.groupDroppedOnPlaceholder(source.group, target);
       },
       droppedOnArea: function(source, target) {
-        if(target.position == 'before') {
-          graph.insertIntoGroupBefore(source.group, target.target);
-        }
-        else {
-          graph.insertIntoGroupAfter(source.group, target.target);
-        }
+        controller.groupDroppedOnArea(source.group, target.target, target.position);
       },
       subViews: [
         { view: graphEditor.pagesView,
@@ -64,25 +55,13 @@ graphEditor.GraphView = function(svgElement, graph) {
               data: function(d) { return [d]; },
               options: {
                 click: function(source) {
-                  source.page.select();
-
-                  window.p = page;
+                  controller.pageSelected(source.page);
                 },
                 droppedOnArea: function(source, target) {
-                  if(target.position == 'before') {
-                    graph.movePageBefore(source.page, target.target);
-                  }
-                  else {
-                    graph.movePageAfter(source.page, target.target);
-                  }
+                  controller.pageDroppedOnArea(source.page, target.target, target.position);
                 },
                 droppedOnPlaceholder: function (source, target) {
-                  if (source.page.group().count() <= 1) {
-                    graph.moveGroupTo(target.lane, target.row, source.page.group());
-                  }
-                  else {
-                    graph.moveToEmptyGroup(target.lane, target.row, source.page);
-                  }
+                  controller.pageDroppedOnPlaceholder(source.page, target);
                 }
               }
             },
@@ -105,20 +84,7 @@ graphEditor.GraphView = function(svgElement, graph) {
                     },
                     options: {
                       clicked: function (source) {
-                        var sitemapPage = page('after', source.data);
-                        var chapter = source.page.group().get('chapter');
-
-                        chapter.once('sync', function() {
-                          sitemapPage.select();
-                        }, this);
-
-                        // Create new pageflow page
-                        var pageflowPage = chapter.addPage({
-                          position: source.page.index()
-                        });
-                        sitemapPage.set('page', pageflowPage);
-                        pageflowPage.sitemapPage = sitemapPage;
-                        source.page.group().addPageAfter(sitemapPage, source.page);
+                        controller.addPageAfter(source.page);
                       }
                     }
                   },
@@ -128,9 +94,7 @@ graphEditor.GraphView = function(svgElement, graph) {
                     data: function(d) { return d.availKnobs || []; },
                     options: {
                       droppedOnPage: function (source, target) {
-                        if (!source.knob.linkTo(target.page)) {
-                          alert('Konnte nicht verlinkt werden!\nDas Limit von ' + source.knob.get('limit') + ' ist ausgeschöpft.');
-                        }
+                        controller.knobDroppedOnPage(source.knob, target.page);
                       }
                     }
                   },
@@ -143,10 +107,7 @@ graphEditor.GraphView = function(svgElement, graph) {
                         // Handler for click on successor button
                       },
                       droppedOnPage: function (source, target) {
-                        source.group.makePredecessorOf(target.page);
-                        if (target.group.get('pages').first() === target.page) {
-                          source.group.joinWithIfConnected(target.group);
-                        }
+                        controller.successorKnobDroppedOnPage(source.group, target.page);
                       }
                     }
                   }
@@ -161,47 +122,23 @@ graphEditor.GraphView = function(svgElement, graph) {
 
     linkPathView(svgLinks, '.link', grid.links, {
       clicked: function (d) {
-        if (confirm("Wollen Sie den Link wirklich löschen?")) {
-          d.link.remove();
-        }
+        controller.linkPathSelected(d.link);
       }
     });
     followPathView(svgLinks, '.follow', grid.followLinks, {
       clicked: function (d) {
-        if (confirm("Wollen Sie den Link wirklich löschen?")) {
-          d.source.page.removeSuccessorLink();
-        }
+        controller.followPathSelected(d.page);
       }
     });
     successorPathView(svgLinks, '.successor', grid.successorLinks, {
       clicked: function (d) {
-        if (confirm("Wollen Sie den Link wirklich löschen?")) {
-          d.source.page.removeSuccessorLink();
-        }
+        controller.successorPathSelected(d.source.page);
       }
     });
 
     placeholdersView(svgPlaceholders, '.placeholder', grid.placeholders, {
       clicked: function(d) {
-        // Create sitemap group and pageflow chapter.
-        var group = Group.createGroup(d.lane.index(), d.row);
-        var chapter = group.get('chapter');
-
-        chapter.once('sync', function() {
-          // create pageflow page via chapter
-          var pageflowPage = chapter.addPage({ position: 0 });
-
-          pageflowPage.once('sync', function() {
-            // create sitemapPage for pageflow Page
-            var sitemapPage = page('after', {x:0, y:0});
-            sitemapPage.set('page', pageflowPage);
-            group.addPageAt(sitemapPage, 0);
-
-            // update UI
-            sitemapPage.select();
-            pageflow.editor.refresh();
-          }, this);
-        }, this);
+        controller.placeholderSelected(d);
       }
     });
 
@@ -211,10 +148,5 @@ graphEditor.GraphView = function(svgElement, graph) {
     });
   };
 
-  update();
-  var updateTimeout;
-  graph.on('change', function () {
-    clearTimeout(updateTimeout);
-    updateTimeout = setTimeout(update, 100);
-  });
+    controller.addUpdateHandler(update);
 };

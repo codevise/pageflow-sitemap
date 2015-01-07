@@ -12,6 +12,8 @@
 
 //= require_tree ./editor/templates
 
+//= require ./editor/graph_editor_controller.js
+
 //= require ./editor/d3_view.js
 //= require ./editor/views.js
 //= require ./editor/group_view.js
