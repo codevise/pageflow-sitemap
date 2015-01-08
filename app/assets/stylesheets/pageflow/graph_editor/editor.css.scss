@@ -44,6 +44,11 @@ $font: 10px sans-serif;
   stroke-width: $stroke-width;
 }
 
+.pagetext {
+  font: $font;
+  text-align: center;
+}
+
 text {
   font: $font;
   pointer-events: none;

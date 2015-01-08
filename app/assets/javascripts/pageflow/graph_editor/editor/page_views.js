@@ -106,16 +106,23 @@
             .attr("transform", "translate(" + trX + "," + (-trY) + ")")
       ;
 
-      g.append("svg:text")
-          .text(function(d){ return d.page.get('title'); })
-          .attr("transform", "translate(" + 0 + "," + (-trY + 5) + ")")
+
+      g.append("foreignObject")
+          .attr("width", options.page.width-2)
+          .attr("height", 12)
+          .attr("transform", "translate(" + (trX+1) + "," + (-trY) + ")")
+        .append("xhtml:body")
+          .html(pagetext)
       ;
     };
 
     svg.update = function(node) {
-      node.select('text')
-         .text(function(d){ return d.page.get('title'); });
+      node.select('.pageview div.pagetext')
+          .html(pagetext)
+      ;
     };
+
+    function pagetext(d) { return '<div class="pagetext">'+ d.page.get('title') + '</div>'; }
 
     function drag(opts) {
       return graphEditor.addDrag('page-drag')
