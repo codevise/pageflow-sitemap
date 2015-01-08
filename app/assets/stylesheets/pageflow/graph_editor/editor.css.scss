@@ -49,6 +49,11 @@ $font: 10px sans-serif;
   text-align: center;
 }
 
+
+image {
+  pointer-events: none;
+}
+
 text {
   font: $font;
   pointer-events: none;
