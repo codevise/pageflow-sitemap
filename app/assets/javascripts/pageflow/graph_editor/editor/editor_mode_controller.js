@@ -1,23 +1,8 @@
 /*global pageflow, graphEditor */
 
-graphEditor.GraphEditorController = pageflow.Object.extend({
-  initialize: function (graph) {
-    this.graph = graph;
-    this.selection = new Backbone.Model();
-
-    this.selection.on('change:page', function(selection, sitemapPage) {
-      this.showPageInSidebar(sitemapPage);
-      pageflow.editor.refresh(); // TODO: Why?
-    }, this);
-
-    this.selection.on('change:group', function(selection, sitemapGroup) {
-      this.showGroupInSidebar(sitemapGroup);
-      pageflow.editor.refresh(); // TODO: Why?
-    }, this);
-  },
-
+graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   groupSelected: function (group) {
-    this.selection.set('group', group);
+    this.showGroupInSidebar(group);
   },
 
   groupDroppedOnPlaceholder: function (group, placeholder) {
@@ -34,7 +19,7 @@ graphEditor.GraphEditorController = pageflow.Object.extend({
   },
 
   pageSelected: function (page) {
-    this.selection.set('page', page);
+    this.showPageInSidebar(page);
   },
 
   pageDroppedOnPlaceholder: function (page, placeholder) {
@@ -60,7 +45,7 @@ graphEditor.GraphEditorController = pageflow.Object.extend({
     var chapter = page.group().get('chapter');
 
     chapter.once('sync', function() {
-      this.selection.set('page', sitemapPage);
+      this.showPageInSidebar(sitemapPage);
     }, this);
 
     // Create new pageflow page
@@ -120,19 +105,9 @@ graphEditor.GraphEditorController = pageflow.Object.extend({
         sitemapPage.set('page', pageflowPage);
         group.addPageAt(sitemapPage, 0);
 
-        this.selection.set('page', sitemapPage);
+        this.showPageInSidebar(sitemapPage);
       }, this);
     }, this);
-  },
-
-  addUpdateHandler: function (handler) {
-    handler(this.graph);
-
-    var updateTimeout;
-    this.graph.on('change', function () {
-      clearTimeout(updateTimeout);
-      updateTimeout = setTimeout(_.bind(handler, this, this), 100);
-    });
   },
 
   showPageInSidebar: function (sitemapPage) {

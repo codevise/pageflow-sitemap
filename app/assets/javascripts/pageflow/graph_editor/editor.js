@@ -8,11 +8,16 @@
 //= require ./editor/page.js
 //= require ./editor/group.js
 //= require ./editor/lane.js
+//= require ./editor/graph_factory.js
 //= require ./editor/graph.js
+
+//= require ./editor/entry_to_graph_binding.js
 
 //= require_tree ./editor/templates
 
-//= require ./editor/graph_editor_controller.js
+//= require ./editor/abstract_controller.js
+//= require ./editor/editor_mode_controller.js
+//= require ./editor/selection_mode_controller.js
 
 //= require ./editor/d3_view.js
 //= require ./editor/views.js
@@ -29,11 +34,30 @@
 //= require ./editor/drag.js
 //= require ./editor/graph_view.js
 //= require ./editor/graph_editor_view.js
+//= require ./editor/graph_selection_view.js
 //
 /*global $, graphEditor, JST, data, pageflow, Backbone, Marionette, Graph, GraphEditorView, console, _*/
 
 (function() {
   window.graphEditor = {};
+
+  // TODO remove this
+  pageflow.editor.registerMainMenuItem({
+    translationKey: 'graph_selection',
+    click: function() {
+      graphEditor.showSelection();
+    }
+  });
+
+  graphEditor.showSelection = function () {
+    graphEditor.selectPage()
+      .done(function (selected) {
+        console.log('selected', selected);
+      })
+      .fail(function () {
+        console.log('nothing selected');
+      });
+  };
 
   pageflow.editor.registerMainMenuItem({
     translationKey: 'sitemap',
@@ -42,94 +66,42 @@
     }
   });
 
-  function getGraph() {
-    var graph = Graph.create();
+  graphEditor.selectPage = function () {
+    var result = $.Deferred(),
+      graph = graphEditor.graphFactory(pageflow.chapters),
+      binding = new graphEditor.EntryToGraphBinding(pageflow.chapters, pageflow.pages, graph),
+      graphView = new graphEditor.GraphSelectionView({ data: graph });
 
-    var lastLaneIndex = 0;
-    _(pageflow.chapters.groupBy(function(c) { return c.configuration.get('lane') || 0; })).forEach(function(chapters, laneIndex) {
-
-      // ensure empty lanes
-      for(;lastLaneIndex < laneIndex-1; lastLaneIndex++) {
-        graph.lane().end();
-      }
-      lastLaneIndex = laneIndex;
-
-      var lane = graph.lane();
-
-      _(chapters).sortBy(function(c) {
-        return c.configuration.get('row');
-      }).forEach(function(chapter) {
-        var group = lane.group(chapter);
-
-        var row = chapter.configuration.get('row');
-        if (_.isNumber(row)) {
-          group.row(row);
-        }
-        chapter.pages.forEach(function(page) {
-          group.page(page).end();
-        });
-        group.end();
-      });
-      lane.end();
+    graphView.controller.once('selected', function (selected) {
+      graphView.remove();
+      result.resolve(selected);
     });
 
-    return graph.end();
-  }
+    graphView.once('closed', _.bind(result.reject, result));
+
+    pageflow.editor.showViewInMainPanel(graphView);
+
+    return result.promise();
+  };
 
   graphEditor.show = function () {
-    var graph = getGraph();
-    var graphEditorView = new graphEditor.GraphEditorView({ data: graph });
+    if (!graphEditor.editor) {
+      createGraphEditor();
+    }
 
-    pageflow.chapters.on('add', function(chapter) {
-      // TODO: Update graph when a chapter is added in pageflow editor
-
-      // var found = _(graph.get('lanes')).find(function (lane) {
-      //   return lane.find(function (group) { return group.get('chapter') == chapter; });
-      // });
-
-      // if (!found) {
-      //    graph.addGroupForChapter(chapter);
-      // }
-
-      // pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
-    });
-
-    pageflow.pages.on('change:configuration', function(page) {
-      // This updates the title only.
-      var title = page.configuration.get('title');
-      page.sitemapPage.set('title', title);
-      graph.trigger('change');
-    });
-
-    pageflow.pages.on('add', pageflow.editor.refresh);
-    pageflow.pages.on('remove', function(page) {
-      page.once('sync', function() {
-        // pageflow page has been deleted. remove sitemap representation and refresh graph
-        var sp = page.sitemapPage;
-        sp.collection.remove(sp);
-        graph.trigger('change');
-      });
-    });
-
-    pageflow.chapters.on('remove', function(model) {
-      model.once('sync', function() { pageflow.editor.refresh(); });
-    });
-
-    pageflow.chapters.on('change:title', function(model, title) {
-      // d3view takes data directly from backbone model.
-      // sitemapGroup still seemingly needs to be updated so that d3 detects a change
-      model.sitemapGroup.set('title', title);
-      graph.trigger('change');
-    });
-
-    pageflow.editor.showViewInMainPanel(graphEditorView);
-
-    pageflow.editor.refresh = function() {
-      pageflow.editor.showViewInMainPanel(new graphEditor.GraphEditorView({ data: getGraph() }));
-    };
+    graphEditor.editor.show();
+    pageflow.editor.showViewInMainPanel(graphEditor.editor);
   };
 
   graphEditor.hide = function () {
-    pageflow.editor.showPreview();
+    if (graphEditor.editor) {
+      graphEditor.editor.hide();
+    }
   };
+
+  function createGraphEditor() {
+    var graph = graphEditor.graphFactory(pageflow.chapters);
+    new graphEditor.EntryToGraphBinding(pageflow.chapters, pageflow.pages, graph);
+    graphEditor.editor = new graphEditor.GraphEditorView({ data: graph });
+  }
 }());

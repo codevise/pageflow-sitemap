@@ -16,6 +16,14 @@ var Graph = Backbone.Model.extend({
     return this.lane(laneIndex).at(groupIndex);
   },
 
+  eachGroup: function (callback) {
+    _(this.get('lanes')).each(function (lane) {
+      lane.each(function (group) {
+        callback(group);
+      });
+    });
+  },
+
   movePageBefore: function(movedPage, targetPage) {
     var targetGroup = targetPage.group();
     var sourceGroup = movedPage.group();
