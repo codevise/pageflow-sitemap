@@ -108,6 +108,7 @@
 
 
       g.append("foreignObject")
+          .style('pointer-events', 'none')
           .attr("width", options.page.width-2)
           .attr("height", 12)
           .attr("transform", "translate(" + (trX+1) + "," + (-trY) + ")")
@@ -118,7 +119,7 @@
 
     svg.update = function(node) {
       node.select('.pageview div.pagetext')
-          .html(pagetext)
+          .text(function(d) { return d.page.get('title'); })
       ;
     };
 

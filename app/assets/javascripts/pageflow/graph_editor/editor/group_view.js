@@ -11,10 +11,9 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
     var w = 90,
         barHeight = 10;
 
-    representationNode.append('svg:rect')
-        .attr('class', 'group-handle')
-        .attr('width', w)
-        .attr('height', barHeight)
+    var handleGroup = representationNode
+        .append('svg:g')
+        .attr('class', 'group-handle-group')
         .attr('transform', trBar)
         .call(drag(opts))
         .on('mouseover', function() {
@@ -27,17 +26,31 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
           if (opts.clicked) {
             opts.clicked.apply(this, arguments);
           }
-        });
+        })
+        ;
 
-    representationNode.append('svg:text')
-          .attr('transform', trBarText)
-          .text(function(d){ return d.group.get('chapter').get('title'); });
+      handleGroup.append('svg:rect')
+        .attr('class', 'group-handle')
+        .attr('width', w)
+        .attr('height', barHeight)
+        ;
+
+        handleGroup.append("foreignObject")
+        .style('pointer-events', 'none')
+        .attr('width', w)
+        .attr('height', barHeight)
+        // .attr('transform', trBar)
+        .append("xhtml:body")
+        .html(function(d){ return '<div class="pagetext">' + d.group.get('chapter').get('title') + '</div>'; })
+        ;
 
     representationNode.append('svg:rect')
         .attr('class', 'group-highlight')
         .attr('width', w)
         .attr('height', function (d) { return d.height + 20; })
-        .attr('transform', trArea);
+        .attr('transform', trArea)
+        ;
+
 
     representationNode.append('svg:rect')
         .attr('class', 'group-dummy')
@@ -47,8 +60,14 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
   };
 
   svg.update = function(node) {
-    node.select('.group-handle')
+    node.select('.group-handle-group')
+        .transition().duration(options.duration)
         .attr('transform', trBar);
+
+    node.select('.group div.pagetext')
+        .transition().duration(options.duration)
+        .text(function(d){ return d.group.get('chapter').get('title'); })
+    ;
 
     node.select('text')
         .transition().duration(options.duration)
