@@ -42,13 +42,8 @@ $font: 10px sans-serif;
   fill: #fff;
   stroke: $stroke-color;
   stroke-width: $stroke-width;
-}
-
-.pagetext {
   font: $font;
-  text-align: center;
 }
-
 
 image {
   pointer-events: none;
@@ -59,6 +54,24 @@ text {
   pointer-events: none;
   text-anchor: middle;
   alignment-baseline: central;
+}
+
+.pagetext {
+  font: $font;
+  text-align: center;
+  pointer-events: none;
+}
+
+.small {
+  .pagetext {
+    font: 8px sans-serif;
+  }
+}
+
+.xsmall {
+  .pagetext {
+    font: 5px sans-serif;
+  }
 }
 
 .drag-dummy {

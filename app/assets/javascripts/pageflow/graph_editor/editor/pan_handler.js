@@ -1,7 +1,8 @@
 /*global graphEditor, d3, options, pageflow*/
 graphEditor.PanHandler = function(svgElement, svgGroup) {
   var svg = d3.select(svgElement);
-  var zoomListener = new graphEditor.ZoomHandler(svgGroup).listener();
+  var zoomHandler = graphEditor.ZoomHandler.create(svgGroup);
+  var zoomListener = zoomHandler.listener();
   svg.call(zoomListener);
 
   var w, h;
