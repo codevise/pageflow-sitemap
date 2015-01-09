@@ -1,4 +1,4 @@
-/*global pageflow, graphEditor */
+/*global pageflow, graphEditor, Backbone, confirm, Group, _, Page*/
 
 graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   groupSelected: function (group) {
@@ -40,7 +40,7 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
     }
   },
 
-  addPageAfter: function (page, x, y) {
+  addPageAfter: function (page) {
     var sitemapPage = this._page('after');
     var chapter = page.group().get('chapter');
 
@@ -58,8 +58,8 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   },
 
   knobDroppedOnPage: function (knob,  page) {
-    if (!knob.linkTo(target.page)) {
-      alert('Konnte nicht verlinkt werden!\nDas Limit von ' + knob.get('limit') + ' ist ausgeschöpft.');
+    if (!knob.linkTo(page)) {
+      window.alert('Konnte nicht verlinkt werden!\nDas Limit von ' + knob.get('limit') + ' ist ausgeschöpft.');
     }
   },
 
