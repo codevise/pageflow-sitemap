@@ -1,4 +1,4 @@
-/*global s pageflow, graphEditor, Group, PageCollection, pageflow, Page, _*/
+/*global s pageflow, graphEditor, Group, PageCollection, pageflow, Page, _, console*/
 
 graphEditor.EntryToGraphBinding = pageflow.Object.extend({
 
@@ -9,7 +9,7 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
       // first lane and assumme that it is empty or corresponding add
       // page events get triggered
 
-      var group = this._groupOf(chapter);
+      var group = chapter.sitemapGroup;
       if (!group) {
         chapter.once('sync', function () {
           group = new Group({
@@ -28,7 +28,7 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
     },
     'remove': function(model) {
       model.once('sync', function() {
-        var group = this._groupOf(model);
+        var group = model.sitemapGroup;
         if (group) {
           group.removeFromLane();
         }
@@ -39,23 +39,26 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
   pageEvents: {
     'add': function (page) {
       page.once('sync', function () {
-        var group = this._groupOf(page.chapter);
-
         // TODO: replace this with correct page creation
-        var sitemapPage = new Page({
-          page: page,
-          name: page.id,
-          title: page.configuration.get('title') || "Kein Titel"
-        });
+        var sitemapPage = page.sitemapPage;
 
-        if (!group) {
-          group = new Group({
-            chapter: chapter,
-            pages: new PageCollection([sitemapPage])
+        if (!sitemapPage) {
+          sitemapPage = new Page({
+            page: page,
+            name: page.id,
+            title: page.configuration.get('title') || "Kein Titel"
           });
-        }
-        else {
-          group.pushPage(sitemapPage);
+
+          var group = page.chapter.sitemapGroup;
+          if (!group) {
+            group = new Group({
+              chapter: page.chapter,
+              pages: new PageCollection([sitemapPage])
+            });
+          }
+          else {
+            group.pushPage(sitemapPage);
+          }
         }
       }, this);
     },
@@ -68,7 +71,9 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
     'remove': function(page) {
       page.once('sync', function() {
         var sp = page.sitemapPage;
-        sp.collection.remove(sp);
+        if (sp.collection) {
+          sp.collection.remove(sp);
+        }
         this.graph.trigger('change');
       }, this);
     }
@@ -81,16 +86,6 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
 
     this._listenTo(chapters, this.chapterEvents);
     this._listenTo(pages, this.pageEvents);
-  },
-
-  _groupOf: function (chapter) {
-    var found;
-    this.graph.eachGroup(function (group) {
-      if (group.chapter() === chapter) {
-        found  = group;
-      }
-    });
-    return found;
   },
 
   _listenTo: function (other, events) {
