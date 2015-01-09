@@ -1,4 +1,4 @@
-/*globals pageflow, graphEditor */
+/*global s pageflow, graphEditor, Group, PageCollection, pageflow, Page, _*/
 
 graphEditor.EntryToGraphBinding = pageflow.Object.extend({
 
@@ -98,5 +98,4 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
       this.listenTo(other, event, callback);
     }, this);
   }
-
 });
