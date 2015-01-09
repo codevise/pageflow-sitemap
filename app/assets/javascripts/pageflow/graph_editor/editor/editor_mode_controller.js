@@ -41,7 +41,7 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   },
 
   addPageAfter: function (page) {
-    var sitemapPage = this._page('after');
+    var sitemapPage = this._page('after', 0, 0);
     var chapter = page.group().get('chapter');
 
     chapter.once('sync', function() {
@@ -124,7 +124,7 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
     pageflow.editor.navigate('/chapters/' + id, {trigger: true});
   },
 
-  _page: function (name, d) {
-    return new Page({ x0: d.x, y0: d.y, name: name });
+  _page: function (name, x, y) {
+    return new Page({ x0: x, y0: y, name: name });
   }
 });
