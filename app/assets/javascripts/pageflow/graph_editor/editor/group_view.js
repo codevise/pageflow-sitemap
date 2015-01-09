@@ -47,7 +47,7 @@ graphEditor.groupView = graphEditor.D3View(function(svg) {
     representationNode.append('svg:rect')
         .attr('class', 'group-highlight')
         .attr('width', w)
-        .attr('height', function (d) { return d.height + 20; })
+        .attr('height', function (d) { var h = d.height + 20; return h > 0 ? h : 0; })
         .attr('transform', trArea)
         ;
 

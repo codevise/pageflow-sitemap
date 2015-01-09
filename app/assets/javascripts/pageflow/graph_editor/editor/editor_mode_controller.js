@@ -96,16 +96,20 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
     var chapter = group.get('chapter');
 
     chapter.once('sync', function() {
+
       // create pageflow page via chapter
       var pageflowPage = chapter.addPage({ position: 0 });
 
+      var sitemapPage = this._page('after', placeholder.x, placeholder.y);
+      sitemapPage.set('page', pageflowPage);
+
       pageflowPage.once('sync', function() {
         // create sitemapPage for pageflow Page
-        var sitemapPage = this._page('after', 0, 0);
-        sitemapPage.set('page', pageflowPage);
         group.addPageAt(sitemapPage, 0);
+        placeholder.lane.addGroup(group, placeholder.row);
+        this.graph.trigger('change');
 
-        this.showPageInSidebar(sitemapPage);
+        // this.showPageInSidebar(sitemapPage);
       }, this);
     }, this);
   },
@@ -125,6 +129,6 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   },
 
   _page: function (name, x, y) {
-    return new Page({ x0: x, y0: y, name: name });
+    return new Page({ x0: x, y0: y, name: name, title: 'Kein Titel' });
   }
 });
