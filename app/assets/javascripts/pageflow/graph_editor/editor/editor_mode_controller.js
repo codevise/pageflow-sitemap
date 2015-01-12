@@ -52,8 +52,10 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
     var pageflowPage = chapter.addPage({
       position: page.index()
     });
+
     sitemapPage.set('page', pageflowPage);
     pageflowPage.sitemapPage = sitemapPage;
+
     page.group().addPageAfter(sitemapPage, page);
   },
 
@@ -102,6 +104,7 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
 
       var sitemapPage = this._page('after', placeholder.x, placeholder.y);
       sitemapPage.set('page', pageflowPage);
+      pageflowPage.sitemapPage = sitemapPage;
 
       pageflowPage.once('sync', function() {
         // create sitemapPage for pageflow Page
@@ -109,7 +112,7 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
         placeholder.lane.addGroup(group, placeholder.row);
         this.graph.trigger('change');
 
-        // this.showPageInSidebar(sitemapPage);
+        this.showPageInSidebar(sitemapPage);
       }, this);
     }, this);
   },
