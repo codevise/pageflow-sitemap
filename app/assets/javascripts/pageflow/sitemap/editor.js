@@ -13,7 +13,7 @@
 /*global $, sitemap, JST, data, pageflow, Backbone, Marionette, Graph, SitemapView, console, _*/
 
 (function() {
-  window.sitemap = {};
+  window.sitemap = window.sitemap || {};
 
   // TODO remove this
   pageflow.editor.registerMainMenuItem({

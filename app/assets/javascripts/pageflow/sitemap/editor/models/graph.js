@@ -1,4 +1,4 @@
-/*global Backbone, _, Group, PageCollection, Lane, Knob, Page*/
+/*global Backbone, _, Group, PageCollection, Lane, Knob, Page, pageflow*/
 /*exported Graph*/
 
 var Graph = Backbone.Model.extend({
@@ -234,6 +234,14 @@ Graph.create = function () {
     });
 
     _.forEach(pagesMap, function (source) {
+      // find scroll successor
+      var successorPermaId = source.model.page().configuration.get('scroll_successor_id');
+      var pageflowPage = pageflow.pages.getByPermaId(successorPermaId);
+      if (pageflowPage) {
+        source.model.set('successor', pageflowPage.sitemapPage);
+      }
+
+      // do knobs
       source.data.knobs.forEach(function (knobData) {
         var knob = new Knob({name: knobData.name, limit: knobData.limitValue }, {pageLinks: knobData.pageLinks});
         source.model.get('knobs').add(knob);
