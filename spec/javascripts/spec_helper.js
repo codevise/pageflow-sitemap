@@ -11,7 +11,7 @@
 
 //= require pageflow/editor/base
 
-//= require pageflow/graph_editor/editor.js
+//= require pageflow/sitemap/editor.js
 
 window.expect = chai.expect;
 

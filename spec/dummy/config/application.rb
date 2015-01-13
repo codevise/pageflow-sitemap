@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require(*Rails.groups)
-require "pageflow_graph_editor"
+require "pageflow_sitemap"
 
 module Dummy
   class Application < Rails::Application
