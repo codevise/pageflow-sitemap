@@ -8,207 +8,217 @@ $font: 10px sans-serif;
   stroke-width: 2px;
 }
 
-.group-handle {
-  fill: #f9f9f9;
-}
+div.svgcontainer {
+  z-index: 10000;
+  background: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 
-.group-highlight {
-  fill: none;
-}
-
-.group-dummy {
-  fill: none;
-  pointer-events: none;
-
-  &.active {
-    fill: red;
-  }
-}
-
-.hover {
   .group-handle {
-    fill: $highlight-color;
-    @include highlight;
+    fill: #f9f9f9;
   }
 
   .group-highlight {
-    fill: #f9f9f9;
-    @include highlight;
-  }
-}
-
-.page {
-  cursor: pointer;
-  fill: #fff;
-  stroke: $stroke-color;
-  stroke-width: $stroke-width;
-  font: $font;
-}
-
-image {
-  pointer-events: none;
-}
-
-text {
-  font: $font;
-  pointer-events: none;
-  text-anchor: middle;
-  alignment-baseline: central;
-}
-
-.pagetext {
-  font: $font;
-  text-align: center;
-  pointer-events: none;
-}
-
-.small {
-  .pagetext {
-    font: 8px sans-serif;
-  }
-}
-
-.xsmall {
-  .pagetext {
-    font: 5px sans-serif;
-  }
-}
-
-.drag-dummy {
-  display: none;
-
-  stroke-dasharray: 5,5;
-  opacity: .5;
-  fill:  rgb(176, 196, 222);
-
-  &.active  {
-    display: inline;
+    fill: none;
   }
 
-  rect {
+  .group-dummy {
+    fill: none;
+    pointer-events: none;
+
+    &.active {
+      fill: red;
+    }
+  }
+
+  .hover {
+    .group-handle {
+      fill: $highlight-color;
+      @include highlight;
+    }
+
+    .group-highlight {
+      fill: #f9f9f9;
+      @include highlight;
+    }
+  }
+
+  .page {
+    cursor: pointer;
+    fill: #fff;
+    stroke: $stroke-color;
+    stroke-width: $stroke-width;
+    font: $font;
+  }
+
+  image {
     pointer-events: none;
   }
-}
 
-.ghost {
-  opacity: .5;
-}
-
-.highlight .page {
-  @include highlight;
-}
-
-.area {
-  fill: rgba(255,255,255,0);
-  stroke-width: $stroke-width;
-  pointer-events: none;
-}
-
-.dragging .area {
-  pointer-events: all;
-}
-
-.placeholder {
-  fill: white;
-  stroke: $stroke-color;
-  stroke-width: 0.5px;
-  stroke-dasharray: 5,5;
-
-  &.drag {
-    fill: #efefef;
-    stroke: $stroke-color;
-    stroke-width: 1px;
+  text {
+    font: $font;
+    pointer-events: none;
+    text-anchor: middle;
+    alignment-baseline: central;
   }
 
-  &.hover {
-    fill: #efefef;
-    stroke: red;
-    stroke-width: 1px;
-  }
-}
-
-
-
-path.link {
-  fill: none;
-  stroke: #9ecae1;
-  stroke-width: $stroke-width;
-}
-
-path.follow {
-  fill: none;
-  stroke: red;
-  stroke-width: $stroke-width;
-}
-
-path.successor {
-  fill: none;
-  stroke: red;
-  stroke-width: $stroke-width;
-}
-
-path.highlight {
-  stroke: $highlight-color;
-  stroke-width: 2px;
-}
-
-path.invisible {
-  fill: none;
-  stroke: none;
-  stroke-width: 0;
-}
-
-marker {
-  stroke: inherit;
-  fill: inherit;
-}
-
-.node {
-  .menu-item {
-    fill: none;
-    stroke: none;
+  .pagetext {
+    font: $font;
+    text-align: center;
+    pointer-events: none;
   }
 
-  .knob, .successor-knob {
-    stroke: #ffffff;
-    fill: rgba(255,255,255, 0.5);
+  .small {
+    .pagetext {
+      font: 8px sans-serif;
+    }
   }
 
-  .knob {
-    stroke: #98fb98;
+  .xsmall {
+    .pagetext {
+      font: 5px sans-serif;
+    }
+  }
+
+  .drag-dummy {
+    display: none;
+
+    stroke-dasharray: 5,5;
+    opacity: .5;
+    fill:  rgb(176, 196, 222);
+
+    &.active  {
+      display: inline;
+    }
+
+    rect {
+      pointer-events: none;
+    }
+  }
+
+  .ghost {
+    opacity: .5;
+  }
+
+  .highlight .page {
+    @include highlight;
+  }
+
+  .area {
+    fill: rgba(255,255,255,0);
+    stroke-width: $stroke-width;
+    pointer-events: none;
+  }
+
+  .dragging .area {
     pointer-events: all;
   }
 
-  .knob.exceeded {
-    stroke: #ffffff;
-    pointer-events: none;
+  .placeholder {
+    fill: white;
+    stroke: $stroke-color;
+    stroke-width: 0.5px;
+    stroke-dasharray: 5,5;
+
+    &.drag {
+      fill: #efefef;
+      stroke: $stroke-color;
+      stroke-width: 1px;
+    }
+
+    &.hover {
+      fill: #efefef;
+      stroke: red;
+      stroke-width: 1px;
+    }
   }
 
-  &.show-menu {
-    .knob, .successor-knob, .menu-item {
-      cursor: pointer;
-      fill: #fff;
-      stroke: $stroke-color;
-      stroke-width: $stroke-width;
+
+
+  path.link {
+    fill: none;
+    stroke: #9ecae1;
+    stroke-width: $stroke-width;
+  }
+
+  path.follow {
+    fill: none;
+    stroke: red;
+    stroke-width: $stroke-width;
+  }
+
+  path.successor {
+    fill: none;
+    stroke: red;
+    stroke-width: $stroke-width;
+  }
+
+  path.highlight {
+    stroke: $highlight-color;
+    stroke-width: 2px;
+  }
+
+  path.invisible {
+    fill: none;
+    stroke: none;
+    stroke-width: 0;
+  }
+
+  marker {
+    stroke: inherit;
+    fill: inherit;
+  }
+
+  .node {
+    .menu-item {
+      fill: none;
+      stroke: none;
+    }
+
+    .knob, .successor-knob {
+      stroke: #ffffff;
+      fill: rgba(255,255,255, 0.5);
+    }
+
+    .knob {
+      stroke: #98fb98;
+      pointer-events: all;
     }
 
     .knob.exceeded {
-      stroke: red;
+      stroke: #ffffff;
+      pointer-events: none;
+    }
+
+    &.show-menu {
+      .knob, .successor-knob, .menu-item {
+        cursor: pointer;
+        fill: #fff;
+        stroke: $stroke-color;
+        stroke-width: $stroke-width;
+      }
+
+      .knob.exceeded {
+        stroke: red;
+      }
     }
   }
-}
 
-.knob-dummy, .menu-item-dummy {
-  display: none;
+  .knob-dummy, .menu-item-dummy {
+    display: none;
 
-  stroke-dasharray: 5,5;
-  opacity: .5;
-  fill:  rgb(176, 196, 222);
+    stroke-dasharray: 5,5;
+    opacity: .5;
+    fill:  rgb(176, 196, 222);
 
-  pointer-events: none;
+    pointer-events: none;
 
-  &.active  {
-    display: inline;
+    &.active  {
+      display: inline;
+    }
   }
 }
 
@@ -226,12 +236,3 @@ div.button {
   }
 }
 
-div.svgcontainer {
-  z-index: 10000;
-  background: white;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-}
