@@ -15,14 +15,6 @@
 (function() {
   window.sitemap = window.sitemap || {};
 
-  // TODO remove this
-  pageflow.editor.registerMainMenuItem({
-    translationKey: 'graph_selection',
-    click: function() {
-      sitemap.showSelection();
-    }
-  });
-
   sitemap.showSelection = function () {
     sitemap.selectPage()
       .done(function (selected) {
