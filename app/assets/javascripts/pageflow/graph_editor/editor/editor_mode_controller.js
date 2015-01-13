@@ -60,9 +60,7 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   },
 
   knobDroppedOnPage: function (knob,  page) {
-    if (!knob.linkTo(page)) {
-      window.alert('Konnte nicht verlinkt werden!\nDas Limit von ' + knob.get('limit') + ' ist ausgeschöpft.');
-    }
+    knob.linkTo(page);
   },
 
   successorKnobDroppedOnPage: function (group,  page) {

@@ -1,4 +1,4 @@
-/*globals pageflow, graphEditor */
+/*global s pageflow, graphEditor, _, Graph*/
 
 graphEditor.graphFactory = function (chapters) {
   var graph = Graph.create();
@@ -18,14 +18,21 @@ graphEditor.graphFactory = function (chapters) {
       return c.configuration.get('row');
     }).forEach(function(chapter) {
       var group = lane.group(chapter);
-      chapter.sitemapGroup = group; // FIXME:  this need to be done in graph.js similar to sitemapPage
 
       var row = chapter.configuration.get('row');
       if (_.isNumber(row)) {
         group.row(row);
       }
       chapter.pages.forEach(function(page) {
-        group.page(page).end();
+        var pageBuilder = group.page(page);
+
+        var pageLinks = page.pageLinks();
+
+        if (pageLinks) {
+          pageBuilder.knob('default', pageLinks).end();
+        }
+
+        pageBuilder.end();
       });
       group.end();
     });

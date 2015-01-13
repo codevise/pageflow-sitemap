@@ -1,4 +1,4 @@
-/*global s pageflow, graphEditor, Group, PageCollection, pageflow, Page, _, console*/
+/*global s pageflow, graphEditor, Group, PageCollection, pageflow, Page, _, console, Knob*/
 
 graphEditor.EntryToGraphBinding = pageflow.Object.extend({
 
@@ -69,6 +69,15 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
       var title = page.configuration.get('title');
       page.sitemapPage.set('title', title);
       this.graph.trigger('change');
+    },
+    'change:template': function(page) {
+      var knobs = page.sitemapPage.get('knobs');
+      knobs.reset();
+      var pageLinks = page.pageLinks();
+      if (pageLinks) {
+        var knob = new Knob({name: 'default'}, {pageLinks: pageLinks});
+        knobs.add(knob);
+      }
     },
     'remove': function(page) {
       page.once('sync', function() {

@@ -146,18 +146,10 @@ Graph.create = function () {
             var page = {
               model: page,
               knobs: [],
-              knob: function (name) {
+              knob: function (name, pageLinks) {
                 var knob = {
                   name: name,
-                  links: [],
-                  link: function (targetId) {
-                    this.links.push(targetId);
-                    return this;
-                  },
-                  limit: function (limit) {
-                    this.limitValue = limit;
-                    return this;
-                  },
+                  pageLinks: pageLinks,
                   end: function () {
                     return page;
                   }
@@ -241,18 +233,10 @@ Graph.create = function () {
       return new Lane(groupModels);
     });
 
-    _.forEach(pagesMap, function (source, name) {
+    _.forEach(pagesMap, function (source) {
       source.data.knobs.forEach(function (knobData) {
-        var knob = new Knob({name: knobData.name, limit: knobData.limitValue});
+        var knob = new Knob({name: knobData.name, limit: knobData.limitValue }, {pageLinks: knobData.pageLinks});
         source.model.get('knobs').add(knob);
-
-        knobData.links.forEach(function (targetName) {
-          var target = pagesMap[targetName];
-
-          if (!target) { throw 'Unknown link target ' + targetName + ' for ' + name; }
-
-          knob.linkTo(target.model);
-        });
       });
     });
 

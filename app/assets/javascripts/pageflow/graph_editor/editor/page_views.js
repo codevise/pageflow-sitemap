@@ -38,9 +38,6 @@
 
             // highlight links
             d3.selectAll('[id^="link:' + d.page.get('name') +'"]').classed('highlight', true);
-            d.page.get('incommingLinks').forEach(function(link) { // TODO this shouldn't be hardcoded here
-              d3.selectAll('[id^="page:' + link +'"]').classed('highlight', true);
-            });
 
             clearTimeout(d.page.menuTimeout);
             d3.select(this.parentNode).classed('show-menu', true);

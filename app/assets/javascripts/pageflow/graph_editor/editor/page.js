@@ -37,7 +37,6 @@ var Page = Backbone.Model.extend({
   },
 
   remove: function () {
-    this.removeAllLinks();
     this.removeFromGroup();
   },
 

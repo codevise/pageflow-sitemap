@@ -84,8 +84,13 @@ graphEditor.Grid = function(data) {
   nodes.forEach(function(node) {
     var knobs = node.page.get('knobs');
     knobs.forEach(function(knob) {
-      knob.get('links').forEach(function (link) {
-        var pageName = link.get('target').get('name');
+      knob.pageLinks.forEach(function (link) {
+        var pageName = link.targetPage().sitemapPage.get('name');
+
+        if (!(nodesByName[pageName])) {
+          throw('node not found for ' + pageName);
+        }
+
         links.push({
           id: "link:" + node.page.get('name') + '-' + pageName,
           link: link,
