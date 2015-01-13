@@ -217,5 +217,7 @@ Group.createGroup = function(lane, row) {
     chapter: chapter
   });
 
+  chapter.sitemapGroup = group;
+
   return group;
 };

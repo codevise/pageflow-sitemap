@@ -4,21 +4,23 @@ graphEditor.EntryToGraphBinding = pageflow.Object.extend({
 
   chapterEvents: {
     'add': function(chapter) {
-      // If a chapter is added from outside, that is currently not
-      // represented in the graph we simply add it to the end of the
-      // first lane and assumme that it is empty or corresponding add
-      // page events get triggered
+      chapter.once('sync', function () {
+        // If a chapter is added from outside, that is currently not
+        // represented in the graph we simply add it to the end of the
+        // first lane and assumme that it is empty or corresponding add
+        // page events get triggered
 
-      var group = chapter.sitemapGroup;
-      if (!group) {
-        chapter.once('sync', function () {
-          group = new Group({
-            chapter: chapter,
-            pages: new PageCollection()
-          });
-          this.graph.lane(0).add(group);
-        }, this);
-      }
+        var group = chapter.sitemapGroup;
+        if (!group) {
+          chapter.once('sync', function () {
+            group = new Group({
+              chapter: chapter,
+              pages: new PageCollection()
+            });
+            this.graph.lane(0).add(group);
+          }, this);
+        }
+      }, this);
     },
     'change:title': function(model, title) {
       // d3view takes data directly from backbone model.
