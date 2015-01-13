@@ -16,6 +16,8 @@ var Page = Backbone.Model.extend({
     }
     this.get('knobs').page = this;
     this.get('knobs').on('all', this._collectionChanged, this);
+
+    this.set('name', this.cid);
   },
 
   page: function() {

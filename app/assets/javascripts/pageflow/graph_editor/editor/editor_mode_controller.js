@@ -132,6 +132,6 @@ graphEditor.EditorModeController = graphEditor.AbstractController.extend({
   },
 
   _page: function (name, x, y) {
-    return new Page({ x0: x, y0: y, name: name, title: 'Kein Titel' });
+    return new Page({ x0: x, y0: y, title: 'Kein Titel' });
   }
 });

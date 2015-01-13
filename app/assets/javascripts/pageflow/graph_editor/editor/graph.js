@@ -206,14 +206,13 @@ Graph.create = function () {
         var pageModels = group.pages.map(function (page) {
           var pageModel = new Page({
             page: page.model,
-            name: page.model.id,
             title: page.model.configuration.get('title') || "Kein Titel"
           });
 
           // attach ref to sitemap model to pageflow model.
           page.model.sitemapPage = pageModel;
 
-          pagesMap[page.name] = {
+          pagesMap[page.model.id] = {
             data: page,
             model: pageModel
           };
