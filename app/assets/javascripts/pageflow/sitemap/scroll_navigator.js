@@ -1,4 +1,4 @@
-/*global pageflow, _*/
+/*global pageflow, _, $*/
 pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
   var predecessorIds = _(configurations).reduce(function(result, configuration, permaId) {
     result[configuration.scroll_successor_id] = permaId;
@@ -34,6 +34,10 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
   }
 
   function historyBack() {
+    if ($('sidebar')){
+      return false;
+    }
+
     history.back();
     return true;
   }
