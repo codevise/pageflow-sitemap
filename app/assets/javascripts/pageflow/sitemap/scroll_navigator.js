@@ -34,7 +34,7 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
   }
 
   function historyBack() {
-    if ($('sidebar')){
+    if ($('sidebar').length){
       return false;
     }
 
