@@ -16,8 +16,6 @@ sitemap.GraphView = function(svgElement, controller) {
   // this should go somewhere to be usable by D3Views
   sitemap.pan = new sitemap.PanHandler(svgElement, svgGroup);
 
-  var ix = 0;
-
   var update =  function (graph) {
     var grid = new sitemap.Grid(graph);
 
