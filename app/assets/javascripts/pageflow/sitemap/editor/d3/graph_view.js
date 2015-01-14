@@ -125,7 +125,7 @@ sitemap.GraphView = function(svgElement, controller) {
     });
     followPathView(svgLinks, '.follow', grid.followLinks, {
       clicked: function (d) {
-        controller.followPathSelected(d.page);
+        controller.followPathSelected(d.source.page);
       }
     });
     successorPathView(svgLinks, '.successor', grid.successorLinks, {
