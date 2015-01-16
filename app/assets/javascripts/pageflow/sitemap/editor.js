@@ -25,13 +25,6 @@
       });
   };
 
-  pageflow.editor.registerMainMenuItem({
-    translationKey: 'sitemap',
-    click: function() {
-      sitemap.show();
-    }
-  });
-
   sitemap.selectPage = function () {
     var result = $.Deferred(),
       graph = sitemap.graphFactory(pageflow.chapters),
