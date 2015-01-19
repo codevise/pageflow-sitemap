@@ -66,9 +66,11 @@ sitemap.EntryToGraphBinding = pageflow.Object.extend({
     },
     'change:configuration': function(page) {
       // This updates the title only.
-      var title = page.configuration.get('title');
-      page.sitemapPage.set('title', title);
-      this.graph.trigger('change');
+      if (page.sitemapPage) {
+        var title = page.configuration.get('title');
+        page.sitemapPage.set('title', title);
+        this.graph.trigger('change');
+      }
     },
     'change:template': function(page) {
       var knobs = page.sitemapPage.get('knobs');
