@@ -12,7 +12,7 @@
     svg.enter = function(node, opts) {
       var g = node.append("g")
           .attr("class", "node")
-          .attr("id", function(d) { return 'node:'+ d.page.get('name'); })
+          .attr("id", function(d) { return 'node:'+ d.page.name(); })
           .attr("transform", transformStart);
 
       g.transition()
@@ -37,7 +37,7 @@
             d3.select(this).classed('hover', true);
 
             // highlight links
-            d3.selectAll('[id^="link:' + d.page.get('name') +'"]').classed('highlight', true);
+            d3.selectAll('[id^="link:' + d.page.name() +'"]').classed('highlight', true);
 
             clearTimeout(d.page.menuTimeout);
             d3.select(this.parentNode).classed('show-menu', true);

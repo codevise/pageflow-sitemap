@@ -17,8 +17,6 @@ var Page = Backbone.Model.extend({
     this.get('knobs').page = this;
     this.get('knobs').on('all', this._collectionChanged, this);
 
-    this.set('name', this.cid);
-
     this.listenTo(this, 'change:successor', function(model, val) {
       if (val) {
         this.page().configuration.set('scroll_successor_id',  val.page().get('perma_id'));
@@ -35,6 +33,10 @@ var Page = Backbone.Model.extend({
 
   group: function () {
     return this.get('group');
+  },
+
+  name: function () {
+    return this.page().cid;
   },
 
   index: function() {

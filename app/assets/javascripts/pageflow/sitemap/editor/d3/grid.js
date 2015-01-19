@@ -31,7 +31,7 @@ sitemap.Grid = function(data) {
       }
 
       group.get('pages').forEach(function(page) {
-        var id = "page:" + page.get('name');
+        var id = "page:" + page.name();
 
         var ids = 0,
             knobs = page.get('knobs').map(function (knob) {
@@ -54,7 +54,7 @@ sitemap.Grid = function(data) {
         nodes.push(node);
 
         // build index of nodes by name
-        nodesByName[page.get('name')] = node;
+        nodesByName[page.name()] = node;
       });
 
       var lastNode = _.last(groupNodes);
@@ -85,18 +85,20 @@ sitemap.Grid = function(data) {
     var knobs = node.page.get('knobs');
     knobs.forEach(function(knob) {
       knob.pageLinks.forEach(function (link) {
-        var pageName = link.targetPage().sitemapPage.get('name');
+        if (link.targetPage()) {
+          var pageName = link.targetPage().cid;
 
-        if (!(nodesByName[pageName])) {
-          throw('node not found for ' + pageName);
+          if (!(nodesByName[pageName])) {
+            throw('node not found for ' + pageName);
+          }
+
+          links.push({
+            id: "link:" + node.page.name() + '-' + pageName,
+            link: link,
+            source: node,
+            target: nodesByName[pageName]
+          });
         }
-
-        links.push({
-          id: "link:" + node.page.get('name') + '-' + pageName,
-          link: link,
-          source: node,
-          target: nodesByName[pageName]
-        });
       });
     });
   });
@@ -108,12 +110,12 @@ sitemap.Grid = function(data) {
     groups.forEach(function(group) {
       var last = false;
       group.get('pages').forEach(function(page) {
-        var pageName = page.get('name');
+        var pageName = page.name();
         var target = nodesByName[pageName];
 
         if (last && target) {
           followLinks.push({
-            id: "follow:" + nodesByName[last].page.get('name') + '-' + pageName,
+            id: "follow:" + nodesByName[last].page.name() + '-' + pageName,
             source: nodesByName[last],
             target: target
           });
@@ -122,7 +124,7 @@ sitemap.Grid = function(data) {
       });
 
       if (group.successor()) {
-        var targetName = group.successor().get('name'),
+        var targetName = group.successor().name(),
             source = nodesByName[last],
             target = nodesByName[targetName];
 
