@@ -32,7 +32,7 @@
     }
   });
 
-  sitemap.selectPage = function () {
+  pageflow.editor.selectPage = sitemap.selectPage = function () {
     var result = $.Deferred(),
       graph = sitemap.graphFactory(pageflow.chapters),
       binding = new sitemap.EntryToGraphBinding(pageflow.chapters, pageflow.pages, graph),
