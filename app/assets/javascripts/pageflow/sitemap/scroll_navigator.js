@@ -1,5 +1,13 @@
 /*global pageflow, _, $*/
 pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
+  var stack = [];
+
+  slideshow.on('slideshowchangepage', function() {
+    stack.push(slideshow.currentPage().data('id'));
+  });
+
+  stack.push(slideshow.currentPage().data('id'));
+
   var predecessorIds = _(configurations).reduce(function(result, configuration, permaId) {
     result[configuration.scroll_successor_id] = permaId;
     return result;
@@ -13,11 +21,11 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
   }
 
   function goToConfiguredPredecessor(currentPage) {
-    return slideshow.goToById(predecessorIds[currentPage.data('id')], {direction: 'backwards'});
+    return slideshow.goToById(predecessorIds[currentPage.data('id')], {direction: 'backwards', position: 'bottom'});
   }
 
   function goToPreviousPageInChapter(currentPage) {
-    return goToPageInChapter(currentPage, currentPage.prev('.page'), {direction: 'backwards'});
+    return goToPageInChapter(currentPage, currentPage.prev('.page'), {direction: 'backwards', position: 'bottom'});
   }
 
   function goToNextPageInChapter(currentPage) {
@@ -33,17 +41,19 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
     return false;
   }
 
-  function historyBack() {
-    if ($('sidebar').length){
-      return false;
+  function goToPreviouslyVisitedPage() {
+    stack.pop();
+
+    if (stack.length) {
+      slideshow.goToById(stack.pop(), {direction: 'backwards', position: 'bottom'});
+      return true;
     }
 
-    history.back();
-    return true;
+    return false;
   }
 
   this.back = function(currentPage, configuration) {
-    return historyBack() ||
+    return goToPreviouslyVisitedPage() ||
       goToPreviousPageInChapter(currentPage) ||
       goToConfiguredPredecessor(currentPage);
   };
