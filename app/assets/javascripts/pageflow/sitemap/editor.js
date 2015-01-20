@@ -34,16 +34,16 @@
 
   pageflow.editor.selectPage = sitemap.selectPage = function () {
     var result = $.Deferred(),
-      graph = sitemap.graphFactory(pageflow.chapters),
-      binding = new sitemap.EntryToGraphBinding(pageflow.chapters, pageflow.pages, graph),
-      graphView = new sitemap.GraphSelectionView({ data: graph });
+        graphView = new sitemap.GraphSelectionView({
+          data: getGraph()
+        });
 
     graphView.controller.once('selected', function (selected) {
       graphView.remove();
       result.resolve(selected);
     });
 
-    graphView.once('closed', _.bind(result.reject, result));
+    graphView.once('closed', result.reject);
 
     pageflow.editor.showViewInMainPanel(graphView);
 
@@ -51,12 +51,9 @@
   };
 
   sitemap.show = function () {
-    if (!sitemap.editor) {
-      createSitemap();
-    }
-
-    sitemap.editor.show();
-    pageflow.editor.showViewInMainPanel(sitemap.editor);
+    pageflow.editor.showViewInMainPanel(new sitemap.SitemapView({
+      data: getGraph()
+    }));
   };
 
   sitemap.hide = function () {
@@ -65,9 +62,12 @@
     }
   };
 
-  function createSitemap() {
-    var graph = sitemap.graphFactory(pageflow.chapters);
-    new sitemap.EntryToGraphBinding(pageflow.chapters, pageflow.pages, graph);
-    sitemap.editor = new sitemap.SitemapView({ data: graph });
+  function getGraph() {
+    if (!sitemap.graph) {
+      sitemap.graph = sitemap.graphFactory(pageflow.chapters);
+      sitemap.binding = new sitemap.EntryToGraphBinding(pageflow.chapters, pageflow.pages, sitemap.graph);
+    }
+
+    return sitemap.graph;
   }
 }());
