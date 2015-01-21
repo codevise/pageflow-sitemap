@@ -17,10 +17,13 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
 
   onRender: function() {
     var svgElement = this.$el.find('svg')[0];
-    new sitemap.GraphView(svgElement, this.controller);
+    this.graphView = new sitemap.GraphView(svgElement, this.controller);
 
-    pageflow.app.on('resize', sitemap.pan.resize);
-    setTimeout(sitemap.pan.resize, 250);
+    pageflow.app.on('resize', this.graphView.resize);
+  },
+
+  onShow: function() {
+    this.graphView.resize();
   },
 
   hide: function () {

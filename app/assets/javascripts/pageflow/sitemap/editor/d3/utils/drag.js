@@ -11,7 +11,7 @@ sitemap.addDrag = function(id) {
 
   var drag = d3.behavior.drag()
       .on("dragstart", function dragStartHandler() {
-        d3.event.sourceEvent.stopPropagation();
+        d3.event.sourceEvent.preventDefault();
 
         var offset = drag.offsetFn.apply(this, arguments);
         dx = offset.x;
@@ -43,8 +43,6 @@ sitemap.addDrag = function(id) {
         dy += d3.event.dy;
 
         dummy.attr("transform", "translate(" + dx + "," + dy + ")");
-
-        sitemap.pan.update.apply(this);
 
         dragging = true;
       })

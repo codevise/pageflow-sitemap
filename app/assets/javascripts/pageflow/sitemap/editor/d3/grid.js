@@ -7,6 +7,7 @@ sitemap.Grid = function(data) {
   var successorLinks = this.successorLinks = [];
   var nodesByName = {};
   var placeholders = this.placeholders = [];
+  var size = this.size = {x: 0, y: 0};
 
   var laneWidth = 2 * options.page.horizontalMargin + options.page.width,
       rowHeight = 2 * options.page.verticalMargin + options.page.height;
@@ -148,6 +149,9 @@ sitemap.Grid = function(data) {
         x: laneIndex * laneWidth,
         y: i * rowHeight
       });
+
+      size.x = Math.max(size.x, laneIndex * laneWidth);
+      size.y = Math.max(size.y, i * rowHeight);
     }
   });
 };

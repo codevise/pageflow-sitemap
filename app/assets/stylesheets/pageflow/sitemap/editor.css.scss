@@ -9,6 +9,9 @@ $font: 10px sans-serif;
 }
 
 div.svgcontainer {
+  @include user-select(none);
+  cursor: default;
+
   z-index: 10000;
   background: white;
   position: absolute;

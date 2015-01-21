@@ -5,8 +5,7 @@ sitemap.GraphView = function(svgElement, controller) {
     .attr("width", "100%")
     .attr("height", "100%");
 
-  var svgGroup = svg.select("g.all")
-    .attr("transform", "translate(" + options.margin.left + "," + options.margin.top + ")");
+  var svgGroup = svg.select("g.all");
 
   var svgPages = svg.select("g.pages");
   var svgLinks = svg.select("g.links");
@@ -14,10 +13,37 @@ sitemap.GraphView = function(svgElement, controller) {
   // var svgControls = svg.select("g.controls");
 
   // this should go somewhere to be usable by D3Views
-  sitemap.pan = new sitemap.PanHandler(svgElement, svgGroup);
+  //sitemap.pan = new sitemap.PanHandler(svgElement, svgGroup);
+
+  var scrollAndZoom = sitemap.behavior.scrollAndZoom({
+    margin: 50
+  })
+    .on('change', function(event) {
+      svgGroup.attr('transform', 'translate(' + event.translate + ')scale(' + event.scale + ')');
+    });
+
+  svg.call(scrollAndZoom);
+
+  this.getScale = function() {
+    return scrollAndZoom.getScale();
+  };
+
+  this.setScale = function(value) {
+    scrollAndZoom.setScale(value);
+  };
+
+  this.resize = function() {
+    scrollAndZoom.updateSize(parseInt(svg.style('width'), 10),
+                             parseInt(svg.style('height'), 10));
+  };
 
   var update =  function (graph) {
     var grid = new sitemap.Grid(graph);
+
+    scrollAndZoom.updateConstraints(-(grid.size.x + window.options.page.width / 2),
+                                    -(grid.size.y + window.options.page.height / 2),
+                                    window.options.page.width / 2,
+                                    window.options.page.height / 2);
 
     var phalf = window.options.page.height / 2;
     // add svg elements for different types of things

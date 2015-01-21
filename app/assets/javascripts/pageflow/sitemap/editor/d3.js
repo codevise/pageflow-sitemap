@@ -1,5 +1,7 @@
-
 //= require ./d3/options.js
+
+//= require_tree ./d3/behaviors
+
 //= require ./d3/views/d3_view.js
 //= require ./d3/views/views.js
 //= require ./d3/views/group_view.js
