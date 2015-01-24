@@ -22,7 +22,12 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
       svgGroup.attr('transform', 'translate(' + event.translate + ')scale(' + event.scale + ')');
     });
 
-  svg.call(scrollAndZoom);
+  svg
+    .call(scrollAndZoom)
+    .call(sitemap.behavior.selectionRect({
+      container: 'g.all',
+      targets: '.group'
+    }));
 
   this.resize = function() {
     scrollAndZoom.updateSize(parseInt(svg.style('width'), 10),

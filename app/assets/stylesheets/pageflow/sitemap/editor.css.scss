@@ -224,6 +224,15 @@ div.svgcontainer {
       display: inline;
     }
   }
+
+  rect.selection {
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+    cursor: default;
+    vector-effect: non-scaling-stroke;
+  }
 }
 
 div.button {

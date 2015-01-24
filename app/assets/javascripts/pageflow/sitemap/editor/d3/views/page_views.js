@@ -50,6 +50,8 @@
               d3.select(this).classed('show-menu', false);
             }, this.parentNode), 200);
           })
+          .on('select', function() {
+          })
       ;
 
       g.append('svg:rect')
