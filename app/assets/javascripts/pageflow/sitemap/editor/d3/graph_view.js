@@ -26,7 +26,10 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     .call(scrollAndZoom)
     .call(sitemap.behavior.selectionRect({
       container: 'g.all',
-      targets: '.group'
+      targets: '.group',
+      selected: function(groups) {
+        controller.groupsSelected(_(groups).pluck('group'));
+      }
     }));
 
   this.resize = function() {
@@ -42,8 +45,8 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
             'getScrollWindowProportionX',
             'getScrollWindowProportionY');
 
-  var update =  function (graph) {
-    var grid = new sitemap.Grid(graph, viewModelOptions);
+  var update = function (graph, selection) {
+    var grid = new sitemap.Grid(graph, selection, viewModelOptions);
 
     scrollAndZoom.updateConstraints(-(grid.size.x + window.options.page.width / 2),
                                     -(grid.size.y + window.options.page.height / 2),
@@ -177,5 +180,5 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     });
   };
 
-    controller.addUpdateHandler(update);
+  controller.addUpdateHandler(update);
 };

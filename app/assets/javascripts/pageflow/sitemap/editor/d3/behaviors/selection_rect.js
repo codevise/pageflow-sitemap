@@ -18,6 +18,10 @@ sitemap.behavior.selectionRect = function(options) {
         return;
       }
 
+      if (event.target !== g.node()) {
+        return;
+      }
+
       var startPoint = d3.mouse(this);
       var container = g.select(options.container);
       var r0 = container.node().getBoundingClientRect();
@@ -63,9 +67,9 @@ sitemap.behavior.selectionRect = function(options) {
       }
 
       function dispatchSelectEvents() {
-        selectedTargets().each(function() {
-          dispatchEvent(this, 'select');
-        });
+        if (options.selected) {
+          options.selected(selectedTargets().data());
+        }
       }
 
       function selectedTargets() {

@@ -1,5 +1,5 @@
 /*global _, options, sitemap*/
-sitemap.Grid = function(data, opts) {
+sitemap.Grid = function(data, selection, opts) {
   opts = opts || {};
 
   var nodes = this.nodes = [];
@@ -74,6 +74,7 @@ sitemap.Grid = function(data, opts) {
         id: 'group:' + group.get('id'),
         group: group,
         nodes: groupNodes,
+        selected: _(selection.get('groups')).contains(group),
         x: x,
         y: groupRow * rowHeight,
         height: (rowIndex - groupRow) * rowHeight - 2 * options.page.verticalMargin

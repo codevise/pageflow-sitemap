@@ -50,6 +50,12 @@ div.svgcontainer {
     }
   }
 
+  .selected {
+    .group-handle {
+      fill: red;
+    }
+  }
+
   .page {
     cursor: pointer;
     fill: #fff;

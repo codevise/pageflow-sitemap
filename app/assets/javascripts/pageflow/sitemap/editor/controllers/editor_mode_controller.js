@@ -1,8 +1,18 @@
 /*global pageflow, sitemap, Backbone, confirm, Group, _, Page*/
 
 sitemap.EditorModeController = sitemap.AbstractController.extend({
+  initialize: function(graph) {
+    this.graph = graph;
+    this.selection = new Backbone.Model({groups: []});
+  },
+
   groupSelected: function (group) {
     this.showGroupInSidebar(group);
+    this.selection.set('groups', [group]);
+  },
+
+  groupsSelected: function (groups) {
+    this.selection.set('groups', groups);
   },
 
   groupDroppedOnPlaceholder: function (group, placeholder) {
@@ -131,5 +141,20 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
 
   _page: function (name, x, y) {
     return new Page({ x0: x, y0: y, title: 'Kein Titel' });
+  },
+
+  addUpdateHandler: function (handler) {
+    var that = this;
+    handler(this.graph, this.selection);
+
+    var updateTimeout;
+    this.graph.on('change', function () {
+      clearTimeout(updateTimeout);
+      updateTimeout = setTimeout(_.bind(handler, this, this, that.selection), 100);
+    });
+
+    this.selection.on('change', function() {
+      handler(that.graph, that.selection);
+    });
   }
 });

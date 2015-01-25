@@ -4,7 +4,10 @@ sitemap.groupView = sitemap.D3View(function(svg) {
   svg.enter = function (nodeEnter, opts) {
     var g = nodeEnter.append("svg:g")
         .attr('id', function (d) { return d.id; })
-        .attr('class', 'group');
+        .attr('class', 'group')
+        .classed('selected', function(d) {
+          return d.selected;
+        });
 
     var representationNode = g.append('svg:g');
 
@@ -60,6 +63,10 @@ sitemap.groupView = sitemap.D3View(function(svg) {
   };
 
   svg.update = function(node) {
+    node.classed('selected', function(d) {
+      return d.selected;
+    });
+
     node.select('.group-handle-group')
         .transition().duration(options.duration)
         .attr('transform', trBar);
