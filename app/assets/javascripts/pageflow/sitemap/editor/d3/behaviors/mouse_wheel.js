@@ -14,8 +14,8 @@ sitemap.behavior.mouseWheel = function() {
     dispatch.wheel({
       delta: delta(),
       point: d3.mouse(this),
-      ctrlKey: event.ctrlKey,
-      altKey: event.altKey
+      ctrlKey: d3.event.ctrlKey,
+      altKey: d3.event.altKey
     });
   }
 

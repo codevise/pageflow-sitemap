@@ -164,7 +164,7 @@ sitemap.behavior.scrollAndZoom = function(options) {
       scaleTo(Math.pow(2, event.delta * 0.002) * view.k);
       translateTo(center0, translate0);
     }
-    else if (event.shiftKey || event.altKey) {
+    else if (event.shiftKey || d3.event.altKey) {
       center0[0] += Math.sign(event.delta) * 50;
     }
     else {
@@ -176,7 +176,7 @@ sitemap.behavior.scrollAndZoom = function(options) {
   }
 
   function onMouseDown() {
-    if (event.which !== 1) {
+    if (d3.event.which !== 1) {
       return;
     }
 
