@@ -11,6 +11,10 @@ sitemap.ScrollBarView = Backbone.Marionette.ItemView.extend({
     this.setupSlider();
   },
 
+  onClose: function() {
+    this.options.graphView.on(this.graphViewChangeEvent, null);
+  },
+
   setupSlider: function() {
     var graphView = this.options.graphView;
     var view = this;
@@ -23,7 +27,9 @@ sitemap.ScrollBarView = Backbone.Marionette.ItemView.extend({
       }
     });
 
-    this.options.graphView.on('change.scrollBar' + coord, function() {
+    this.graphViewChangeEvent = 'change.scrollBar' + coord;
+
+    this.options.graphView.on(this.graphViewChangeEvent, function() {
       view.ui.slider.slider('value', graphView['getScroll' + coord]());
       view.resizeHandle();
     });

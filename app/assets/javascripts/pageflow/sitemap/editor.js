@@ -15,16 +15,6 @@
 (function() {
   window.sitemap = window.sitemap || {};
 
-  sitemap.showSelection = function () {
-    sitemap.selectPage()
-      .done(function (selected) {
-        console.log('selected', selected);
-      })
-      .fail(function () {
-        console.log('nothing selected');
-      });
-  };
-
   pageflow.editor.registerMainMenuItem({
     translationKey: 'sitemap',
     click: function() {
@@ -34,12 +24,13 @@
 
   pageflow.editor.selectPage = sitemap.selectPage = function () {
     var result = $.Deferred(),
-        graphView = new sitemap.GraphSelectionView({
-          data: getGraph()
+        controller = new sitemap.SelectionModeController(getGraph()),
+        graphView = new sitemap.SitemapView({
+          controller: controller
         });
 
-    graphView.controller.once('selected', function (selected) {
-      graphView.remove();
+    controller.once('selected', function (selected) {
+      graphView.close();
       result.resolve(selected);
     });
 
@@ -52,14 +43,8 @@
 
   sitemap.show = function () {
     pageflow.editor.showViewInMainPanel(new sitemap.SitemapView({
-      data: getGraph()
+      controller: new sitemap.EditorModeController(getGraph())
     }));
-  };
-
-  sitemap.hide = function () {
-    if (sitemap.editor) {
-      sitemap.editor.hide();
-    }
   };
 
   function getGraph() {

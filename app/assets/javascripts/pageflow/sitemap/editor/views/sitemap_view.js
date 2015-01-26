@@ -1,8 +1,6 @@
-/*global sitemap, Backbone, pageflow, data*/
-
 sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
   className: 'container sitemap',
-  template: 'pageflow/sitemap/editor/templates/graph',
+  template: 'pageflow/sitemap/editor/templates/sitemap',
 
   ui: {
     scrollBarX: '.scroll_bar_x',
@@ -12,18 +10,20 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
 
   events: {
     "click .close.button": function() {
+      this.trigger('closed');
       this.close();
     }
   },
 
-  initialize: function(options) {
-    this.data = options.data;
-    this.controller = new sitemap.EditorModeController(options.data);
+  initialize: function() {
+    this.listenTo(this, 'close', function() {
+      this.graphView.on('change.scaleSlider', null);
+    });
   },
 
   onRender: function() {
     var svgElement = this.$el.find('svg')[0];
-    this.graphView = new sitemap.GraphView(svgElement, this.controller);
+    this.graphView = new sitemap.GraphView(svgElement, this.options.controller);
 
     this.listenTo(pageflow.app, 'resize', this.graphView.resize);
 
@@ -39,13 +39,13 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
     this.subview(new sitemap.ScrollBarView({
       el: this.ui.scrollBarX,
       graphView: this.graphView
-    }).render());
+    }));
 
     this.subview(new sitemap.ScrollBarView({
       el: this.ui.scrollBarY,
       graphView: this.graphView,
       orientation: 'vertical'
-    }).render());
+    }));
   },
 
   setupScaleSlider: function() {
@@ -57,16 +57,8 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
       }
     });
 
-    this.graphView.on('change', function() {
+    this.graphView.on('change.scaleSlider', function() {
       view.ui.scaleSlider.slider('value', view.graphView.getScale());
     });
-  },
-
-  hide: function () {
-    this.$el.hide();
-  },
-
-  show: function () {
-    this.$el.show();
   }
 });
