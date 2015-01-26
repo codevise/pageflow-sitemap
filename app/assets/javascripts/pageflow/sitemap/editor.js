@@ -26,7 +26,8 @@
     var result = $.Deferred(),
         controller = new sitemap.SelectionModeController(getGraph()),
         graphView = new sitemap.SitemapView({
-          controller: controller
+          controller: controller,
+          viewModelOptions: {hideKnobs: true}
         });
 
     controller.once('selected', function (selected) {

@@ -1,6 +1,6 @@
 /*global d3, console, Group, options, sitemap, linkPathView, followPathView, placeholdersView, successorPathView, Page, PageCollection, confirm, withSession, pageflow*/
 
-sitemap.GraphView = function(svgElement, controller) {
+sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
   var svg = d3.select(svgElement)
     .attr("width", "100%")
     .attr("height", "100%");
@@ -38,7 +38,7 @@ sitemap.GraphView = function(svgElement, controller) {
             'getScrollWindowProportionY');
 
   var update =  function (graph) {
-    var grid = new sitemap.Grid(graph);
+    var grid = new sitemap.Grid(graph, viewModelOptions);
 
     scrollAndZoom.updateConstraints(-(grid.size.x + window.options.page.width / 2),
                                     -(grid.size.y + window.options.page.height / 2),

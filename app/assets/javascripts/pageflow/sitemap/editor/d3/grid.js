@@ -1,5 +1,7 @@
 /*global _, options, sitemap*/
-sitemap.Grid = function(data) {
+sitemap.Grid = function(data, opts) {
+  opts = opts || {};
+
   var nodes = this.nodes = [];
   var links = this.links = [];
   var groups = this.groups = [];
@@ -47,7 +49,7 @@ sitemap.Grid = function(data) {
           y0: typeof page.y0 == "undefined" ? (rowIndex-1 ) * rowHeight : page.y0,
           x: x,
           y: (rowIndex++) * rowHeight,
-          availKnobs: knobs,
+          availKnobs: opts.hideKnobs ? [] : knobs,
           visibleKnobs: []
         };
 

@@ -23,7 +23,9 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
 
   onRender: function() {
     var svgElement = this.$el.find('svg')[0];
-    this.graphView = new sitemap.GraphView(svgElement, this.options.controller);
+    this.graphView = new sitemap.GraphView(svgElement,
+                                           this.options.controller,
+                                           this.options.viewModelOptions);
 
     this.listenTo(pageflow.app, 'resize', this.graphView.resize);
 
