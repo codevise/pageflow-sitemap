@@ -1,0 +1,33 @@
+.scroll_bar {
+  .ui-slider {
+    border: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ui-slider-handle {
+    background: #bbb;
+    border: solid 1px #888;
+    border-radius: 0;
+    cursor: move;
+
+    &:hover {
+      background: #aaa;
+    }
+  }
+
+  .ui-slider-horizontal .ui-slider-handle {
+    height: 11px;
+    top: 0;
+  }
+
+  .ui-slider-vertical .ui-slider-handle {
+    width: 11px;
+    left: 0;
+  }
+
+  .ui-handle-helper-parent {
+    position: relative;
+  }
+}

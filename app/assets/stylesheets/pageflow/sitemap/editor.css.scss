@@ -9,16 +9,17 @@ $font: 10px sans-serif;
 }
 
 div.svgcontainer {
-  @include user-select(none);
   cursor: default;
 
-  z-index: 10000;
   background: white;
+  border: solid 1px #ddd;
+
+  z-index: 10000;
   position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  top: 35px;
+  right: 15px;
+  left: 1px;
+  bottom: 15px;
 
   .group-handle {
     fill: #f9f9f9;
@@ -227,15 +228,74 @@ div.svgcontainer {
 
 div.button {
   display: block;
-  border: 2px solid black;
   position: absolute;
   z-index: 100000;
+  font-size: 13px;
+  cursor: pointer;
 
   &.close {
     height: 25px;
     width: 80px;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 10px;
   }
 }
 
+.sitemap {
+  @include user-select(none);
+  background-color: #fff;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100000;
+
+  .scroll_bar_x {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    right: 17px;
+    height: 13px;
+  }
+
+  .scroll_bar_y {
+    position: absolute;
+    right: 1px;
+    top: 37px;
+    bottom: 15px;
+    width: 13px;
+  }
+
+  .toolbar {
+    position: absolute;
+    right: 100px;
+    top: 10px;
+
+    > * {
+      display: inline-block;
+    }
+  }
+
+  .scale_slider {
+    width: 300px;
+  }
+
+  .scale_minus,
+  .scale_plus {
+    @include background-icon-center($font-size: 16px);
+    width: 40px;
+    height: 16px;
+  }
+
+  .scale_minus {
+    @include fa-search-minus-icon;
+  }
+
+  .scale_plus {
+    @include fa-search-plus-icon;
+  }
+
+  @import "./editor/scroll_bar";
+}

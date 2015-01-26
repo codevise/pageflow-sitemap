@@ -46,6 +46,64 @@ sitemap.behavior.scrollAndZoom = function(options) {
     dispatchChange();
   };
 
+  behavior.getScale = function() {
+    return (view.k - minScale) / (maxScale - minScale) * 100;
+  };
+
+  behavior.setScale = function(percent) {
+    var r = percent / 100;
+    scaleTo(minScale * (1 - r) + maxScale * r);
+
+    normalize();
+    dispatchChange();
+  };
+
+  behavior.getScrollX = function() {
+    var _maxX = maxX * view.k + margin;
+    var _minX = Math.min(_maxX, minX * view.k + size.x - margin);
+
+    return (view.x - _maxX) / (_minX - _maxX) * 100;
+  };
+
+  behavior.setScrollX = function(percent) {
+    var _maxX = maxX * view.k + margin;
+    var _minX = Math.min(_maxX, minX * view.k + size.x - margin);
+    var r = percent / 100;
+
+    view.x = _minX * r + _maxX * (1 - r);
+    dispatchChange();
+  };
+
+  behavior.getScrollY = function() {
+    var _maxY = maxY * view.k + margin;
+    var _minY = Math.min(_maxY, minY * view.k + size.y - margin);
+
+    return (view.y - _minY) / (_maxY - _minY) * 100;
+  };
+
+  behavior.setScrollY = function(percent) {
+    var _maxY = maxY * view.k + margin;
+    var _minY = Math.min(_maxY, minY * view.k + size.y - margin);
+    var r = percent / 100;
+
+    view.y = _minY * (1 - r) + _maxY * r;
+    dispatchChange();
+  };
+
+  behavior.getScrollWindowProportionX = function() {
+    var _maxX = maxX * view.k + margin;
+    var _minX = Math.min(_maxX, minX * view.k - margin);
+
+    return Math.min(1, size.x / (_maxX - _minX));
+  };
+
+  behavior.getScrollWindowProportionY = function() {
+    var _maxY = maxY * view.k + margin;
+    var _minY = Math.min(_maxY, minY * view.k - margin);
+
+    return Math.min(1, size.y / (_maxY - _minY));
+  };
+
   function dispatchChange() {
     dispatch.change({
       scale: view.k,

@@ -18,24 +18,24 @@ sitemap.GraphView = function(svgElement, controller) {
   var scrollAndZoom = sitemap.behavior.scrollAndZoom({
     margin: 50
   })
-    .on('change', function(event) {
+    .on('change.graphView', function(event) {
       svgGroup.attr('transform', 'translate(' + event.translate + ')scale(' + event.scale + ')');
     });
 
   svg.call(scrollAndZoom);
 
-  this.getScale = function() {
-    return scrollAndZoom.getScale();
-  };
-
-  this.setScale = function(value) {
-    scrollAndZoom.setScale(value);
-  };
-
   this.resize = function() {
     scrollAndZoom.updateSize(parseInt(svg.style('width'), 10),
                              parseInt(svg.style('height'), 10));
   };
+
+  d3.rebind(this, scrollAndZoom,
+            'on',
+            'getScale', 'setScale',
+            'getScrollX', 'setScrollX',
+            'getScrollY', 'setScrollY',
+            'getScrollWindowProportionX',
+            'getScrollWindowProportionY');
 
   var update =  function (graph) {
     var grid = new sitemap.Grid(graph);
