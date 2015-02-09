@@ -1,13 +1,4 @@
-/*global pageflow, _, $*/
 pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
-  var stack = [];
-
-  slideshow.on('slideshowchangepage', function() {
-    stack.push(slideshow.currentPage().data('id'));
-  });
-
-  stack.push(slideshow.currentPage().data('id'));
-
   var predecessorIds = _(configurations).reduce(function(result, configuration, permaId) {
     result[configuration.scroll_successor_id] = permaId;
     return result;
@@ -42,14 +33,7 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
   }
 
   function goToPreviouslyVisitedPage() {
-    stack.pop();
-
-    if (stack.length) {
-      slideshow.goToById(stack.pop(), {direction: 'backwards', position: 'bottom'});
-      return true;
-    }
-
-    return false;
+    return pageflow.history.back();
   }
 
   this.back = function(currentPage, configuration) {
