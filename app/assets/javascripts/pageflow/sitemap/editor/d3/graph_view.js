@@ -45,8 +45,8 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
             'getScrollWindowProportionX',
             'getScrollWindowProportionY');
 
-  var update = function (graph, selection) {
-    var grid = new sitemap.Grid(graph, selection, viewModelOptions);
+  var update = function (graph, selection, updateOptions) {
+    var grid = new sitemap.Grid(graph, selection, _.extend(viewModelOptions || {}, updateOptions || {}));
 
     scrollAndZoom.updateConstraints(-(grid.size.x + window.options.page.width / 2),
                                     -(grid.size.y + window.options.page.height / 2),
@@ -58,6 +58,21 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     sitemap.groupView(svgPages, '.group', grid.groups, {
       clicked: function(source) {
         controller.groupSelected(source.group);
+      },
+      drag: function(options) {
+        update(graph, selection, {groupDx: options.dx, groupDy: options.dy});
+      },
+      dragend: function(options) {
+        var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
+        var cellHeight = 2 * window.options.page.verticalMargin + window.options.page.height;
+
+        controller.groupsPositioned(_.map(selection.get('groups'), function(group) {
+          return {
+            group: group,
+            row: group.row() + Math.round(options.dy / cellHeight),
+            lane: group.lane() + Math.round(options.dx / cellWidth)
+          };
+        }));
       },
       droppedOnPlaceholder: function (source, target) {
         controller.groupDroppedOnPlaceholder(source.group, target);

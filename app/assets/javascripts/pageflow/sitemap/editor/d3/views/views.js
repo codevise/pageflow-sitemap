@@ -35,7 +35,7 @@ var linkPathView = sitemap.D3View(function(svg) {
   };
 
   svg.update = function(node) {
-    node.transition()
+    node.transition().duration(window.options.duration)
       .attr("d", sitemap.linkpath);
   };
 });
@@ -55,7 +55,7 @@ var followPathView = sitemap.D3View(function(svg) {
   };
 
   svg.update = function(node) {
-    node.transition()
+    node.transition().duration(window.options.duration)
      .attr("d", sitemap.diagonal);
   };
 });
@@ -75,7 +75,7 @@ var successorPathView = sitemap.D3View(function(svg) {
   };
 
   svg.update = function(node) {
-    node.transition()
+    node.transition().duration(window.options.duration)
      .attr("d", sitemap.linkpath);
   };
 });

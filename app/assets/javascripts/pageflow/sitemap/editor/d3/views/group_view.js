@@ -18,7 +18,6 @@ sitemap.groupView = sitemap.D3View(function(svg) {
         .append('svg:g')
         .attr('class', 'group-handle-group')
         .attr('transform', trBar)
-        .call(drag(opts))
         .on('mouseover', function() {
           d3.select(this.parentNode).classed('hover', true);
         })
@@ -60,11 +59,25 @@ sitemap.groupView = sitemap.D3View(function(svg) {
         .attr('width', w)
         .attr('height', barHeight)
         .attr('transform', trBar);
+
+    g.call(sitemap.behavior.multiDrag({
+      drag: opts.drag,
+      dragend: opts.dragend,
+      handle: '.group-handle-group'
+    }));
   };
 
   svg.update = function(node) {
+    function duration(d) {
+      return d.dragged ? 0 : options.duration;
+    }
+
     node.classed('selected', function(d) {
       return d.selected;
+    });
+
+    node.classed('hover', function(d) {
+      return d.dragged;
     });
 
     node.select('.group-handle-group')

@@ -1,5 +1,5 @@
 /*global options*/
-  window.options = {
+  window.options = sitemap.settings = {
     margin: {
       top: 60,
       right: 60,

@@ -23,6 +23,10 @@ sitemap.Grid = function(data, selection, opts) {
       var groupNodes = [];
       var groupRow = Math.max(group.row() ? group.row() : 0, rowIndex);
 
+      var groupSelected = _(selection.get('groups')).contains(group);
+      var groupDx = groupSelected ? opts.groupDx || 0 : 0;
+      var groupDy = groupSelected ? opts.groupDy || 0 : 0;
+
       for(; rowIndex < groupRow; rowIndex++) {
         placeholders.push({
           id: "placeholder:" + laneIndex + ':' + rowIndex,
@@ -47,8 +51,8 @@ sitemap.Grid = function(data, selection, opts) {
           group: group,
           x0: typeof page.x0 == "undefined" ? x : page.x0,
           y0: typeof page.y0 == "undefined" ? (rowIndex-1 ) * rowHeight : page.y0,
-          x: x,
-          y: (rowIndex++) * rowHeight,
+          x: x + groupDx,
+          y: (rowIndex++) * rowHeight + groupDy,
           availKnobs: opts.hideKnobs ? [] : knobs,
           visibleKnobs: []
         };
@@ -74,9 +78,10 @@ sitemap.Grid = function(data, selection, opts) {
         id: 'group:' + group.get('id'),
         group: group,
         nodes: groupNodes,
-        selected: _(selection.get('groups')).contains(group),
-        x: x,
-        y: groupRow * rowHeight,
+        selected: groupSelected,
+        dragged: groupSelected && ('groupDx' in opts),
+        x: x + groupDx,
+        y: groupRow * rowHeight + groupDy,
         height: (rowIndex - groupRow) * rowHeight - 2 * options.page.verticalMargin
       });
     });

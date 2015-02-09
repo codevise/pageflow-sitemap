@@ -28,6 +28,12 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     }
   },
 
+  groupsPositioned: function(updates) {
+    _.each(updates, function(update) {
+      this.graph.moveGroupTo(this.graph.lane(update.lane), update.row, update.group);
+    }, this);
+  },
+
   pageSelected: function (page) {
     this.showPageInSidebar(page);
   },
