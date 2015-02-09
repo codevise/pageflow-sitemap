@@ -68,6 +68,12 @@ PATH
     pageflow-sitemap (0.0.1)
       pageflow
 
+PATH
+  remote: ../pageflow/spec/support
+  specs:
+    pageflow-support (0.7.1.alpha)
+      mysql2
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -177,6 +183,7 @@ GEM
     minitest (4.7.5)
     mono_logger (1.1.0)
     multi_json (1.10.1)
+    mysql2 (0.3.16)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
     orm_adapter (0.5.0)
@@ -293,6 +300,7 @@ DEPENDENCIES
   inherited_resources (= 1.4.1)
   pageflow!
   pageflow-sitemap!
+  pageflow-support!
   ransack
   spring-commands-rspec
   spring-commands-teaspoon

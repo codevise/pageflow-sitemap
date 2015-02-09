@@ -16,6 +16,8 @@ gem 'formtastic', '2.3.0.rc2'
 
 gem 'ejs'
 
+gem 'pageflow-support', path: '../pageflow/spec/support'
+
 gem 'teaspoon', git: 'https://github.com/modeset/teaspoon'
 
 gem "spring-commands-rspec", group: :development

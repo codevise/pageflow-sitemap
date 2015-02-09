@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+dummy_dir = File.expand_path('../spec/dummy', File.dirname(__FILE__))
+
+begin
+  load File.expand_path('../spring', __FILE__) if File.exists?(dummy_dir)
+rescue LoadError
+end
+
+require 'bundler/setup'
+
+ENV['PAGEFLOW_PLUGIN_ENGINE'] = 'pageflow_sitemap'
+
+require 'pageflow/support'
+Pageflow::Dummy.setup
+
+load Gem.bin_path('teaspoon', 'teaspoon')
