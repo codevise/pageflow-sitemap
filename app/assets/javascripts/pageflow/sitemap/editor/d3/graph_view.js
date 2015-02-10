@@ -45,22 +45,23 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
             'getScrollWindowProportionX',
             'getScrollWindowProportionY');
 
-  var update = function (graph, selection, updateOptions) {
-    var grid = new sitemap.Grid(graph, selection, _.extend(viewModelOptions || {}, updateOptions || {}));
+  var update = function (entry, selection, updateOptions) {
+    var viewModel = new sitemap.ViewModel(entry, selection, _.extend(viewModelOptions || {}, updateOptions || {}));
 
-    scrollAndZoom.updateConstraints(-(grid.size.x + window.options.page.width / 2),
-                                    -(grid.size.y + window.options.page.height / 2),
+    scrollAndZoom.updateConstraints(-(viewModel.size.x + window.options.page.width / 2),
+                                    -(viewModel.size.y + window.options.page.height / 2),
                                     window.options.page.width / 2,
                                     window.options.page.height / 2);
 
     var phalf = window.options.page.height / 2;
     // add svg elements for different types of things
-    sitemap.groupView(svgPages, '.group', grid.groups, {
+
+    svgPages.call(sitemap.chapterView(viewModel.chapters, {
       clicked: function(source) {
-        controller.groupSelected(source.group);
+        controller.chapterSelected(source.chapter);
       },
       drag: function(options) {
-        update(graph, selection, {groupDx: options.dx, groupDy: options.dy});
+        update(entry, selection, {groupDx: options.dx, groupDy: options.dy});
       },
       dragend: function(options) {
         var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
@@ -165,31 +166,31 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         }
       }
       ]
-    });
+    }));
 
-    linkPathView(svgLinks, '.link', grid.links, {
+    linkPathView(svgLinks, '.link', viewModel.links, {
       clicked: function (d) {
         controller.linkPathSelected(d.link);
       }
     });
-    followPathView(svgLinks, '.follow', grid.followLinks, {
+    followPathView(svgLinks, '.follow', viewModel.followLinks, {
       clicked: function (d) {
         controller.followPathSelected(d.source.page);
       }
     });
-    successorPathView(svgLinks, '.successor', grid.successorLinks, {
+    successorPathView(svgLinks, '.successor', viewModel.successorLinks, {
       clicked: function (d) {
         controller.successorPathSelected(d.source.page);
       }
     });
 
-    placeholdersView(svgPlaceholders, '.placeholder', grid.placeholders, {
+    placeholdersView(svgPlaceholders, '.placeholder', viewModel.placeholders, {
       clicked: function(d) {
         controller.placeholderSelected(d);
       }
     });
 
-    grid.nodes.forEach(function(node) {
+    viewModel.nodes.forEach(function(node) {
       node.page.x0 = node.x;
       node.page.y0 = node.y;
     });

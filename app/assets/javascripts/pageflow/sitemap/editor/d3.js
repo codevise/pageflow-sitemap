@@ -1,10 +1,11 @@
-//= require ./d3/options.js
+//= require ./d3/options
+//= require ./d3/view_model
 
 //= require_tree ./d3/behaviors
 
 //= require ./d3/views/d3_view.js
 //= require ./d3/views/views.js
-//= require ./d3/views/group_view.js
+//= require ./d3/views/chapter_view.js
 //= require ./d3/views/page_menu_view.js
 //= require ./d3/views/knob_view.js
 //= require ./d3/views/successor_knob_view.js

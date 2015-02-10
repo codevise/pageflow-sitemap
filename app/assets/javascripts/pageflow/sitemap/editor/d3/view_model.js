@@ -1,164 +1,148 @@
 sitemap.ViewModel = function(entry, selection, options) {
   options = options || {};
 
+  var chapters = this.chapters = [];
   var nodes = this.nodes = [];
-  var links = this.links = [];
-  var groups = this.groups = [];
-  var followLinks = this.followLinks  = [];
+  var followLinks = this.followLinks = [];
   var successorLinks = this.successorLinks = [];
-  var placeholders = this.placeholders = [];
+  var pageLinks = this.links = [];
   var size = this.size = {x: 0, y: 0};
+
+  this.placeholders = [];
 
   var nodesByName = {};
 
-  var laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
-      rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
+  buildChaptersAndPages();
+  buildSuccessorLinks();
+  buildPageLinks();
 
-  var laneLengths = [];
+  function buildChaptersAndPages() {
+    var laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
+        rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
 
-  function ChapterWithPosition(chapter) {
-    this.lane = function() {
-      return chapter.configuration.get('lane') || 0;
-    };
+    entry.chapters.each(function(chapter) {
+      var chapterLane = chapter.configuration.get('lane') || 0;
+      var chapterRow = chapter.configuration.get('row') || 0;
 
-    this.row = function() {
-      return chapter.configuration.get('row') || 0;
-    };
+      var x = chapterLane * laneWidth;
+
+      var chapterNodes = [];
+
+      var groupSelected = _(selection.get('chapters')).contains(chapter);
+
+      var groupDx = groupSelected ? options.groupDx || 0 : 0;
+      var groupDy = groupSelected ? options.groupDy || 0 : 0;
+
+      var rowIndex = chapterRow;
+
+      chapter.pages.each(function(page, index) {
+        var id = "page:" + page.cid;
+
+        var knobs = [];
+
+        if (page.pageLinks() && !options.hideKnobs) {
+          knobs.push({
+            pid: id,
+            id: 'default',
+            text: 'default',
+            exceeded: !page.pageLinks().canAddLink()
+          });
+        }
+
+        var node = {
+          id: id,
+          page: page,
+          chapter: chapter,
+          x0: typeof page.x0 == "undefined" ? x : page.x0,
+          y0: typeof page.y0 == "undefined" ? (rowIndex - 1) * rowHeight : page.y0,
+          x: x + groupDx,
+          y: (rowIndex++) * rowHeight + groupDy,
+          availKnobs: knobs,
+          visibleKnobs: []
+        };
+
+        chapterNodes.push(node);
+        nodes.push(node);
+
+        nodesByName[page.cid] = node;
+      });
+
+      buildFollowLinks(chapter.pages);
+      buildSuccesor(chapter);
+
+      chapters.push({
+        id: 'group:' + chapter.cid,
+        chapter: chapter,
+        nodes: chapterNodes,
+        selected: groupSelected,
+        dragged: groupSelected && ('groupDx' in options),
+        x: x + groupDx,
+        y: chapterRow * rowHeight + groupDy,
+        height: chapter.pages.length * rowHeight - 2 * sitemap.settings.page.verticalMargin
+      });
+    });
   }
 
-  entry.chapters.each(function(c) {
-    var chapter = new ChapterWithPosition(c);
+  function buildSuccesor(chapter) {
+    var lastPage = chapter.pages.last();
 
-    var x = c.lane() * laneWidth;
+    if (lastPage) {
+      var successorPage = entry.pages.getByPermaId(lastPage.configuration.get('scroll_successor_id'));
 
-    var chapterNodes = [];
-    var groupSelected = _(selection.get('chapters')).contains(chapter);
-    var groupDx = groupSelected ? options.groupDx || 0 : 0;
-    var groupDy = groupSelected ? options.groupDy || 0 : 0;
+      if (!successorPage) {
+        nodesByName[lastPage.cid].successor = {
+          id: 'group:successor:' + chapter.cid,
+          pid: lastPage.cid,
+          chapter: chapter
+        };
+      }
+    }
+  }
 
-    chapter.pages.each(function(page) {
-      var rowIndex = chapter.row();
-
-      var id = "page:" + page.cid;
-
-      var ids = 0,
-          knobs = [];
-
-      var node = {
-        id: id,
-        page: page,
-        chapter: chapter,
-        x0: typeof page.x0 == "undefined" ? x : page.x0,
-        y0: typeof page.y0 == "undefined" ? (rowIndex-1 ) * rowHeight : page.y0,
-        x: x + groupDx,
-        y: (rowIndex++) * rowHeight + groupDy,
-        availKnobs: options.hideKnobs ? [] : knobs,
-        visibleKnobs: []
-      };
-
-      chapterNodes.push(node);
-      nodes.push(node);
-
-        // build index of nodes by name
-      nodesByName[page.cid] = node;
+  function buildFollowLinks(pages) {
+    eachPair(pages, function(first, second) {
+      followLinks.push(buildLink('follow', first, second));
     });
+  }
 
-    var lastNode = _.last(chapterNodes);
-
-    //if (!group.successor() && lastNode) {
-    lastNode.successor = {
-      id: 'group:successor:' + chapter.cid,
-      pid: lastNode.id,
-      group: chapter,
-      node: lastNode
-    };
-    //  }
-
-    groups.push({
-      id: 'group:' + chapter.cid,
-      group: chapter,
-      nodes: chapterNodes,
-      selected: groupSelected,
-      dragged: groupSelected && ('groupDx' in options),
-      x: x + groupDx,
-      y: group.row() * rowHeight + groupDy,
-      height: chapter.pages.length * rowHeight - 2 * sitemap.settings.page.verticalMargin
-    });
-
-    laneLengths[laneIndex] = rowIndex;
-  });
-
-  // parse links
-  nodes.forEach(function(node) {
-    var knobs = node.page.get('knobs');
-    knobs.forEach(function(knob) {
-      knob.pageLinks.forEach(function (link) {
-        if (link.targetPage()) {
-          var pageName = link.targetPage().cid;
-
-          if (!(nodesByName[pageName])) {
-            throw('node not found for ' + pageName);
+  function buildPageLinks() {
+    entry.pages.each(function(page) {
+      if (page.pageLinks()) {
+        page.pageLinks().each(function(link) {
+          if (link.targetPage()) {
+            pageLinks.push(buildLink('link', page, link.targetPage()));
           }
-
-          links.push({
-            id: "link:" + node.page.name() + '-' + pageName,
-            link: link,
-            source: node,
-            target: nodesByName[pageName]
-          });
-        }
-      });
+        });
+      }
     });
-  });
+  }
 
-  var maxLaneLength = Math.max.apply(null, laneLengths);
+  function buildSuccessorLinks() {
+    entry.chapters.each(function(chapter) {
+      var lastPage = chapter.pages.last();
 
-  // parse follower links
-  data.get('lanes').forEach(function(groups, laneIndex){
-    groups.forEach(function(group) {
-      var last = false;
-      group.get('pages').forEach(function(page) {
-        var pageName = page.name();
-        var target = nodesByName[pageName];
+      if (lastPage) {
+        var successorPage = entry.pages.getByPermaId(lastPage.configuration.get('scroll_successor_id'));
 
-        if (last && target) {
-          followLinks.push({
-            id: "follow:" + nodesByName[last].page.name() + '-' + pageName,
-            source: nodesByName[last],
-            target: target
-          });
-        }
-        last = pageName;
-      });
-
-      if (group.successor()) {
-        var targetName = group.successor().name(),
-            source = nodesByName[last],
-            target = nodesByName[targetName];
-
-        if (source && target) {
-          successorLinks.push({
-            id: "successor:" + last + '-' + targetName,
-            source: source,
-            target: target
-          });
+        if (successorPage) {
+          successorLinks.push(buildLink('successor', lastPage, successorPage));
         }
       }
     });
+  }
 
-    // create placeholders below
-    var i;
-    for(i = laneLengths[laneIndex]; i <= maxLaneLength; i++) {
-      placeholders.push({
-        id: "placeholder:" + laneIndex + ':' + i,
-        lane: groups,
-        row: i,
-        x: laneIndex * laneWidth,
-        y: i * rowHeight
-      });
+  function buildLink(idPrefix, sourcePage, targetPage) {
+    return {
+      id: idPrefix + ':' + sourcePage.cid + '-' + targetPage.cid,
+      source: nodesByName[sourcePage.cid],
+      target: nodesByName[targetPage.cid]
+    };
+  }
 
-      size.x = Math.max(size.x, laneIndex * laneWidth);
-      size.y = Math.max(size.y, i * rowHeight);
-    }
-  });
+  function eachPair(collection, fn) {
+    collection.reduce(function(last, item) {
+      fn(last, item);
+      return item;
+    });
+  }
 };

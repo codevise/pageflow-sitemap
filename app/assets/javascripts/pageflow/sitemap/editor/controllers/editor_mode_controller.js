@@ -6,9 +6,9 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     this.selection = new Backbone.Model({groups: []});
   },
 
-  groupSelected: function (group) {
-    this.showGroupInSidebar(group);
-    this.selection.set('groups', [group]);
+  chapterSelected: function (chapter) {
+    this.showChapterInSidebar(chapter);
+    this.selection.set('chapters', [chapter]);
   },
 
   groupsSelected: function (groups) {
@@ -138,11 +138,8 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     pageflow.editor.navigate('/pages/' + pageId, {trigger: true});
   },
 
-  showGroupInSidebar: function (sitemapGroup) {
-    var chapter = sitemapGroup.get('chapter'),
-      id = chapter.get('id');
-
-    pageflow.editor.navigate('/chapters/' + id, {trigger: true});
+  showChapterInSidebar: function (chapter) {
+    pageflow.editor.navigate('/chapters/' + chapter.id, {trigger: true});
   },
 
   _page: function (name, x, y) {
@@ -151,16 +148,16 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
 
   addUpdateHandler: function (handler) {
     var that = this;
-    handler(this.graph, this.selection);
+    handler(pageflow.entry, this.selection);
 
-    var updateTimeout;
-    this.graph.on('change', function () {
-      clearTimeout(updateTimeout);
-      updateTimeout = setTimeout(_.bind(handler, this, this, that.selection), 100);
-    });
+    //var updateTimeout;
+    //this.graph.on('change', function () {
+    //  clearTimeout(updateTimeout);
+    //  updateTimeout = setTimeout(_.bind(handler, this, this, that.selection), 100);
+    //});
 
     this.selection.on('change', function() {
-      handler(that.graph, that.selection);
+      handler(pageflow.entry, that.selection);
     });
   }
 });

@@ -12,7 +12,7 @@ sitemap.knobView = sitemap.D3View(function(svg) {
           this
               .attr("width", 20)
               .attr("height", h)
-              .classed("exceeded", function (d) { return d.knob.exceeded(); });
+              .classed("exceeded", function (d) { return d.exceeded; });
         })
         .dummy(function () {
           this

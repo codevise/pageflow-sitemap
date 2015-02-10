@@ -14,11 +14,11 @@ sitemap.behavior.selectionRect = function(options) {
       .style('visibility', 'hidden');
 
     g.on(mousedown, function() {
-      if (event.which !== 1) {
+      if (d3.event.which !== 1) {
         return;
       }
 
-      if (event.target !== g.node()) {
+      if (d3.event.target !== g.node()) {
         return;
       }
 

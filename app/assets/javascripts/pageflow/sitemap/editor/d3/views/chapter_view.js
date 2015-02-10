@@ -1,15 +1,10 @@
 /*global sitemap, options, d3*/
 
-sitemap.groupView = sitemap.D3View(function(svg) {
-  svg.enter = function (nodeEnter, opts) {
-    var g = nodeEnter.append("svg:g")
-        .attr('id', function (d) { return d.id; })
-        .attr('class', 'group')
-        .classed('selected', function(d) {
-          return d.selected;
-        });
+sitemap.chapterView = sitemap.d3View(function(view, u) {
+  view.selector('g.group');
 
-    var representationNode = g.append('svg:g');
+  view.enter = function (node, opts) {
+    var representationNode = node.append('svg:g');
 
     var w = 90,
         barHeight = 10;
@@ -31,19 +26,19 @@ sitemap.groupView = sitemap.D3View(function(svg) {
         })
         ;
 
-      handleGroup.append('svg:rect')
+    handleGroup.append('svg:rect')
         .attr('class', 'group-handle')
         .attr('width', w)
         .attr('height', barHeight)
         ;
 
-        handleGroup.append("foreignObject")
+    handleGroup.append("foreignObject")
         .style('pointer-events', 'none')
         .attr('width', w)
         .attr('height', barHeight)
         // .attr('transform', trBar)
         .append("xhtml:body")
-        .html(function(d){ return '<div class="pagetext">' + d.group.get('chapter').get('title') + '</div>'; })
+        .html(function(d){ return '<div class="pagetext">' + d.chapter.get('title') + '</div>'; })
         ;
 
     representationNode.append('svg:rect')
@@ -53,32 +48,26 @@ sitemap.groupView = sitemap.D3View(function(svg) {
         .attr('transform', trArea)
         ;
 
-
     representationNode.append('svg:rect')
         .attr('class', 'group-dummy')
         .attr('width', w)
         .attr('height', barHeight)
         .attr('transform', trBar);
 
-    g.call(sitemap.behavior.multiDrag({
+    node.call(sitemap.behavior.multiDrag({
       drag: opts.drag,
       dragend: opts.dragend,
       handle: '.group-handle-group'
     }));
   };
 
-  svg.update = function(node) {
+  view.update = function(node) {
     function duration(d) {
       return d.dragged ? 0 : options.duration;
     }
 
-    node.classed('selected', function(d) {
-      return d.selected;
-    });
-
-    node.classed('hover', function(d) {
-      return d.dragged;
-    });
+    node.classed('selected', u.fn.d('selected'));
+    node.classed('hover', u.fn.d('dragged'));
 
     node.select('.group-handle-group')
         .transition().duration(options.duration)
@@ -86,13 +75,8 @@ sitemap.groupView = sitemap.D3View(function(svg) {
 
     node.select('.group div.pagetext')
         .transition().duration(options.duration)
-        .text(function(d){ return d.group.get('chapter').get('title'); })
+        .text(function(d){ return d.chapter.get('title'); })
     ;
-
-    node.select('text')
-        .transition().duration(options.duration)
-        .text(function(d){ return d.group.get('chapter').get('title'); })
-        .attr('transform', trBarText);
 
     node.select('.group-highlight')
         .attr('height', function (d) { var h = d.height + 20; return h > 0 ? h : 0; })
