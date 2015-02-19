@@ -12,14 +12,15 @@ sitemap.ViewModel = function(entry, selection, options) {
 
   var nodesByName = {};
 
+  var laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
+      rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
+
   buildChaptersAndPages();
   buildSuccessorLinks();
   buildPageLinks();
+  setSize();
 
   function buildChaptersAndPages() {
-    var laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
-        rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
-
     entry.chapters.each(function(chapter) {
       var chapterLane = chapter.configuration.get('lane') || 0;
       var chapterRow = chapter.configuration.get('row') || 0;
@@ -137,6 +138,14 @@ sitemap.ViewModel = function(entry, selection, options) {
       source: nodesByName[sourcePage.cid],
       target: nodesByName[targetPage.cid]
     };
+  }
+
+  function setSize() {
+    _.forEach(nodes, function(node) {
+      size.x = Math.max(node.x + laneWidth, size.x);
+      size.y = Math.max(node.y + rowHeight, size.y);
+    });
+
   }
 
   function eachPair(collection, fn) {

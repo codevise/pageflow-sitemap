@@ -5,7 +5,7 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
   ui: {
     scrollBarX: '.scroll_bar_x',
     scrollBarY: '.scroll_bar_y',
-    scaleSlider: '.scale_slider',
+    scaleSlider: '.scale_slider'
   },
 
   events: {
