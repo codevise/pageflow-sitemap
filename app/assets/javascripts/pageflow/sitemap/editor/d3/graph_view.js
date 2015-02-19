@@ -27,8 +27,8 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     .call(sitemap.behavior.selectionRect({
       container: 'g.all',
       targets: '.group',
-      selected: function(groups) {
-        controller.groupsSelected(_(groups).pluck('group'));
+      selected: function(chapters) {
+        controller.chaptersSelected(_(chapters).pluck('chapter'));
       }
     }));
 
@@ -67,11 +67,11 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
         var cellHeight = 2 * window.options.page.verticalMargin + window.options.page.height;
 
-        controller.groupsPositioned(_.map(selection.get('groups'), function(group) {
+        controller.chaptersPositioned(_.map(selection.get('chapters'), function(chapter) {
           return {
-            group: group,
-            row: group.row() + Math.round(options.dy / cellHeight),
-            lane: group.lane() + Math.round(options.dx / cellWidth)
+            chapter: chapter,
+            row: chapter.configuration.get('row') + Math.round(options.dy / cellHeight),
+            lane: chapter.configuration.get('lane') + Math.round(options.dx / cellWidth)
           };
         }));
       },

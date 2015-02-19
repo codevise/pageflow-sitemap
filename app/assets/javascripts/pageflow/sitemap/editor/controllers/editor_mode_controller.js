@@ -11,14 +11,11 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     this.selection.set('chapters', [chapter]);
   },
 
-  groupsSelected: function (groups) {
-    this.selection.set('groups', groups);
+  chaptersSelected: function (chapters) {
+    this.selection.set('chapters', chapters);
   },
 
-  groupDroppedOnPlaceholder: function (group, placeholder) {
-    this.graph.moveGroupTo(placeholder.lane, placeholder.row, group);
-  },
-
+  // FIXME
   groupDroppedOnArea: function (group, target, position) {
     if(position == 'before') {
       this.graph.insertIntoGroupBefore(group, target);
@@ -28,16 +25,22 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     }
   },
 
-  groupsPositioned: function(updates) {
+  chaptersPositioned: function(updates) {
+    // FIXME should have batch update for chapters
     _.each(updates, function(update) {
-      this.graph.moveGroupTo(this.graph.lane(update.lane), update.row, update.group);
+      update.chapter.configuration.set({
+        row: update.row,
+        lane: update.lane
+      });
     }, this);
   },
 
+  // FIXME
   pageSelected: function (page) {
     this.showPageInSidebar(page);
   },
 
+  // FIXME
   pageDroppedOnPlaceholder: function (page, placeholder) {
     if (page.group().count() <= 1) {
       this.graph.moveGroupTo(placeholder.lane, placeholder.row, page.group());
@@ -47,6 +50,7 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     }
   },
 
+  // FIXME
   pageDroppedOnArea: function (page, target, position) {
     if(position == 'before') {
       this.graph.movePageBefore(page, target);
@@ -56,6 +60,7 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     }
   },
 
+  // FIXME, remove sitemap models
   addPageAfter: function (page) {
     var sitemapPage = this._page('after', 0, 0);
     var chapter = page.group().get('chapter');
@@ -76,6 +81,7 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
   },
 
   knobDroppedOnPage: function (knob,  page) {
+    // FIXME, use pagelinks api
     knob.linkTo(page);
   },
 
@@ -87,6 +93,7 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
   },
 
   linkPathSelected: function (link) {
+    // FIXME, move to selection, open in sidebar
     if (confirm("Wollen Sie den Link wirklich löschen?")) {
       link.remove();
     }
@@ -104,6 +111,7 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     }
   },
 
+  // FIXME, remove sitemap models
   placeholderSelected: function (placeholder) {
     // Create sitemap group and pageflow chapter.
 
@@ -142,6 +150,7 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     pageflow.editor.navigate('/chapters/' + chapter.id, {trigger: true});
   },
 
+  // Should get obsolete
   _page: function (name, x, y) {
     return new Page({ x0: x, y0: y, title: 'Kein Titel' });
   },
@@ -150,11 +159,17 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     var that = this;
     handler(pageflow.entry, this.selection);
 
+    //
     //var updateTimeout;
     //this.graph.on('change', function () {
     //  clearTimeout(updateTimeout);
     //  updateTimeout = setTimeout(_.bind(handler, this, this, that.selection), 100);
     //});
+    //
+
+    pageflow.chapters.on('change:configuration', function() {
+      handler(pageflow.entry, that.selection);
+    });
 
     this.selection.on('change', function() {
       handler(pageflow.entry, that.selection);
