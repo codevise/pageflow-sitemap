@@ -6,4 +6,8 @@
 //= require pageflow/editor/base
 //= require pageflow/sitemap/editor
 
+//= require_self
+//= require support/factories
+
+window.support = {};
 window.expect = chai.expect;
