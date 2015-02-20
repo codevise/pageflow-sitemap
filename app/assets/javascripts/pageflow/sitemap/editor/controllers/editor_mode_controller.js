@@ -21,8 +21,10 @@ pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
     this.selection.select('chapters', chapters);
   },
 
-  pageSelected: function (page) {
-    this.selection.select('pages', [page]);
+  pageSelected: function (page, event) {
+    this.selection.select('pages', [page], {
+      additive: event.ctrlKey
+    });
   },
 
   pageLinkSelected: function (pageLink) {
@@ -49,24 +51,8 @@ pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
     }, this);
   },
 
-  // FIXME
-  pageDroppedOnPlaceholder: function (page, placeholder) {
-    if (page.group().count() <= 1) {
-      this.graph.moveGroupTo(placeholder.lane, placeholder.row, page.group());
-    }
-    else {
-      this.graph.moveToEmptyGroup(placeholder.lane, placeholder.row, page);
-    }
-  },
-
-  // FIXME
-  pageDroppedOnArea: function (page, target, position) {
-    if(position == 'before') {
-      this.graph.movePageBefore(page, target);
-    }
-    else {
-      this.graph.movePageAfter(page, target);
-    }
+  pagesMoved: function(pagesGroupedByChapters) {
+    window.console.log(pagesGroupedByChapters);
   },
 
   // FIXME, remove sitemap models

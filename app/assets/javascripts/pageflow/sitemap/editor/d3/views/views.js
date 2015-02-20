@@ -25,18 +25,17 @@ var followPathView = sitemap.D3View(function(svg) {
     node.insert("path", "g")
       .attr("class", 'follow')
       .attr("id", svg.idfunc)
-      .attr("marker-end", "url(#Triangle)")
       .call(applyHighlight)
       .call(addClicked, opts)
       .transition()
         .attr("d", sitemap.short)
       .transition()
-        .attr("d", sitemap.diagonal);
+        .attr("d", sitemap.followPath);
   };
 
   svg.update = function(node) {
     node.transition().duration(window.options.duration)
-     .attr("d", sitemap.diagonal);
+     .attr("d", sitemap.followPath);
   };
 });
 

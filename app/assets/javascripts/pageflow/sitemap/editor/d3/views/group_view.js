@@ -18,7 +18,7 @@ pageflow.sitemap.groupView = {
           .attr('id', s.utils.fn.d('id'))
           .classed(className, true);
 
-        fn({
+        fn.call({
           options: options || {},
 
           enter: function() {
@@ -29,34 +29,42 @@ pageflow.sitemap.groupView = {
             return nodes;
           },
 
-          child: function(selector, fn) {
-            var components = selector.split('.');
-            var tagName = components[0];
-            var className = components[1];
-
-            var enteredChild = nodesEnter
-              .append(tagName)
-              .attr('class', className);
-
-            var child = nodes.select(selector);
-
-            fn({
-              enter: function() {
-                return enteredChild;
-              },
-
-              update: function() {
-                return child;
-              }
-            });
-
-            return child;
-          }
+          child: childFactory(nodesEnter, nodes, options)
         }, pageflow.sitemap);
 
         nodes.exit()
           .remove();
       };
     };
+
+    function childFactory(nodesEnter, nodes, options) {
+      return function(selector, fn) {
+        var components = selector.split('.');
+        var tagName = components[0];
+        var className = components[1];
+
+        var enteredChild = nodesEnter
+          .append(tagName)
+          .attr('class', className);
+
+        var child = nodes.select(selector);
+
+        fn.call({
+          options: options,
+
+          enter: function() {
+            return enteredChild;
+          },
+
+          update: function() {
+            return child;
+          },
+
+          child: childFactory(enteredChild, child, options)
+        });
+
+        return child;
+      };
+    }
   }
 };

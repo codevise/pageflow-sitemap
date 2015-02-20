@@ -1,4 +1,4 @@
-/*global sitemap, options, d3*/
+/*global options*/
 
 sitemap.chapterView = sitemap.d3View(function(view, u) {
   view.selector('g.group');

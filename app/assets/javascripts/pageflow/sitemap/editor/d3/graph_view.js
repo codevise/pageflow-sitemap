@@ -9,11 +9,6 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
 
   var svgPages = svg.select("g.pages");
   var svgLinks = svg.select("g.links");
-  var svgPlaceholders = svg.select("g.placeholders");
-  // var svgControls = svg.select("g.controls");
-
-  // this should go somewhere to be usable by D3Views
-  //sitemap.pan = new sitemap.PanHandler(svgElement, svgGroup);
 
   var scrollAndZoom = sitemap.behavior.scrollAndZoom({
     margin: 50
@@ -46,15 +41,16 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
             'getScrollWindowProportionY');
 
   var update = function (entry, selection, updateOptions) {
-    var viewModel = new sitemap.ViewModel(entry, selection, _.extend(viewModelOptions || {}, updateOptions || {}));
+    var layout =
+      pageflow.sitemap.layout.create(entry, selection, updateOptions);
+
+    var viewModel =
+      new pageflow.sitemap.ViewModel(entry, selection, layout, viewModelOptions || {});
 
     scrollAndZoom.updateConstraints(-(viewModel.size.x + window.options.page.width / 2),
                                     -(viewModel.size.y + window.options.page.height / 2),
                                     window.options.page.width / 2,
                                     window.options.page.height / 2);
-
-    var phalf = window.options.page.height / 2;
-    // add svg elements for different types of things
 
     svgPages.call(sitemap.chapterView(viewModel.chapters, {
       clicked: function(source) {
@@ -66,38 +62,48 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         }
       },
       drag: function(options) {
-        update(entry, selection, {dragDx: options.dx, dragDy: options.dy});
+        update(entry, selection, {dragDelta: {x: options.dx, y: options.dy}});
       },
       dragend: function(options) {
-        var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
-        var cellHeight = 2 * window.options.page.verticalMargin + window.options.page.height;
+        var layout = pageflow.sitemap.layout.create(entry, selection, {
+          dragDelta: {
+            x: options.dx,
+            y: options.dy
+          }
+        });
 
         controller.chaptersPositioned(_.map(selection.get('chapters'), function(chapter) {
+          var coordinates = layout.laneAndRowFromPoint(layout.position(chapter));
+
           return {
             chapter: chapter,
-            row: chapter.configuration.get('row') + Math.round(options.dy / cellHeight),
-            lane: chapter.configuration.get('lane') + Math.round(options.dx / cellWidth)
+            lane: coordinates.lane,
+            row: coordinates.row
           };
         }));
-      },
-      droppedOnPlaceholder: function (source, target) {
-        controller.groupDroppedOnPlaceholder(source.group, target);
-      },
-      droppedOnArea: function(source, target) {
-        controller.groupDroppedOnArea(source.group, target.target, target.position);
+
+        update(entry, selection);
       },
       subViews: [
         { view: sitemap.pagesView,
           selector: '.node',
           data: function(d) { return d.nodes; },
 
-
-
           options: {
             drag: function(options) {
-              update(entry, selection, {dragDx: options.dx, dragDy: options.dy});
+              update(entry, selection, {dragDelta: {x: options.dx, y: options.dy}});
             },
-            dragend: function(options) {},
+            dragend: function(options) {
+              var layout = pageflow.sitemap.layout.create(entry, selection, {
+                dragDelta: {
+                  x: options.dx,
+                  y: options.dy
+                }
+              });
+
+              controller.pagesMoved(layout.pagesGroupedByChapters);
+              update(entry, selection);
+            },
 
             subViews: [
             {
@@ -107,12 +113,6 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
               options: {
                 click: function(source) {
                   controller.pageSelected(source.page, d3.event);
-                },
-                droppedOnArea: function(source, target) {
-                  controller.pageDroppedOnArea(source.page, target.target, target.position);
-                },
-                droppedOnPlaceholder: function (source, target) {
-                  controller.pageDroppedOnPlaceholder(source.page, target);
                 }
               }
             },
@@ -185,12 +185,6 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     successorPathView(svgLinks, '.successor', viewModel.successorLinks, {
       clicked: function (d) {
         controller.successorPathSelected(d.source.page);
-      }
-    });
-
-    placeholdersView(svgPlaceholders, '.placeholder', viewModel.placeholders, {
-      clicked: function(d) {
-        controller.placeholderSelected(d);
       }
     });
 
