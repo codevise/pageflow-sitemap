@@ -24,6 +24,11 @@ sitemap.chapterView = sitemap.d3View(function(view, u) {
             opts.clicked.apply(this, arguments);
           }
         })
+        .on('mousedown', function() {
+          if (opts.mousedown) {
+            opts.mousedown.apply(this, arguments);
+          }
+        })
         ;
 
     handleGroup.append('svg:rect')
@@ -84,25 +89,7 @@ sitemap.chapterView = sitemap.d3View(function(view, u) {
   };
 
 
-  function trBarText(d) { return "translate(" + (d.x) + "," + (d.y - options.page.height / 2 - 15) + ")"; }
   function trBar(d) { return "translate(" + (d.x - options.page.width / 2 - 5) + "," + (d.y - options.page.height / 2 - 20) + ")"; }
   function trArea(d) { return "translate(" + (d.x - options.page.width / 2 - 5) + "," + (d.y - options.page.height / 2 - 10) + ")"; }
 
-  function drag(opts) {
-    return sitemap.addDrag('page-drag')
-      .dummy(function () { return d3.select(this.parentNode).select('.group-dummy'); })
-      .offset(function (d) {
-        return {
-          x: d.x - options.page.width / 2 - 10,
-          y: d.y - options.page.height / 2 - 20
-        };
-      })
-      .dropTarget('area')
-        .start(function () { this.style('pointer-events', 'all'); })
-        .end(function () { this.style('pointer-events', 'none'); })
-        .dropped(opts.droppedOnArea)
-      .dropTarget('placeholder')
-        .dropped(opts.droppedOnPlaceholder)
-      .listener();
-  }
 });

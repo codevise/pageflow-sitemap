@@ -60,7 +60,13 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
       clicked: function(source) {
         controller.chapterSelected(source.chapter);
       },
+      mousedown: function(source) {
+        if (!_.contains(selection.get('chapters'), source.chapter)) {
+          selection.set('chapters', [source.chapter]);
+        }
+      },
       drag: function(options) {
+
         update(entry, selection, {groupDx: options.dx, groupDy: options.dy});
       },
       dragend: function(options) {
