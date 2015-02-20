@@ -6,7 +6,7 @@ sitemap.behavior.multiDrag = function(options) {
   var dragend = 'dragend.multiDrag';
 
   function behavior(g) {
-    var handles = g.selectAll(options.handle);
+    var handles = options.handle ? g.selectAll(options.handle) : g;
     var dx, dy;
 
     var xxx;

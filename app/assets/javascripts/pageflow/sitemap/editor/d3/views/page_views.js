@@ -18,6 +18,11 @@
       g.transition()
           .duration(window.options.duration)
           .attr("transform", transformFinal);
+
+      g.call(sitemap.behavior.multiDrag({
+        drag: opts.drag,
+        dragend: opts.dragend
+      }));
     };
 
     function transformStart(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; }
@@ -32,7 +37,6 @@
       var g = node.append("svg:g")
           .attr('class', "pageview")
           .attr("id", function(d) { return d.id; })
-          .call(drag(opts))
           .on('mouseover', function(d) {
             d3.select(this).classed('hover', true);
 
@@ -67,7 +71,6 @@
           })
       ;
 
-
       // thumbnail
       g.each(function(d) {
         var r = d3.select(this);
@@ -97,15 +100,6 @@
           .attr("transform", "translate(" + (trX+1) + "," + (-trY) + ")")
         ;
 
-      g.append("svg:g")
-          .attr('class', 'drag-dummy')
-          .append("svg:rect")
-            .attr('height', options.page.height)
-            .attr('width', options.page.width)
-            .attr("transform", "translate(" + trX + "," + (-trY) + ")")
-      ;
-
-
       g.append("foreignObject")
           .style('pointer-events', 'none')
           .attr("width", options.page.width-2)
@@ -125,18 +119,6 @@
     };
 
     function pagetext(d) { return '<div class="pagetext">'+ d.page.get('title') + '</div>'; }
-
-    function drag(opts) {
-      return sitemap.addDrag('page-drag')
-          .dummy(function () { return d3.select(this.parentNode).select('.drag-dummy'); })
-          .dropTarget('area')
-            .start(function () { this.style('pointer-events', 'all'); })
-            .end(function () { this.style('pointer-events', 'none'); })
-          .dropped(opts.droppedOnArea)
-          .dropTarget('placeholder')
-            .dropped(opts.droppedOnPlaceholder)
-          .listener();
-    }
   });
 
   sitemap.dropAreaView = sitemap.D3View(function(svg) {

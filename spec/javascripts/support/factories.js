@@ -31,6 +31,9 @@ support.factories = {
     page.pageLinks = function() {
       return support.factories.pageLinks();
     };
+    page.chapterPosition = function() {
+      return chapter.get('position');
+    };
 
     chapter.pages.add(page);
 
