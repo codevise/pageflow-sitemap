@@ -4,10 +4,27 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
   initialize: function(graph) {
     this.graph = graph;
     this.selection = new pageflow.sitemap.Selection();
+
+    this.listenTo(this.selection, 'select:pages', function(pages) {
+      if (pages.length === 1) {
+        pageflow.editor.navigate('/pages/' + pages[0].id, {trigger: true});
+      }
+      else {
+        pageflow.editor.navigate('/', {trigger: true});
+      }
+    });
+
+    this.listenTo(this.selection, 'select:chapters', function(chapters) {
+      if (chapters.length === 1) {
+        pageflow.editor.navigate('/chapters/' + chapters[0].id, {trigger: true});
+      }
+      else {
+        pageflow.editor.navigate('/', {trigger: true});
+      }
+    });
   },
 
   chapterSelected: function (chapter, event) {
-    this.showChapterInSidebar(chapter);
     this.selection.select('chapters', [chapter], {
       additive: event.ctrlKey
     });
