@@ -15,15 +15,25 @@ sitemap.ViewModel = function(entry, selection, options) {
 
   var nodesByName = {};
 
-  var laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
-      rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
+  var laneWidth = this.laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
+      rowHeight = this.rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
 
   buildChaptersAndPages();
+  buildVirtualPages();
+  repositionVirtualPages();
+  buildFollowLinks();
   buildSuccessorLinks();
   buildPageLinks();
   setSize();
 
+  function isDragging() {
+    return 'dragDx' in options;
+  }
+
   function buildChaptersAndPages() {
+    var chapterMapping = {'pageId': 'chapterId'};
+    var layout = window.layout(entry.chapters, entry.pages, chapterMapping);
+
     entry.chapters.each(function(chapter) {
       var chapterLane = chapter.configuration.get('lane') || 0;
       var chapterRow = chapter.configuration.get('row') || 0;
@@ -61,13 +71,18 @@ sitemap.ViewModel = function(entry, selection, options) {
           page: page,
           chapter: chapter,
           selected: selection.contains(page),
+          dragged: selection.contains(page) && ('dragDx' in options),
           x0: typeof page.x0 == "undefined" ? x : page.x0,
           y0: typeof page.y0 == "undefined" ? (rowIndex - 1) * rowHeight : page.y0,
           x: x + pageDx,
-          y: (rowIndex++) * rowHeight + pageDy,
+          y: rowIndex * rowHeight + pageDy,
           availKnobs: knobs,
           visibleKnobs: []
         };
+
+        if (!node.dragged) {
+          rowIndex += 1;
+        }
 
         chapterNodes.push(node);
         nodes.push(node);
@@ -75,7 +90,6 @@ sitemap.ViewModel = function(entry, selection, options) {
         nodesByName[page.cid] = node;
       });
 
-      buildFollowLinks(chapter.pages);
       buildSuccesor(chapter);
 
       chapters.push({
@@ -83,10 +97,65 @@ sitemap.ViewModel = function(entry, selection, options) {
         chapter: chapter,
         nodes: chapterNodes,
         selected: groupSelected,
-        dragged: groupSelected && ('groupDx' in options),
+        dragged: groupSelected && ('dragDx' in options),
         x: x + chapterDx,
         y: chapterRow * rowHeight + chapterDy,
         height: chapter.pages.length * rowHeight - 2 * sitemap.settings.page.verticalMargin
+      });
+    });
+  }
+
+  function buildVirtualPages() {
+    _(chapters).each(function(chapterData) {
+      chapterData.virtualPages = [];
+      _(chapterData.nodes).each(function(pageData) {
+        if (!pageData.dragged) {
+          _(selection.get('pages')).each(function(selectedPage) {
+            var selectedPageData = nodesByName[selectedPage.cid];
+
+            if (draggedBeforePage(selectedPageData, pageData)) {
+              chapterData.virtualPages.push(selectedPage);
+            }
+          });
+
+          chapterData.virtualPages.push(pageData.page);
+        }
+      });
+
+      _(selection.get('pages')).each(function(selectedPage) {
+        var selectedPageData = nodesByName[selectedPage.cid];
+
+        if (draggedBelowChapter(selectedPageData, chapterData)) {
+          chapterData.virtualPages.push(selectedPage);
+        }
+      });
+    });
+
+    function draggedBeforePage(draggedPage, page) {
+      return (Math.abs(draggedPage.x - page.x) < laneWidth / 2 &&
+              Math.abs(draggedPage.y - page.y) < rowHeight / 2 &&
+              draggedPage.y <= page.y + rowHeight / 2);
+    }
+
+    function draggedBelowChapter(draggedPage, chapter) {
+      var chapterBottom = chapter.y + chapter.virtualPages.length * rowHeight;
+
+      return (Math.abs(draggedPage.x - chapter.x) < laneWidth / 2 &&
+              Math.abs(draggedPage.y - chapterBottom) < rowHeight / 2 &&
+              draggedPage.y < chapterBottom + rowHeight / 2);
+    }
+  }
+
+  function repositionVirtualPages() {
+    _(chapters).each(function(chapterData) {
+      var chapterRow = chapterData.chapter.configuration.get('row') || 0;
+
+      _(chapterData.virtualPages).each(function(page, index) {
+        var pageData = nodesByName[page.cid];
+
+        if (!pageData.selected) {
+          pageData.y = chapterData.y + index * rowHeight;
+        }
       });
     });
   }
@@ -107,9 +176,11 @@ sitemap.ViewModel = function(entry, selection, options) {
     }
   }
 
-  function buildFollowLinks(pages) {
-    eachPair(pages, function(first, second) {
-      followLinks.push(buildLink('follow', first, second));
+  function buildFollowLinks() {
+    _(chapters).each(function(chapterData) {
+      eachPair(chapterData.virtualPages, function(first, second) {
+        followLinks.push(buildLink('follow', first, second));
+      });
     });
   }
 
@@ -159,7 +230,11 @@ sitemap.ViewModel = function(entry, selection, options) {
   }
 
   function eachPair(collection, fn) {
-    collection.reduce(function(last, item) {
+    if (collection.length < 2) {
+      return;
+    }
+
+    _.reduce(collection, function(last, item) {
       fn(last, item);
       return item;
     });

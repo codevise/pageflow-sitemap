@@ -2,6 +2,7 @@
 //= require ./d3/view_model
 
 //= require_tree ./d3/behaviors
+//= require_tree ./d3/paths
 
 //= require ./d3/utils
 //= require ./d3/views/group_view
@@ -16,7 +17,6 @@
 //= require ./d3/views/successor_knob_view.js
 //= require ./d3/views/page_views.js
 //= require ./d3/utils/paths.js
-//= require ./d3/utils/linkpath.js
 //= require ./d3/utils/zoom_handler.js
 //= require ./d3/utils/pan_handler.js
 //= require ./d3/utils/drag.js

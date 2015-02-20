@@ -39,4 +39,18 @@ describe('pageflow.sitemap.ViewModel', function() {
     expect(viewModel.pages[0].x).to.eq(0);
     expect(viewModel.pages[0].y).to.eq(0);
   });
+
+  describe('chapters[].virtualPages', function() {
+    it('contains non selected pages of chapter', function() {
+      var entry = f.entry();
+      var chapter = f.chapter(entry, {configuration: {lane: 1, row: 1}});
+      var otherChapter = f.chapter(entry, {configuration: {lane: 2, row: 1}});
+      var page = f.page(chapter);
+      var selection = new s.Selection();
+
+      var viewModel = new s.ViewModel(entry, selection);
+
+      expect(viewModel.chapters[0].virtualPages).to.deep.eq([page]);
+    });
+  });
 });

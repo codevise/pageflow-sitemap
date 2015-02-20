@@ -5,7 +5,7 @@ source "https://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-gem 'pageflow', git: 'https://github.com/codevise/pageflow.git', :branch => 'master'
+gem 'pageflow', path: '.bundle/linked/pageflow' #, git: 'https://github.com/codevise/pageflow.git', :branch => 'master'
 
 gem 'sqlite3'
 

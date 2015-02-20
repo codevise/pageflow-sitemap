@@ -5,10 +5,10 @@
 sitemap.linkpath = function(d) {
   var deltaX = d.source.x - d.target.x;
 
-  var start = { x: d.source.x, y: d.source.y},
-      p1 = { x: d.source.x, y: d.source.y},
-      p2 = { x: d.target.x, y: d.target.y},
-      end = { x: d.target.x, y: d.target.y};
+  var start = { x: d.source.x, y: d.source.y + 5},
+      p1 = { x: d.source.x, y: d.source.y + 5},
+      p2 = { x: d.target.x, y: d.target.y - 5},
+      end = { x: d.target.x, y: d.target.y - 5};
 
   var horizontalMargin = options.page.horizontalMargin * 2;
 
@@ -16,7 +16,7 @@ sitemap.linkpath = function(d) {
       offsetEnd = offsetStart + options.arrowSize;
 
   // start of path
-  if (deltaX > 0) {
+  if (deltaX > options.page.width) {
     // path from left to right
     start.x -= offsetStart;
     p1.x -= offsetStart + horizontalMargin;
@@ -29,16 +29,15 @@ sitemap.linkpath = function(d) {
   }
 
   // end of path
-  if (deltaX >= 0) {
-    // path from left to right
-    p2.x += offsetEnd + horizontalMargin;
-    end.x += offsetEnd;
-
-  }
-  else {
+  if (deltaX < -options.page.width) {
     // path from right to left
     end.x -= offsetEnd;
     p2.x -= offsetEnd + horizontalMargin;
+  }
+  else {
+    // path from left to right
+    p2.x += offsetEnd + horizontalMargin;
+    end.x += offsetEnd;
   }
 
   var p = [start, p1, p2, end];
