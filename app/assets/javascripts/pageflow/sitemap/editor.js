@@ -13,7 +13,8 @@
 /*global $, sitemap, JST, data, pageflow, Backbone, Marionette, Graph, SitemapView, console, _*/
 
 (function() {
-  window.sitemap = window.sitemap || {};
+  pageflow.sitemap = pageflow.sitemap || {};
+  window.sitemap = window.sitemap || pageflow.sitemap;
 
   pageflow.editor.registerMainMenuItem({
     translationKey: 'sitemap',
