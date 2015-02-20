@@ -1,27 +1,14 @@
 /*global pageflow, sitemap, Backbone, confirm, Group, _, Page*/
 
-sitemap.EditorModeController = sitemap.AbstractController.extend({
+pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
   initialize: function(graph) {
     this.graph = graph;
     this.selection = new pageflow.sitemap.Selection();
 
-    this.listenTo(this.selection, 'select:pages', function(pages) {
-      if (pages.length === 1) {
-        pageflow.editor.navigate('/pages/' + pages[0].id, {trigger: true});
-      }
-      else {
-        pageflow.editor.navigate('/', {trigger: true});
-      }
-    });
-
-    this.listenTo(this.selection, 'select:chapters', function(chapters) {
-      if (chapters.length === 1) {
-        pageflow.editor.navigate('/chapters/' + chapters[0].id, {trigger: true});
-      }
-      else {
-        pageflow.editor.navigate('/', {trigger: true});
-      }
-    });
+    new pageflow.sitemap.SelectionNavigator({
+      selection: this.selection,
+      multiSelectionPath: '/'
+    }).attach();
   },
 
   chapterSelected: function (chapter, event) {
@@ -36,6 +23,10 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
 
   pageSelected: function (page) {
     this.selection.select('pages', [page]);
+  },
+
+  pageLinkSelected: function (pageLink) {
+    this.selection.select('pageLinks', [pageLink]);
   },
 
   // FIXME
@@ -107,13 +98,6 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
     group.makePredecessorOf(page);
     if (page.group().get('pages').first() === page) {
       group.joinWithIfConnected(page.group());
-    }
-  },
-
-  linkPathSelected: function (link) {
-    // FIXME, move to selection, open in sidebar
-    if (confirm("Wollen Sie den Link wirklich löschen?")) {
-      link.remove();
     }
   },
 

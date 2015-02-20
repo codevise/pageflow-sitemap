@@ -118,7 +118,7 @@ sitemap.ViewModel = function(entry, selection, options) {
       if (page.pageLinks()) {
         page.pageLinks().each(function(link) {
           if (link.targetPage()) {
-            pageLinks.push(buildLink('link', page, link.targetPage()));
+            pageLinks.push(buildLink('link', page, link.targetPage(), link));
           }
         });
       }
@@ -139,11 +139,12 @@ sitemap.ViewModel = function(entry, selection, options) {
     });
   }
 
-  function buildLink(idPrefix, sourcePage, targetPage) {
+  function buildLink(idPrefix, sourcePage, targetPage, linkObject) {
     return {
       id: idPrefix + ':' + sourcePage.cid + '-' + targetPage.cid,
       source: nodesByName[sourcePage.cid],
-      target: nodesByName[targetPage.cid]
+      target: nodesByName[targetPage.cid],
+      link: linkObject
     };
   }
 
