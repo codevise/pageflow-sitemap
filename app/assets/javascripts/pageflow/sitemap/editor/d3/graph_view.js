@@ -61,7 +61,7 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         controller.chapterSelected(source.chapter, d3.event);
       },
       drag: function(options) {
-        update(entry, selection, {groupDx: options.dx, groupDy: options.dy});
+        update(entry, selection, {dragDx: options.dx, dragDy: options.dy});
       },
       dragend: function(options) {
         var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
@@ -85,18 +85,16 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         { view: sitemap.pagesView,
           selector: '.node',
           data: function(d) { return d.nodes; },
+
+
+
           options: {
-            subViews: [
-            {
-              view: sitemap.dropAreaView,
-              selector: '.area',
-              data: function(d) {
-                return [
-                  { dy: -(phalf+20), id: 2, target: d.page, position: 'before' },
-                  { dy: phalf, id: 1, target: d.page, position: 'after' }
-                ];
-              }
+            drag: function(options) {
+              update(entry, selection, {dragDx: options.dx, dragDy: options.dy});
             },
+            dragend: function(options) {},
+
+            subViews: [
             {
               view: sitemap.pageView,
               selector: '.pageview',

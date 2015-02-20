@@ -1,8 +1,11 @@
 sitemap.ViewModel = function(entry, selection, options) {
-  options = options || {};
+  options = _.extend({
+    dragDx: 0,
+    dragDy: 0
+  }, options || {});
 
   var chapters = this.chapters = [];
-  var nodes = this.nodes = [];
+  var nodes = this.nodes = this.pages = [];
   var followLinks = this.followLinks = [];
   var successorLinks = this.successorLinks = [];
   var pageLinks = this.links = [];
@@ -31,13 +34,16 @@ sitemap.ViewModel = function(entry, selection, options) {
 
       var groupSelected = selection.contains(chapter);
 
-      var groupDx = groupSelected ? options.groupDx || 0 : 0;
-      var groupDy = groupSelected ? options.groupDy || 0 : 0;
+      var chapterDx = groupSelected ? options.dragDx : 0;
+      var chapterDy = groupSelected ? options.dragDy : 0;
 
       var rowIndex = chapterRow;
 
       chapter.pages.each(function(page, index) {
         var id = "page:" + page.cid;
+
+        var pageDx = selection.contains(page) ? options.dragDx : chapterDx;
+        var pageDy = selection.contains(page) ? options.dragDy : chapterDy;
 
         var knobs = [];
 
@@ -57,8 +63,8 @@ sitemap.ViewModel = function(entry, selection, options) {
           selected: selection.contains(page),
           x0: typeof page.x0 == "undefined" ? x : page.x0,
           y0: typeof page.y0 == "undefined" ? (rowIndex - 1) * rowHeight : page.y0,
-          x: x + groupDx,
-          y: (rowIndex++) * rowHeight + groupDy,
+          x: x + pageDx,
+          y: (rowIndex++) * rowHeight + pageDy,
           availKnobs: knobs,
           visibleKnobs: []
         };
@@ -78,8 +84,8 @@ sitemap.ViewModel = function(entry, selection, options) {
         nodes: chapterNodes,
         selected: groupSelected,
         dragged: groupSelected && ('groupDx' in options),
-        x: x + groupDx,
-        y: chapterRow * rowHeight + groupDy,
+        x: x + chapterDx,
+        y: chapterRow * rowHeight + chapterDy,
         height: chapter.pages.length * rowHeight - 2 * sitemap.settings.page.verticalMargin
       });
     });
