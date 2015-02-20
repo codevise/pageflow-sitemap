@@ -19,69 +19,54 @@ sitemap.ViewModel = function(entry, selection, options) {
       rowHeight = this.rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
 
   buildChaptersAndPages();
-  buildVirtualPages();
-  repositionVirtualPages();
   buildFollowLinks();
   buildSuccessorLinks();
   buildPageLinks();
   setSize();
 
-  function isDragging() {
-    return 'dragDx' in options;
+  var s;
+
+  function pagesGroupedByChapters() {
+    entry.chapters.reduce(function(result, chapter) {
+      result[chapter.cid] = chapter.pages;
+      return result;
+    }, {});
   }
 
   function buildChaptersAndPages() {
-    var chapterMapping = {'pageId': 'chapterId'};
-    var layout = window.layout(entry.chapters, entry.pages, chapterMapping);
+    var gridLayout = new s.GridLayout(pagesGroupedByChapters());
+    var draggingLayout = this.chapterLayout = new s.DraggingLayout(gridLayout, selection, options.delta);
+
+    var pageCollision = s.PageCollision(this.draggingLayout);
+    var layout = new pageflow.sitemap.GridLayout(pageCollision.pagesGroupedByDragTargetChapters());
 
     entry.chapters.each(function(chapter) {
-      var chapterLane = chapter.configuration.get('lane') || 0;
-      var chapterRow = chapter.configuration.get('row') || 0;
-
-      var x = chapterLane * laneWidth;
-
       var chapterNodes = [];
 
-      var groupSelected = selection.contains(chapter);
-
-      var chapterDx = groupSelected ? options.dragDx : 0;
-      var chapterDy = groupSelected ? options.dragDy : 0;
-
-      var rowIndex = chapterRow;
-
-      chapter.pages.each(function(page, index) {
+      chapter.pages.each(function(page) {
         var id = "page:" + page.cid;
 
-        var pageDx = selection.contains(page) ? options.dragDx : chapterDx;
-        var pageDy = selection.contains(page) ? options.dragDy : chapterDy;
+        var node = {
+          id: id,
 
-        var knobs = [];
+          page: page,
+          chapter: chapter,
+
+          selected: selection.contains(page),
+          dragged: draggingLayout.isDragged(page),
+          position: layout.pagePosition(page),
+
+          availKnobs: [],
+          visibleKnobs: []
+        };
 
         if (page.pageLinks() && !options.hideKnobs) {
-          knobs.push({
+          node.availKnobs.push({
             pid: id,
             id: 'default',
             text: 'default',
             exceeded: !page.pageLinks().canAddLink()
           });
-        }
-
-        var node = {
-          id: id,
-          page: page,
-          chapter: chapter,
-          selected: selection.contains(page),
-          dragged: selection.contains(page) && ('dragDx' in options),
-          x0: typeof page.x0 == "undefined" ? x : page.x0,
-          y0: typeof page.y0 == "undefined" ? (rowIndex - 1) * rowHeight : page.y0,
-          x: x + pageDx,
-          y: rowIndex * rowHeight + pageDy,
-          availKnobs: knobs,
-          visibleKnobs: []
-        };
-
-        if (!node.dragged) {
-          rowIndex += 1;
         }
 
         chapterNodes.push(node);
@@ -94,12 +79,15 @@ sitemap.ViewModel = function(entry, selection, options) {
 
       chapters.push({
         id: 'group:' + chapter.cid,
+
         chapter: chapter,
         nodes: chapterNodes,
-        selected: groupSelected,
-        dragged: groupSelected && ('dragDx' in options),
-        x: x + chapterDx,
-        y: chapterRow * rowHeight + chapterDy,
+
+        selected: selection.contains(chapter),
+        dragged: draggingLayout.isDragged(chapter),
+        droppable: draggingLayout.isLegal(),
+
+        position: layout.chapterPosition(chapter),
         height: chapter.pages.length * rowHeight - 2 * sitemap.settings.page.verticalMargin
       });
     });
