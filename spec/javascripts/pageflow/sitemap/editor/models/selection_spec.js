@@ -24,6 +24,17 @@ describe('pageflow.sitemap.Selection', function() {
       expect(selection.get('pages')).to.deep.eq([]);
     });
 
+    it('triggers select:<name> event', function() {
+      var selection = new s.Selection();
+      var page = {};
+      var handler = sinon.spy();
+
+      selection.on('select:pages', handler);
+      selection.select('pages', [page]);
+
+      expect(handler).to.have.been.calledWith([page]);
+    });
+
     describe('with additive option', function() {
       it('adds model of same type', function() {
         var selection = new s.Selection();

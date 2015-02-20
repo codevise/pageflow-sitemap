@@ -21,5 +21,7 @@ pageflow.sitemap.Selection = Backbone.Model.extend({
 
     attributes[name] = base.concat(models);
     this.set(attributes);
+
+    this.trigger('select:' + name, attributes[name]);
   }
 });

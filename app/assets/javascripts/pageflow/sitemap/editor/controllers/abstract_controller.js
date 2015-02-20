@@ -42,3 +42,5 @@ sitemap.AbstractController = pageflow.Object.extend({
   }
 
 });
+
+_.extend(sitemap.AbstractController, Backbone.Events);
