@@ -3,16 +3,22 @@
 sitemap.EditorModeController = sitemap.AbstractController.extend({
   initialize: function(graph) {
     this.graph = graph;
-    this.selection = new Backbone.Model({groups: []});
+    this.selection = new pageflow.sitemap.Selection();
   },
 
-  chapterSelected: function (chapter) {
+  chapterSelected: function (chapter, event) {
     this.showChapterInSidebar(chapter);
-    this.selection.set('chapters', [chapter]);
+    this.selection.select('chapters', [chapter], {
+      additive: event.ctrlKey
+    });
   },
 
   chaptersSelected: function (chapters) {
-    this.selection.set('chapters', chapters);
+    this.selection.select('chapters', chapters);
+  },
+
+  pageSelected: function (page) {
+    this.selection.select('pages', [page]);
   },
 
   // FIXME
@@ -33,11 +39,6 @@ sitemap.EditorModeController = sitemap.AbstractController.extend({
         lane: update.lane
       });
     }, this);
-  },
-
-  // FIXME
-  pageSelected: function (page) {
-    this.showPageInSidebar(page);
   },
 
   // FIXME

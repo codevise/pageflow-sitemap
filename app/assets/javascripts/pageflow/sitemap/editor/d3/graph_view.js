@@ -58,7 +58,7 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
 
     svgPages.call(sitemap.chapterView(viewModel.chapters, {
       clicked: function(source) {
-        controller.chapterSelected(source.chapter);
+        controller.chapterSelected(source.chapter, d3.event);
       },
       mousedown: function(source) {
         if (!_.contains(selection.get('chapters'), source.chapter)) {
@@ -109,7 +109,7 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
               data: function(d) { return [d]; },
               options: {
                 click: function(source) {
-                  controller.pageSelected(source.page);
+                  controller.pageSelected(source.page, d3.event);
                 },
                 droppedOnArea: function(source, target) {
                   controller.pageDroppedOnArea(source.page, target.target, target.position);
