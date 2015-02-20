@@ -29,7 +29,7 @@ sitemap.ViewModel = function(entry, selection, options) {
 
       var chapterNodes = [];
 
-      var groupSelected = _(selection.get('chapters')).contains(chapter);
+      var groupSelected = selection.contains(chapter);
 
       var groupDx = groupSelected ? options.groupDx || 0 : 0;
       var groupDy = groupSelected ? options.groupDy || 0 : 0;
@@ -54,6 +54,7 @@ sitemap.ViewModel = function(entry, selection, options) {
           id: id,
           page: page,
           chapter: chapter,
+          selected: selection.contains(page),
           x0: typeof page.x0 == "undefined" ? x : page.x0,
           y0: typeof page.y0 == "undefined" ? (rowIndex - 1) * rowHeight : page.y0,
           x: x + groupDx,
