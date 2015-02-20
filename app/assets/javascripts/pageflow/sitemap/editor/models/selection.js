@@ -10,7 +10,7 @@ pageflow.sitemap.Selection = Backbone.Model.extend({
   contains: function(model) {
     return _(this.get('chapters')).contains(model) ||
       _(this.get('pages')).contains(model) ||
-      _(this.get('page_links')).contains(model);
+      _(this.get('pageLinks')).contains(model);
   },
 
   select: function(name, models, options) {

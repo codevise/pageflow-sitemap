@@ -166,11 +166,12 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
       ]
     }));
 
-    linkPathView(svgLinks, '.link', viewModel.links, {
-      clicked: function (d) {
+    svgLinks.call(pageflow.sitemap.pageLinksView(viewModel.links, {
+      click: function (d) {
         controller.pageLinkSelected(d.link, d3.event);
       }
-    });
+    }));
+
     followPathView(svgLinks, '.follow', viewModel.followLinks, {
       clicked: function (d) {
         controller.followPathSelected(d.source.page);

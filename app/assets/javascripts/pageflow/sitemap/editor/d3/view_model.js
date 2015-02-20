@@ -118,7 +118,10 @@ sitemap.ViewModel = function(entry, selection, options) {
       if (page.pageLinks()) {
         page.pageLinks().each(function(link) {
           if (link.targetPage()) {
-            pageLinks.push(buildLink('link', page, link.targetPage(), link));
+            pageLinks.push(buildLink('link', page, link.targetPage(), {
+              link: link,
+              selected: selection.contains(link)
+            }));
           }
         });
       }
@@ -139,13 +142,12 @@ sitemap.ViewModel = function(entry, selection, options) {
     });
   }
 
-  function buildLink(idPrefix, sourcePage, targetPage, linkObject) {
-    return {
+  function buildLink(idPrefix, sourcePage, targetPage, options) {
+    return _.extend({
       id: idPrefix + ':' + sourcePage.cid + '-' + targetPage.cid,
       source: nodesByName[sourcePage.cid],
       target: nodesByName[targetPage.cid],
-      link: linkObject
-    };
+    }, options || {});
   }
 
   function setSize() {
