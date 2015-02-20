@@ -20,26 +20,6 @@ var addClicked = function (selection, opts) {
     });
 };
 
-var linkPathView = sitemap.D3View(function(svg) {
-  svg.enter = function(node, opts) {
-    node.insert("path", "g")
-      .attr("class", "link")
-      .attr("id", svg.idfunc)
-      .attr("marker-end", "url(#Triangle)")
-      .attr("d", sitemap.short)
-      .call(applyHighlight)
-      .call(addClicked, opts)
-      .transition()
-        .attr("d", sitemap.linkpath)
-    ;
-  };
-
-  svg.update = function(node) {
-    node.transition().duration(window.options.duration)
-      .attr("d", sitemap.linkpath);
-  };
-});
-
 var followPathView = sitemap.D3View(function(svg) {
   svg.enter = function(node, opts) {
     node.insert("path", "g")

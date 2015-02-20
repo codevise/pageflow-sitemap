@@ -3,11 +3,16 @@
 
 //= require_tree ./d3/behaviors
 
+//= require ./d3/utils
+//= require ./d3/views/group_view
+
 //= require ./d3/views/d3_view.js
+
 //= require ./d3/views/views.js
 //= require ./d3/views/chapter_view.js
 //= require ./d3/views/page_menu_view.js
 //= require ./d3/views/knob_view.js
+//= require ./d3/views/page_links_view
 //= require ./d3/views/successor_knob_view.js
 //= require ./d3/views/page_views.js
 //= require ./d3/utils/paths.js
