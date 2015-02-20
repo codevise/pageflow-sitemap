@@ -2,6 +2,7 @@ $highlight-color: orange;
 $stroke-color: #3182bd;
 $stroke-width: 1.5px;
 $font: 10px sans-serif;
+$selection-color: red;
 
 @mixin highlight() {
   stroke: $highlight-color;
@@ -52,7 +53,7 @@ div.svgcontainer {
 
   .selected {
     .group-handle {
-      fill: red;
+      fill: $selection-color;
     }
   }
 
@@ -62,6 +63,16 @@ div.svgcontainer {
     stroke: $stroke-color;
     stroke-width: $stroke-width;
     font: $font;
+  }
+
+  .page_title {
+    fill: #fff;
+  }
+
+  .pageview.selected {
+    .page_title {
+      fill: $selection-color;
+    }
   }
 
   image {

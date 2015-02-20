@@ -91,10 +91,10 @@
 
       // panel behind title
       g.append('svg:rect')
+          .attr('class', 'page_title')
           .attr("width", options.page.width-2)
           .attr("height", 12)
           .attr("transform", "translate(" + (trX+1) + "," + (-trY) + ")")
-          .style("fill", "white")
         ;
 
       g.append("svg:g")
@@ -117,6 +117,8 @@
     };
 
     svg.update = function(node) {
+      node.classed('selected', function(d) { return d.selected; });
+
       node.select('.pageview div.pagetext')
           .text(function(d) { return d.page.get('title'); })
       ;
