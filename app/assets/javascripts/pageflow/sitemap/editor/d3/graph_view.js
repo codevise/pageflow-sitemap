@@ -46,15 +46,16 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
             'getScrollWindowProportionY');
 
   var update = function (entry, selection, updateOptions) {
-    var viewModel = new sitemap.ViewModel(entry, selection, _.extend(viewModelOptions || {}, updateOptions || {}));
+    var layout =
+      pageflow.sitemap.layout.create(entry, selection, updateOptions);
+
+    var viewModel =
+      new pageflow.sitemap.ViewModel(entry, selection, layout, viewModelOptions || {});
 
     scrollAndZoom.updateConstraints(-(viewModel.size.x + window.options.page.width / 2),
                                     -(viewModel.size.y + window.options.page.height / 2),
                                     window.options.page.width / 2,
                                     window.options.page.height / 2);
-
-    var phalf = window.options.page.height / 2;
-    // add svg elements for different types of things
 
     svgPages.call(sitemap.chapterView(viewModel.chapters, {
       clicked: function(source) {
@@ -64,35 +65,41 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         update(entry, selection, {dragDx: options.dx, dragDy: options.dy});
       },
       dragend: function(options) {
-        var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
-        var cellHeight = 2 * window.options.page.verticalMargin + window.options.page.height;
+        var layout;
 
-        controller.chaptersPositioned(_.map(selection.get('chapters'), function(chapter) {
-          return {
-            chapter: chapter,
-            row: chapter.configuration.get('row') + Math.round(options.dy / cellHeight),
-            lane: chapter.configuration.get('lane') + Math.round(options.dx / cellWidth)
-          };
-        }));
-      },
-      droppedOnPlaceholder: function (source, target) {
-        controller.groupDroppedOnPlaceholder(source.group, target);
-      },
-      droppedOnArea: function(source, target) {
-        controller.groupDroppedOnArea(source.group, target.target, target.position);
+        if (layout.isLegal()) {
+          controller.chaptersMoved(_.map(selection.get('chapters'), function(chapter) {
+            return {
+              chapter: chapter,
+              coordinates: layout.chapterCoordinates(chapter)
+            };
+          }));
+        }
+
+        //var cellWidth = 2 * window.options.page.horizontalMargin + window.options.page.width;
+        //var cellHeight = 2 * window.options.page.verticalMargin + window.options.page.height;
+        //
+        //controller.chaptersPositioned(_.map(selection.get('chapters'), function(chapter) {
+        //  return {
+        //    chapter: chapter,
+        //    row: chapter.configuration.get('row') + Math.round(options.dy / cellHeight),
+        //    lane: chapter.configuration.get('lane') + Math.round(options.dx / cellWidth)
+        //  };
+        //}));
       },
       subViews: [
         { view: sitemap.pagesView,
           selector: '.node',
           data: function(d) { return d.nodes; },
 
-
-
           options: {
             drag: function(options) {
               update(entry, selection, {dragDx: options.dx, dragDy: options.dy});
             },
-            dragend: function(options) {},
+            dragend: function(options) {
+              var layout;
+              controller.pagesMoved(layout.pagesGroupedByChapters);
+            },
 
             subViews: [
             {

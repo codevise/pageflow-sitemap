@@ -1,4 +1,5 @@
 //= require ./d3/options
+//= require ./d3/layout
 //= require ./d3/view_model
 
 //= require_tree ./d3/behaviors

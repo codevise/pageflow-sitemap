@@ -1,1 +1,1 @@
-Spring.application_root = File.join(__FILE__, "../../spec/dummy/rails-4.0.5")
+Spring.application_root = Dir[File.expand_path(File.join(__FILE__, "../../spec/dummy/rails-*"))].first

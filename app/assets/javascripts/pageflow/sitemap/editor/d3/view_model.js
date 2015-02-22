@@ -1,17 +1,10 @@
-sitemap.ViewModel = function(entry, selection, options) {
-  options = _.extend({
-    dragDx: 0,
-    dragDy: 0
-  }, options || {});
-
+sitemap.ViewModel = function(entry, selection, layout, options) {
   var chapters = this.chapters = [];
   var nodes = this.nodes = this.pages = [];
   var followLinks = this.followLinks = [];
   var successorLinks = this.successorLinks = [];
   var pageLinks = this.links = [];
   var size = this.size = {x: 0, y: 0};
-
-  this.placeholders = [];
 
   var nodesByName = {};
 
@@ -22,24 +15,10 @@ sitemap.ViewModel = function(entry, selection, options) {
   buildFollowLinks();
   buildSuccessorLinks();
   buildPageLinks();
+
   setSize();
 
-  var s;
-
-  function pagesGroupedByChapters() {
-    entry.chapters.reduce(function(result, chapter) {
-      result[chapter.cid] = chapter.pages;
-      return result;
-    }, {});
-  }
-
   function buildChaptersAndPages() {
-    var gridLayout = new s.GridLayout(pagesGroupedByChapters());
-    var draggingLayout = this.chapterLayout = new s.DraggingLayout(gridLayout, selection, options.delta);
-
-    var pageCollision = s.PageCollision(this.draggingLayout);
-    var layout = new pageflow.sitemap.GridLayout(pageCollision.pagesGroupedByDragTargetChapters());
-
     entry.chapters.each(function(chapter) {
       var chapterNodes = [];
 
@@ -53,7 +32,7 @@ sitemap.ViewModel = function(entry, selection, options) {
           chapter: chapter,
 
           selected: selection.contains(page),
-          dragged: draggingLayout.isDragged(page),
+          dragged: layout.isDragging(page),
           position: layout.pagePosition(page),
 
           availKnobs: [],
@@ -84,66 +63,11 @@ sitemap.ViewModel = function(entry, selection, options) {
         nodes: chapterNodes,
 
         selected: selection.contains(chapter),
-        dragged: draggingLayout.isDragged(chapter),
-        droppable: draggingLayout.isLegal(),
+        dragged: layout.isDragging(chapter),
+        droppable: layout.isLegal(),
 
         position: layout.chapterPosition(chapter),
         height: chapter.pages.length * rowHeight - 2 * sitemap.settings.page.verticalMargin
-      });
-    });
-  }
-
-  function buildVirtualPages() {
-    _(chapters).each(function(chapterData) {
-      chapterData.virtualPages = [];
-      _(chapterData.nodes).each(function(pageData) {
-        if (!pageData.dragged) {
-          _(selection.get('pages')).each(function(selectedPage) {
-            var selectedPageData = nodesByName[selectedPage.cid];
-
-            if (draggedBeforePage(selectedPageData, pageData)) {
-              chapterData.virtualPages.push(selectedPage);
-            }
-          });
-
-          chapterData.virtualPages.push(pageData.page);
-        }
-      });
-
-      _(selection.get('pages')).each(function(selectedPage) {
-        var selectedPageData = nodesByName[selectedPage.cid];
-
-        if (draggedBelowChapter(selectedPageData, chapterData)) {
-          chapterData.virtualPages.push(selectedPage);
-        }
-      });
-    });
-
-    function draggedBeforePage(draggedPage, page) {
-      return (Math.abs(draggedPage.x - page.x) < laneWidth / 2 &&
-              Math.abs(draggedPage.y - page.y) < rowHeight / 2 &&
-              draggedPage.y <= page.y + rowHeight / 2);
-    }
-
-    function draggedBelowChapter(draggedPage, chapter) {
-      var chapterBottom = chapter.y + chapter.virtualPages.length * rowHeight;
-
-      return (Math.abs(draggedPage.x - chapter.x) < laneWidth / 2 &&
-              Math.abs(draggedPage.y - chapterBottom) < rowHeight / 2 &&
-              draggedPage.y < chapterBottom + rowHeight / 2);
-    }
-  }
-
-  function repositionVirtualPages() {
-    _(chapters).each(function(chapterData) {
-      var chapterRow = chapterData.chapter.configuration.get('row') || 0;
-
-      _(chapterData.virtualPages).each(function(page, index) {
-        var pageData = nodesByName[page.cid];
-
-        if (!pageData.selected) {
-          pageData.y = chapterData.y + index * rowHeight;
-        }
       });
     });
   }
@@ -165,8 +89,8 @@ sitemap.ViewModel = function(entry, selection, options) {
   }
 
   function buildFollowLinks() {
-    _(chapters).each(function(chapterData) {
-      eachPair(chapterData.virtualPages, function(first, second) {
+    _(layout.pagesGroupedByDragTargetChapters).each(function(pages) {
+      eachPair(pages, function(first, second) {
         followLinks.push(buildLink('follow', first, second));
       });
     });
@@ -205,7 +129,7 @@ sitemap.ViewModel = function(entry, selection, options) {
     return _.extend({
       id: idPrefix + ':' + sourcePage.cid + '-' + targetPage.cid,
       source: nodesByName[sourcePage.cid],
-      target: nodesByName[targetPage.cid],
+      target: nodesByName[targetPage.cid]
     }, options || {});
   }
 
@@ -214,7 +138,6 @@ sitemap.ViewModel = function(entry, selection, options) {
       size.x = Math.max(node.x + laneWidth, size.x);
       size.y = Math.max(node.y + rowHeight, size.y);
     });
-
   }
 
   function eachPair(collection, fn) {

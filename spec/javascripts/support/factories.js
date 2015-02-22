@@ -9,6 +9,7 @@ support.factories = {
   },
 
   chapter: function(entry, attributes) {
+    entry = entry || this.entry();
     attributes = attributes || {};
     var chapter = new Backbone.Model(_(attributes).omit('configuration'));
 
@@ -24,6 +25,7 @@ support.factories = {
   },
 
   page: function(chapter, attributes) {
+    chapter = chapter || this.chapter();
     attributes = attributes || {};
     var page = new Backbone.Model(_(attributes).omit('configuration'));
 
