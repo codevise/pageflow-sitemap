@@ -53,13 +53,8 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
                                     window.options.page.height / 2);
 
     svgPages.call(sitemap.chapterView(viewModel.chapters, {
-      clicked: function(source) {
-        controller.chapterSelected(source.chapter, d3.event);
-      },
       mousedown: function(source) {
-        if (!_.contains(selection.get('chapters'), source.chapter)) {
-          selection.set('chapters', [source.chapter]);
-        }
+        controller.chapterSelected(source.chapter, d3.event);
       },
       drag: function(options) {
         update(entry, selection, {dragDelta: {x: options.dx, y: options.dy}});

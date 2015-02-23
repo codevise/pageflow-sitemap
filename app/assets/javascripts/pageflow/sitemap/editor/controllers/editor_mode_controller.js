@@ -12,9 +12,11 @@ pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
   },
 
   chapterSelected: function (chapter, event) {
-    this.selection.select('chapters', [chapter], {
-      additive: event.ctrlKey
-    });
+    if (!this.selection.contains(chapter)) {
+      this.selection.select('chapters', [chapter], {
+        additive: event.ctrlKey
+      });
+    }
   },
 
   chaptersSelected: function (chapters) {
