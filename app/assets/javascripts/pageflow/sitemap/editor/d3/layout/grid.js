@@ -1,10 +1,13 @@
 pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
   var positions = {};
   var chapterHeights = {};
+  var size = {x: 0, y: 0};
 
-  this.pagesGroupedByChapters = pagesGroupedByChapters;
   var laneWidth = this.laneWidth = options.pageWidth + 2 * options.pageMarginWidth;
   var rowHeight = this.rowHeight = options.pageHeight + 2 * options.pageMarginHeight;
+
+  this.pagesGroupedByChapters = pagesGroupedByChapters;
+  this.size = size;
 
   this.position = function(target) {
     return positions[target.cid];
@@ -60,6 +63,9 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
           x: lane(chapter) * laneWidth,
           y: (row(chapter) + index) * rowHeight
         };
+
+        size.x = Math.max(size.x, positions[page.cid].x + laneWidth);
+        size.y = Math.max(size.y, positions[page.cid].y + rowHeight);
       });
     }
   });

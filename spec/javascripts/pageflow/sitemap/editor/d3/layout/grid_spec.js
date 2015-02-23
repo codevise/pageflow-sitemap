@@ -132,4 +132,29 @@ describe('pageflow.sitemap.layout.Grid', function() {
       expect(result).to.deep.eql({lane: 0, row: 1});
     });
   });
+
+  describe('#size', function() {
+    it('returns width and height of all pages', function() {
+      var chapter1 = f.chapter(f.entry(), {configuration: {row: 1, lane: 0}});
+      var page11 = f.page(chapter1);
+      var page12 = f.page(chapter1);
+      var page13 = f.page(chapter1);
+      var chapter2 = f.chapter(f.entry(), {configuration: {row: 0, lane: 2}});
+      var page21 = f.page(chapter2);
+      var gridLayout = new l.Grid([
+        {
+          chapter: chapter1,
+          pages: [page11, page12, page13]
+        },
+        {
+          chapter: chapter2,
+          pages: [page11]
+        }
+      ], options);
+
+      var result = gridLayout.size;
+
+      expect(result).to.deep.eq({x: 300, y: 400});
+    });
+  });
 });

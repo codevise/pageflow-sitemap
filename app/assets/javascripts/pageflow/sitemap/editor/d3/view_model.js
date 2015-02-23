@@ -8,15 +8,10 @@ sitemap.ViewModel = function(entry, selection, layout, options) {
 
   var nodesByName = {};
 
-  var laneWidth = this.laneWidth = 2 * sitemap.settings.page.horizontalMargin + sitemap.settings.page.width,
-      rowHeight = this.rowHeight = 2 * sitemap.settings.page.verticalMargin + sitemap.settings.page.height;
-
   buildChaptersAndPages();
   buildFollowLinks();
   buildSuccessorLinks();
   buildPageLinks();
-
-  setSize();
 
   function buildChaptersAndPages() {
     entry.chapters.each(function(chapter) {
@@ -135,13 +130,6 @@ sitemap.ViewModel = function(entry, selection, layout, options) {
       source: nodesByName[sourcePage.cid],
       target: nodesByName[targetPage.cid]
     }, options || {});
-  }
-
-  function setSize() {
-    _.forEach(nodes, function(node) {
-      size.x = Math.max(node.x + laneWidth, size.x);
-      size.y = Math.max(node.y + rowHeight, size.y);
-    });
   }
 
   function eachPair(collection, fn) {

@@ -47,10 +47,10 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     var viewModel =
       new pageflow.sitemap.ViewModel(entry, selection, layout, viewModelOptions || {});
 
-    scrollAndZoom.updateConstraints(-(viewModel.size.x + window.options.page.width / 2),
-                                    -(viewModel.size.y + window.options.page.height / 2),
-                                    window.options.page.width / 2,
-                                    window.options.page.height / 2);
+    scrollAndZoom.updateConstraints(-(layout.size.x + layout.laneWidth / 2),
+                                    -(layout.size.y + layout.rowHeight / 2),
+                                    layout.laneWidth / 2,
+                                    layout.rowHeight / 2);
 
     svgPages.call(sitemap.chapterView(viewModel.chapters, {
       mousedown: function(source) {
