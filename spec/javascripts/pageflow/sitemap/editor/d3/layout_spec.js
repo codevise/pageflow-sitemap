@@ -9,7 +9,7 @@ describe('pageflow.sitemap.layout', function() {
       var otherChapter = f.chapter(entry, {configuration: {lane: 1, row: 0}});
       var page = f.page(chapter);
       var draggedPage = f.page(otherChapter);
-      var selection = new s.Selection({pages: []});
+      var selection = new s.Selection({pages: [draggedPage]});
 
       var layout = s.layout.create(entry, selection, {
         dragDelta: {
@@ -25,7 +25,7 @@ describe('pageflow.sitemap.layout', function() {
       });
 
       expect(layout.position(page)).to.deep.eq({x: 0, y: 0});
-    //  expect(layout.position(draggedPage)).to.deep.eq({x: 110, y: 20});
+      expect(layout.position(draggedPage)).to.deep.eq({x: 110, y: 20});
     });
   });
 });

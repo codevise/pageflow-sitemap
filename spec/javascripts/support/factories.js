@@ -10,7 +10,10 @@ support.factories = {
 
   chapter: function(entry, attributes) {
     entry = entry || this.entry();
+
     attributes = attributes || {};
+    attributes.id = _.uniqueId();
+
     var chapter = new Backbone.Model(_(attributes).omit('configuration'));
 
     chapter.configuration = new Backbone.Model(attributes.configuration);
@@ -26,7 +29,11 @@ support.factories = {
 
   page: function(chapter, attributes) {
     chapter = chapter || this.chapter();
+
     attributes = attributes || {};
+    attributes.id = _.uniqueId();
+    attributes.chapter_id = chapter.id;
+
     var page = new Backbone.Model(_(attributes).omit('configuration'));
 
     page.configuration = new Backbone.Model(attributes.configuration);

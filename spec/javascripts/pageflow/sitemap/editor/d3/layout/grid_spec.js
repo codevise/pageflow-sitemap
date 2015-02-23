@@ -127,7 +127,7 @@ describe('pageflow.sitemap.layout.Grid', function() {
     it('maps point to row and lane', function() {
       var gridLayout = new l.Grid([], options);
 
-      var result = gridLayout.laneAndRowFromPoint({x: 50, y: 150});
+      var result = gridLayout.laneAndRowFromPoint({x: 0, y: 100});
 
       expect(result).to.deep.eql({lane: 0, row: 1});
     });
