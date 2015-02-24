@@ -60,8 +60,6 @@ pageflow.sitemap.groupView = {
           update: function() {
             return child;
           },
-
-          child: childFactory(enteredChild, child, options)
         });
 
         return child;

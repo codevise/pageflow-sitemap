@@ -1,0 +1,42 @@
+.chapter {
+  .handle {
+    fill: #eee;
+  }
+
+  .border {
+    fill: none;
+    stroke: #eee;
+  }
+
+  &.dragged,
+  &.hover {
+    .handle {
+      fill: $highlight-color;
+      @include highlight;
+    }
+
+    .border {
+      fill: #f9f9f9;
+      @include highlight;
+    }
+  }
+
+  &.selected {
+    .handle {
+      fill: $selection-color;
+      stroke: $selection-color;
+    }
+
+    .border {
+      stroke: $selection-color;
+    }
+  }
+
+  .title_text {
+    color: #000;
+    font: $font;
+    text-align: center;
+    pointer-events: none;
+    padding-top: 2px;
+  }
+}

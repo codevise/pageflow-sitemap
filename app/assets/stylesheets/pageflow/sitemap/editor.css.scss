@@ -9,213 +9,40 @@ $selection-color: red;
   stroke-width: 2px;
 }
 
-div.svgcontainer {
+.sitemap {
+  @import "./editor/chapters";
+  @import "./editor/pages";
   @import "./editor/selectable_links";
   @import "./editor/page_links";
   @import "./editor/successor_links";
+  @import "./editor/follow_links";
+  @import "./editor/scroll_bar";
 
-  cursor: default;
+  @include user-select(none);
+  background-color: #fff;
 
-  background: white;
-  border: solid 1px #ddd;
-
-  z-index: 10000;
   position: absolute;
-  top: 35px;
-  right: 15px;
-  left: 1px;
-  bottom: 15px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100000;
 
-  .group-handle {
-    fill: #f9f9f9;
-  }
+  div.svgcontainer {
+    cursor: default;
+    border: solid 1px #ddd;
 
-  .group-highlight {
-    fill: none;
-  }
-
-  .group-dummy {
-    fill: none;
-    pointer-events: none;
-
-    &.active {
-      fill: red;
-    }
-  }
-
-  .hover {
-    .group-handle {
-      fill: $highlight-color;
-      @include highlight;
-    }
-
-    .group-highlight {
-      fill: #f9f9f9;
-      @include highlight;
-    }
-  }
-
-  .selected {
-    .group-handle {
-      fill: $selection-color;
-    }
-  }
-
-  .page {
-    cursor: pointer;
-    fill: #fff;
-    stroke: $stroke-color;
-    stroke-width: $stroke-width;
-    font: $font;
-  }
-
-  .page_title {
-    fill: #fff;
-  }
-
-  .pageview.selected {
-    .page_title {
-      fill: $selection-color;
-    }
-  }
-
-  image {
-    pointer-events: none;
-  }
-
-  text {
-    font: $font;
-    pointer-events: none;
-    text-anchor: middle;
-    alignment-baseline: central;
-  }
-
-  .pagetext {
-    font: $font;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .small {
-    .pagetext {
-      font: 8px sans-serif;
-    }
-  }
-
-  .xsmall {
-    .pagetext {
-      font: 5px sans-serif;
-    }
-  }
-
-  .drag-dummy {
-    display: none;
-
-    stroke-dasharray: 5,5;
-    opacity: .5;
-    fill:  rgb(176, 196, 222);
-
-    &.active  {
-      display: inline;
-    }
-
-    rect {
-      pointer-events: none;
-    }
-  }
-
-  .ghost {
-    opacity: .5;
-  }
-
-  .highlight .page {
-    @include highlight;
-  }
-
-  .area {
-    fill: rgba(255,255,255,0);
-    stroke-width: $stroke-width;
-    pointer-events: none;
-  }
-
-  .dragging .area {
-    pointer-events: all;
-  }
-
-  path.follow {
-    fill: none;
-    stroke: red;
-    stroke-width: $stroke-width;
-    marker-end: url(#follow_triangle)
-  }
-
-  #follow_triangle {
-    fill: red;
-  }
-
-  path.highlight {
-    stroke: $highlight-color;
-    stroke-width: 2px;
-  }
-
-  path.invisible {
-    fill: none;
-    stroke: none;
-    stroke-width: 0;
+    z-index: 10000;
+    position: absolute;
+    top: 35px;
+    right: 15px;
+    left: 1px;
+    bottom: 15px;
   }
 
   marker {
     stroke: inherit;
     fill: inherit;
-  }
-
-  .node {
-    .menu-item {
-      fill: none;
-      stroke: none;
-    }
-
-    .knob, .successor-knob {
-      stroke: #ffffff;
-      fill: rgba(255,255,255, 0.5);
-    }
-
-    .knob {
-      stroke: #98fb98;
-      pointer-events: all;
-    }
-
-    .knob.exceeded {
-      stroke: #ffffff;
-      pointer-events: none;
-    }
-
-    &.show-menu {
-      .knob, .successor-knob, .menu-item {
-        cursor: pointer;
-        fill: #fff;
-        stroke: $stroke-color;
-        stroke-width: $stroke-width;
-      }
-
-      .knob.exceeded {
-        stroke: red;
-      }
-    }
-  }
-
-  .knob-dummy, .menu-item-dummy {
-    display: none;
-
-    stroke-dasharray: 5,5;
-    opacity: .5;
-    fill:  rgb(176, 196, 222);
-
-    pointer-events: none;
-
-    &.active  {
-      display: inline;
-    }
   }
 
   rect.selection {
@@ -226,33 +53,6 @@ div.svgcontainer {
     cursor: default;
     vector-effect: non-scaling-stroke;
   }
-}
-
-div.button {
-  display: block;
-  position: absolute;
-  z-index: 100000;
-  font-size: 13px;
-  cursor: pointer;
-
-  &.close {
-    height: 25px;
-    width: 80px;
-    top: 10px;
-    right: 10px;
-  }
-}
-
-.sitemap {
-  @include user-select(none);
-  background-color: #fff;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100000;
 
   .scroll_bar_x {
     position: absolute;
@@ -299,5 +99,18 @@ div.button {
     @include fa-search-plus-icon;
   }
 
-  @import "./editor/scroll_bar";
+  .button {
+    display: block;
+    position: absolute;
+    z-index: 100000;
+    font-size: 13px;
+    cursor: pointer;
+
+    &.close {
+      height: 25px;
+      width: 80px;
+      top: 10px;
+      right: 10px;
+    }
+  }
 }

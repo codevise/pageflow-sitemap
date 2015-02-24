@@ -1,0 +1,35 @@
+.page {
+  .bg {
+    cursor: pointer;
+    fill: #fff;
+    stroke: $stroke-color;
+    stroke-width: $stroke-width;
+    font: $font;
+  }
+
+  &.hover .bg {
+    @include highlight;
+  }
+
+  .title {
+    fill: #fff;
+    pointer-events: none;
+  }
+
+  &.selected {
+    .title {
+      fill: $selection-color;
+    }
+  }
+
+  .title_text {
+    color: #000;
+    font: $font;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  image {
+    pointer-events: none;
+  }
+}
