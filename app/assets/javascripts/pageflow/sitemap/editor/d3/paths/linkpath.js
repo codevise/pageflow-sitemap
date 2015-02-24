@@ -3,7 +3,18 @@
 // path generator to be used in d3 attrib function for path element
 // path.attr('d', sitemap.linkpath);
 sitemap.linkpath = function(d) {
+  var points = sitemap.linkpath.points(d);
+
+  var p = [points.start, points.p1, points.p2, points.end].map(function(d) {
+    return [d.x, d.y];
+  });
+
+  return "M" + p[0] + "C" + p[1] + " " + p[2] + " " + p[3];
+};
+
+sitemap.linkpath.points = function(d) {
   var deltaX = d.source.x - d.target.x;
+  var deltaY = d.source.y - d.target.y;
 
   var start = { x: d.source.x, y: d.source.y + 5},
       p1 = { x: d.source.x, y: d.source.y + 5},
@@ -12,8 +23,8 @@ sitemap.linkpath = function(d) {
 
   var horizontalMargin = options.page.horizontalMargin * 2;
 
-  var offsetStart = options.page.width / 2,
-      offsetEnd = offsetStart + options.arrowSize;
+  var offsetStart = d.source.width / 2,
+      offsetEnd = d.target.width / 2 + options.arrowSize;
 
   // start of path
   if (deltaX > options.page.width) {
@@ -28,20 +39,26 @@ sitemap.linkpath = function(d) {
     p1.x += offsetStart + horizontalMargin;
   }
 
-  // end of path
-  if (deltaX < -options.page.width) {
-    // path from right to left
-    end.x -= offsetEnd;
-    p2.x -= offsetEnd + horizontalMargin;
+  if (deltaX === 0 && deltaY === 0) {
+    p1 = p2 = end = start;
   }
   else {
-    // path from left to right
-    p2.x += offsetEnd + horizontalMargin;
-    end.x += offsetEnd;
+    if (deltaX < -options.page.width) {
+      // path from right to left
+      end.x -= offsetEnd;
+      p2.x -= offsetEnd + horizontalMargin;
+    }
+    else {
+      // path from left to right
+      p2.x += offsetEnd + horizontalMargin;
+      end.x += offsetEnd;
+    }
   }
 
-  var p = [start, p1, p2, end];
-  p = p.map(function(d) { return [d.x, d.y]; });
-
-  return "M" + p[0] + "C" + p[1] + " " + p[2] + " " + p[3];
+  return {
+    start: start,
+    p1: p1,
+    p2: p2,
+    end: end
+  };
 };

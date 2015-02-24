@@ -33,13 +33,24 @@ pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
     this.selection.select('pageLinks', [pageLink]);
   },
 
-  // FIXME
-  groupDroppedOnArea: function (group, target, position) {
-    if(position == 'before') {
-      this.graph.insertIntoGroupBefore(group, target);
+  pageLinkDroppedOnPage: function(links, link, page) {
+    links.updateLink(link, page.get('perma_id'));
+  },
+
+  pageLinkPlaceholderDroppedOnPage: function(links, page) {
+    links.addLink(page.get('perma_id'));
+  },
+
+  successorLinkSelected: function (link) {
+    this.selection.select('successorLinks', [link]);
+  },
+
+  successorLinkDroppedOnPage: function(page, targetPage) {
+    if (targetPage) {
+      page.configuration.set('scroll_successor_id', targetPage.get('perma_id'));
     }
     else {
-      this.graph.insertIntoGroupAfter(group, target);
+      page.configuration.unset('scroll_successor_id');
     }
   },
 

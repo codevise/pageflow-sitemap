@@ -13,6 +13,19 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
     return positions[target.cid];
   };
 
+  this.linkSource = function(page) {
+    return {
+      x: this.position(page).x,
+      y: this.position(page).y,
+      width: options.pageWidth,
+      height: options.pageHeight
+    };
+  };
+
+  this.linkTarget = function(page, link) {
+    return this.linkSource(page);
+  };
+
   this.chapterHeight = function(chapter) {
     return chapterHeights[chapter.cid];
   };
@@ -23,6 +36,13 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
     return (Math.abs(position.x - pagePosition.x) < laneWidth / 2 &&
             Math.abs(position.y - pagePosition.y) <= rowHeight / 2 &&
             position.y < pagePosition.y + rowHeight / 2);
+  };
+
+  this.pointInsidePage = function(page, position) {
+    var pagePosition = this.position(page);
+
+    return (Math.abs(position.x - pagePosition.x) <= (options.pageWidth + options.pageMarginWidth) / 2 &&
+            Math.abs(position.y - pagePosition.y) <= (options.pageHeight + options.pageMarginHeight) / 2);
   };
 
   this.isBelowChapter = function(chapter, position) {
@@ -42,6 +62,16 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
       lane: Math.round(position.x / laneWidth),
       row: Math.round(position.y / rowHeight),
     };
+  };
+
+  this.pageFromPoint = function(position) {
+    var that = this;
+
+    return _(pagesGroupedByChapters).reduce(function(result, group) {
+      return result || _(group.pages).find(function(page) {
+        return that.pointInsidePage(page, position);
+      });
+    }, null);
   };
 
   this.isLegal = function() {

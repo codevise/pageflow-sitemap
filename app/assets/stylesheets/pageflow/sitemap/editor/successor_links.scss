@@ -1,0 +1,29 @@
+$successor-link-color: red;
+
+.successor_link {
+  .arrow {
+    stroke: $successor-link-color;
+    marker-end: url(#successor_link_triangle);
+  }
+
+  &.dragged,
+  &.highlight {
+    .arrow {
+      marker-end: url(#successor_link_triangle_highlight);
+    }
+  }
+
+  &.placeholder {
+    .drag_target {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+#successor_link_triangle {
+  fill: $successor-link-color;
+}
+
+#successor_link_triangle_highlight {
+  fill: $highlight-color;
+}

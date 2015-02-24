@@ -8,7 +8,8 @@ pageflow.sitemap.groupView = {
       return function(container) {
         var nodes = container
           .selectAll('.' + className)
-          .data(data, s.utils.fn.d('id'));
+          .data(data, s.utils.fn.d('id'))
+          .order();
 
         var nodesEnter = nodes
           .enter()

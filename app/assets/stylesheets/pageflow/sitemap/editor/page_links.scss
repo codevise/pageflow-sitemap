@@ -2,37 +2,21 @@ $page-link-color: #9ecae1;
 
 .page_link {
   .arrow {
-    fill: none;
     stroke: $page-link-color;
-    stroke-width: $stroke-width;
-    pointer-events: none;
     marker-end: url(#page_link_triangle);
   }
 
-  .selection_highlight {
-    fill: none;
-    stroke: transparent;
-    stroke-width: 4px;
-    pointer-events: none;
-  }
-
-  .selection_target {
-    fill: none;
-    stroke: transparent;
-    stroke-width: 10px;
-    pointer-events: stroke;
-  }
-
+  &.dragged,
   &.highlight {
     .arrow {
-      stroke: $highlight-color;
-      stroke-width: 2px;
       marker-end: url(#page_link_triangle_highlight);
     }
   }
 
-  &.selected .selection_highlight {
-    stroke: $selection-color;
+  &.placeholder {
+    .drag_target {
+      transform: translateX(-5px);
+    }
   }
 }
 

@@ -10,7 +10,9 @@ $selection-color: red;
 }
 
 div.svgcontainer {
+  @import "./editor/selectable_links";
   @import "./editor/page_links";
+  @import "./editor/successor_links";
 
   cursor: default;
 
@@ -140,25 +142,6 @@ div.svgcontainer {
     pointer-events: all;
   }
 
-  .placeholder {
-    fill: white;
-    stroke: $stroke-color;
-    stroke-width: 0.5px;
-    stroke-dasharray: 5,5;
-
-    &.drag {
-      fill: #efefef;
-      stroke: $stroke-color;
-      stroke-width: 1px;
-    }
-
-    &.hover {
-      fill: #efefef;
-      stroke: red;
-      stroke-width: 1px;
-    }
-  }
-
   path.follow {
     fill: none;
     stroke: red;
@@ -168,12 +151,6 @@ div.svgcontainer {
 
   #follow_triangle {
     fill: red;
-  }
-
-  path.successor {
-    fill: none;
-    stroke: red;
-    stroke-width: $stroke-width;
   }
 
   path.highlight {

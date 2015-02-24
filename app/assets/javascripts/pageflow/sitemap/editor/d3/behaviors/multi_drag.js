@@ -7,7 +7,7 @@ sitemap.behavior.multiDrag = function(options) {
 
   function behavior(g) {
     var handles = options.handle ? g.selectAll(options.handle) : g;
-    var dx, dy;
+    var dx, dy, x, y;
 
     var xxx;
 
@@ -23,12 +23,29 @@ sitemap.behavior.multiDrag = function(options) {
         dx += d3.event.dx;
         dy += d3.event.dy;
 
-//        options.targets().attr('transform', 'translate(' + dx + ',' + dy + ')');
-        options.drag({dx: dx, dy: dy});
+        x = d3.event.x;
+        y = d3.event.y;
+
+        options.drag({
+          dx: dx,
+          dy: dy,
+          position: {
+            x: x,
+            y: y
+          }
+        });
       })
-      .on(dragend, function() {
+      .on(dragend, function(data) {
         window.options.duration = xxx;
-        options.dragend({dx: dx, dy: dy});
+        options.dragend({
+          data: data,
+          dx: dx,
+          dy: dy,
+          position: {
+            x: x,
+            y: y
+          }
+        });
       });
 
     handles.call(drag);

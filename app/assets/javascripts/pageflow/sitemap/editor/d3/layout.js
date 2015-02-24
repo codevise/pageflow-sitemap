@@ -1,6 +1,7 @@
 //= require_self
 //= require ./layout/grid
 //= require ./layout/dragging_decorator
+//= require ./layout/link_dragging_decorator
 //= require ./layout/collision
 
 (function() {
@@ -60,13 +61,14 @@
       // layout which already contains placeholder positions for the
       // dragged pages.
 
-      var layout =
-        new s.layout.DraggingDecorator(selection,
-                                       spacingLayout,
-                                       originalLayout,
-                                       {delta: options.dragDelta});
+      var layout = new s.layout.DraggingDecorator(selection,
+                                                  spacingLayout,
+                                                  originalLayout,
+                                                  {delta: options.dragDelta});
 
-      return layout;
+      return new s.layout.LinkDraggingDecorator(selection,
+                                                layout,
+                                                {dragPosition: options.dragPosition});
     }
   };
 

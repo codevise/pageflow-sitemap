@@ -15,7 +15,7 @@ pageflow.sitemap.SelectionNavigator = pageflow.Object.extend({
     });
 
     this.listenToSelection('pageLinks', function(pageLink) {
-      return pageLink.editPath();
+      return pageLink.editPath ? pageLink.editPath() : this.options.emptySelectionPath;
     });
   },
 

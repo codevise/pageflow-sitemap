@@ -3,14 +3,21 @@ pageflow.sitemap.Selection = Backbone.Model.extend({
     return {
       pages: [],
       chapters: [],
-      pageLinks: []
+      pageLinks: [],
+      successorLinks: []
     };
   },
 
   contains: function(model) {
     return _(this.get('chapters')).contains(model) ||
       _(this.get('pages')).contains(model) ||
-      _(this.get('pageLinks')).contains(model);
+      _(this.get('pageLinks')).some(function(link) {
+        return link === model ||
+          (link.placeholder && link.placeholder === model.placeholder);
+      }) ||
+      _(this.get('successorLinks')).some(function(link) {
+        return link.successor && link.successor === model.successor;
+      });
   },
 
   select: function(name, models, options) {

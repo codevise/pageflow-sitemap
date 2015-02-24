@@ -110,55 +110,6 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
                   controller.pageSelected(source.page, d3.event);
                 }
               }
-            },
-            {
-              view: sitemap.pageMenuView,
-              selector: '.page-menu',
-              data: function(d) { return [d]; },
-              options: {
-                subViews: [
-                  {
-                    view: sitemap.addAfterButtonView,
-                    selector: '.add-after-button',
-                    data: function(d) {
-                      return [{
-                        id: 'add-after-button:' + d.id,
-                        page: d.page,
-                        data: d,
-                        pid: d.id
-                      }];
-                    },
-                    options: {
-                      clicked: function (source) {
-                        controller.addPageAfter(source.page);
-                      }
-                    }
-                  },
-                  {
-                    view: sitemap.knobView,
-                    selector: '.knob',
-                    data: function(d) { return d.availKnobs || []; },
-                    options: {
-                      droppedOnPage: function (source, target) {
-                        controller.knobDroppedOnPage(source.knob, target.page);
-                      }
-                    }
-                  },
-                  {
-                    view: sitemap.successorKnobView,
-                    selector: '.successor-knob',
-                    data: function(d) { return d.successor ? [d.successor] : []; },
-                    options: {
-                      clicked: function() {
-                        // Handler for click on successor button
-                      },
-                      droppedOnPage: function (source, target) {
-                        controller.successorKnobDroppedOnPage(source.group, target.page);
-                      }
-                    }
-                  }
-                ]
-              }
             }
           ]
         }
@@ -169,6 +120,26 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
     svgLinks.call(pageflow.sitemap.pageLinksView(viewModel.links, {
       click: function (d) {
         controller.pageLinkSelected(d.link, d3.event);
+      },
+      drag: function(options) {
+        update(entry, selection, {dragPosition: options.position});
+      },
+      dragend: function(options) {
+        var page = layout.pageFromPoint(options.position);
+
+        if (page) {
+          if (options.data.link.placeholder) {
+            controller.pageLinkPlaceholderDroppedOnPage(options.data.links,
+                                                      page);
+          }
+          else {
+            controller.pageLinkDroppedOnPage(options.data.links,
+                                             options.data.link,
+                                             page);
+          }
+        }
+
+        update(entry, selection);
       }
     }));
 
@@ -177,11 +148,23 @@ sitemap.GraphView = function(svgElement, controller, viewModelOptions) {
         controller.followPathSelected(d.source.page);
       }
     });
-    successorPathView(svgLinks, '.successor', viewModel.successorLinks, {
-      clicked: function (d) {
-        controller.successorPathSelected(d.source.page);
+
+    svgLinks.call(pageflow.sitemap.successorLinksView(viewModel.successorLinks, {
+      click: function (d) {
+        controller.successorLinkSelected(d.link, d3.event);
+      },
+      drag: function(options) {
+        update(entry, selection, {dragPosition: options.position});
+      },
+      dragend: function(options) {
+        var targetPage = layout.pageFromPoint(options.position);
+
+        controller.successorLinkDroppedOnPage(options.data.page,
+                                              targetPage);
+
+        update(entry, selection);
       }
-    });
+    }));
 
     viewModel.nodes.forEach(function(node) {
       node.page.x0 = node.x;

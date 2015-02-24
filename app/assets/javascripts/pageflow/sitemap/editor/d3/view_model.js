@@ -100,11 +100,34 @@ sitemap.ViewModel = function(entry, selection, layout, options) {
       if (page.pageLinks()) {
         page.pageLinks().each(function(link) {
           if (link.targetPage()) {
-            pageLinks.push(buildLink('link', page, link.targetPage(), {
+            pageLinks.push({
+              id: 'link' + ':' + page.cid + '-' + link.targetPage().cid,
               link: link,
-              selected: selection.contains(link)
-            }));
+              links: page.pageLinks(),
+
+              source: layout.linkSource(page),
+              target: layout.linkTarget(link.targetPage(), link),
+
+              selected: selection.contains(link),
+              dragged: layout.isDragging(link),
+              placeholder: false
+            });
           }
+        });
+
+        var link = {placeholder: page};
+
+        pageLinks.push({
+          id: 'dangling-link' + ':' + page.cid,
+          link: link,
+          links: page.pageLinks(),
+
+          source:  layout.linkSource(page),
+          target: layout.linkTarget(page, link),
+
+          selected: selection.contains(link),
+          dragged: layout.isDragging(link),
+          placeholder: true
         });
       }
     });
@@ -116,9 +139,35 @@ sitemap.ViewModel = function(entry, selection, layout, options) {
 
       if (lastPage) {
         var successorPage = entry.pages.getByPermaId(lastPage.configuration.get('scroll_successor_id'));
+        var link = {successor: lastPage};
 
         if (successorPage) {
-          successorLinks.push(buildLink('successor', lastPage, successorPage));
+          successorLinks.push({
+            id: 'successor:' + lastPage.cid + '-' + successorPage.cid,
+            page: lastPage,
+            link: link,
+
+            source: layout.linkSource(lastPage),
+            target: layout.linkTarget(successorPage, link),
+
+            selected: selection.contains(link),
+            dragged: layout.isDragging(link),
+            placeholder: false
+          });
+        }
+        else {
+          successorLinks.push({
+            id: 'dangling-successor:' + lastPage.cid,
+            page: lastPage,
+            link: link,
+
+            source: layout.linkSource(lastPage),
+            target: layout.linkTarget(lastPage, link),
+
+            selected: selection.contains(link),
+            dragged: layout.isDragging(link),
+            placeholder: true
+          });
         }
       }
     });
@@ -128,7 +177,7 @@ sitemap.ViewModel = function(entry, selection, layout, options) {
     return _.extend({
       id: idPrefix + ':' + sourcePage.cid + '-' + targetPage.cid,
       source: nodesByName[sourcePage.cid],
-      target: nodesByName[targetPage.cid]
+      target: nodesByName[targetPage.cid],
     }, options || {});
   }
 

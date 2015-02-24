@@ -1,0 +1,66 @@
+.selectable_link {
+  .arrow {
+    fill: none;
+    stroke-width: $stroke-width;
+    pointer-events: none;
+  }
+
+  &.placeholder {
+    .arrow {
+      display: none;
+    }
+  }
+
+  &.dragged {
+    .arrow {
+      display: block;
+    }
+  }
+
+  &.dragged,
+  &.highlight {
+    .arrow {
+      stroke: $highlight-color;
+      stroke-width: 2px;
+    }
+  }
+  .selection_highlight {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 4px;
+    pointer-events: none;
+  }
+
+  .selection_target {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 10px;
+    pointer-events: stroke;
+  }
+
+  .drag_target {
+    fill: none;
+    cursor: move;
+    pointer-events: all;
+  }
+
+  &.placeholder {
+    .drag_target {
+      fill: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  &.dragged {
+    .drag_target {
+      fill: none;
+    }
+  }
+
+  &.selected .selection_highlight {
+    stroke: $selection-color;
+  }
+
+  &.dragged .selection_highlight {
+    stroke: transparent;
+  }
+}
