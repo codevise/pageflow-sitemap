@@ -1,8 +1,7 @@
-/*global pageflow, sitemap, Backbone, confirm, Group, _, Page*/
+pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.extend({
+  name: 'editor_mode',
 
-pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
-  initialize: function(graph) {
-    this.graph = graph;
+  initialize: function() {
     this.selection = new pageflow.sitemap.Selection();
 
     new pageflow.sitemap.SelectionNavigator({
@@ -88,87 +87,24 @@ pageflow.sitemap.EditorModeController = sitemap.AbstractController.extend({
     page.group().addPageAfter(sitemapPage, page);
   },
 
-  knobDroppedOnPage: function (knob,  page) {
-    // FIXME, use pagelinks api
-    knob.linkTo(page);
-  },
-
-  successorKnobDroppedOnPage: function (group,  page) {
-    group.makePredecessorOf(page);
-    if (page.group().get('pages').first() === page) {
-      group.joinWithIfConnected(page.group());
-    }
-  },
-
-  followPathSelected: function (page) {
-    if (confirm("Wollen Sie den Link wirklich löschen?")) {
-      page.removeSuccessorLink();
-    }
-  },
-
-  successorPathSelected: function (page) {
-    if (confirm("Wollen Sie den Link wirklich löschen?")) {
-      page.removeSuccessorLink();
-    }
-  },
-
-  // FIXME, remove sitemap models
-  placeholderSelected: function (placeholder) {
-    // Create sitemap group and pageflow chapter.
-
-    // TODO: move this to the model?
-    var group = Group.createGroup(placeholder.lane.index(), placeholder.row);
-    var chapter = group.get('chapter');
+  addChapter: function(options) {
+    var chapter = pageflow.entry.addChapter({configuration: options});
 
     chapter.once('sync', function() {
-
-      // create pageflow page via chapter
-      var pageflowPage = chapter.addPage({ position: 0 });
-
-      var sitemapPage = this._page('after', placeholder.x, placeholder.y);
-      sitemapPage.set('page', pageflowPage);
-      pageflowPage.sitemapPage = sitemapPage;
-
-      pageflowPage.once('sync', function() {
-        // create sitemapPage for pageflow Page
-        group.addPageAt(sitemapPage, 0);
-        placeholder.lane.addGroup(group, placeholder.row);
-        this.graph.trigger('change');
-
-        this.showPageInSidebar(sitemapPage);
-      }, this);
-    }, this);
-  },
-
-  showPageInSidebar: function (sitemapPage) {
-    var page = sitemapPage.get('page'),
-      pageId = page.get('id');
-
-    pageflow.editor.navigate('/pages/' + pageId, {trigger: true});
-  },
-
-  showChapterInSidebar: function (chapter) {
-    pageflow.editor.navigate('/chapters/' + chapter.id, {trigger: true});
-  },
-
-  // Should get obsolete
-  _page: function (name, x, y) {
-    return new Page({ x0: x, y0: y, title: 'Kein Titel' });
+      chapter.addPage();
+    });
   },
 
   addUpdateHandler: function (handler) {
     var that = this;
+
     handler(pageflow.entry, this.selection);
 
-    //
-    //var updateTimeout;
-    //this.graph.on('change', function () {
-    //  clearTimeout(updateTimeout);
-    //  updateTimeout = setTimeout(_.bind(handler, this, this, that.selection), 100);
-    //});
-    //
+    pageflow.chapters.on('add remove change:configuration', function() {
+      handler(pageflow.entry, that.selection);
+    });
 
-    pageflow.chapters.on('change:configuration', function() {
+    pageflow.pages.on('add remove change:configuration', function() {
       handler(pageflow.entry, that.selection);
     });
 

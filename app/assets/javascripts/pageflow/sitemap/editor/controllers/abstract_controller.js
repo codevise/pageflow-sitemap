@@ -1,46 +1,31 @@
 /*globals _, sitemap, pageflow */
 
 sitemap.AbstractController = pageflow.Object.extend({
-  initialize: function (graph) {
-    this.graph = graph;
-  },
+  chapterSelected: function (chapter, event) {},
 
-  groupSelected: function (group) {},
+  chaptersSelected: function (chapters) {},
 
-  groupDroppedOnPlaceholder: function (group, placeholder) {},
+  pageSelected: function (page, event) {},
 
-  groupDroppedOnArea: function (group, target, position) {},
+  pageLinkSelected: function (pageLink) {},
 
-  pageSelected: function (page) {},
+  pageLinkDroppedOnPage: function(links, link, page) {},
 
-  pageDroppedOnPlaceholder: function (page, placeholder) {},
+  pageLinkPlaceholderDroppedOnPage: function(links, page) {},
 
-  pageDroppedOnArea: function (page, target, position) {},
+  successorLinkSelected: function (link) {},
 
-  addPageAfter: function (page, x, y) {},
+  successorLinkDroppedOnPage: function(page, targetPage) {},
 
-  knobDroppedOnPage: function (knob,  page) {},
+  chaptersPositioned: function(updates) {},
 
-  successorKnobDroppedOnPage: function (group,  page) {},
+  pagesMoved: function(pagesGroupedByChapters) {},
 
-  linkPathSelected: function (link) {},
+  addPageAfter: function (page) {},
 
-  followPathSelected: function (page) {},
+  addChapter: function(options) {},
 
-  successorPathSelected: function (page) {},
-
-  placeholderSelected: function (placeholder) {},
-
-  addUpdateHandler: function (handler) {
-    handler(this.graph);
-
-    var updateTimeout;
-    this.graph.on('change', function () {
-      clearTimeout(updateTimeout);
-      updateTimeout = setTimeout(_.bind(handler, this, this), 100);
-    });
-  }
-
+  addUpdateHandler: function (handler) {}
 });
 
 _.extend(sitemap.AbstractController, Backbone.Events);
