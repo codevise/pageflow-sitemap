@@ -1,21 +1,21 @@
-$successor-link-color: red;
-
 .successor_link {
   .arrow {
     stroke: $successor-link-color;
     marker-end: url(#successor_link_triangle);
   }
 
+  &.placeholder {
+    .drag_target {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+&.editor_mode .successor_link {
   &.dragged,
   &.highlight {
     .arrow {
       marker-end: url(#successor_link_triangle_highlight);
-    }
-  }
-
-  &.placeholder {
-    .drag_target {
-      transform: translateY(-5px);
     }
   }
 }

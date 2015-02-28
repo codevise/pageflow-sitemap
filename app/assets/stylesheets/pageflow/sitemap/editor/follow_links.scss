@@ -1,12 +1,12 @@
 .follow_link {
   path {
     fill: none;
-    stroke: red;
+    stroke: $follow-link-color;
     stroke-width: $stroke-width;
     marker-end: url(#follow_triangle)
   }
 }
 
 #follow_triangle {
-  fill: red;
+  fill: $follow-link-color;
 }

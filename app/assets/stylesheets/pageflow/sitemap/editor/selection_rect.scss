@@ -1,0 +1,12 @@
+rect.selection {
+  fill: none;
+  stroke: #aaa;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+  cursor: default;
+  vector-effect: non-scaling-stroke;
+}
+
+&.selection_mode rect.selection {
+  display: none;
+}

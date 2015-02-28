@@ -1,21 +1,21 @@
-$page-link-color: #9ecae1;
-
 .page_link {
   .arrow {
     stroke: $page-link-color;
     marker-end: url(#page_link_triangle);
   }
 
+  &.placeholder {
+    .drag_target {
+      transform: translateX(-5px);
+    }
+  }
+}
+
+&.editor_mode .page_link {
   &.dragged,
   &.highlight {
     .arrow {
       marker-end: url(#page_link_triangle_highlight);
-    }
-  }
-
-  &.placeholder {
-    .drag_target {
-      transform: translateX(-5px);
     }
   }
 }

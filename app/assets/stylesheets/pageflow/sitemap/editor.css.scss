@@ -4,12 +4,17 @@ $stroke-width: 1.5px;
 $font: 10px sans-serif;
 $selection-color: red;
 
+$follow-link-color: #bbb;
+$successor-link-color: #bbb;
+$page-link-color: #9ecae1;
+
 @mixin highlight() {
   stroke: $highlight-color;
   stroke-width: 2px;
 }
 
 .sitemap {
+  @import "./editor/selection_rect";
   @import "./editor/chapters";
   @import "./editor/pages";
   @import "./editor/selectable_links";
@@ -17,6 +22,7 @@ $selection-color: red;
   @import "./editor/successor_links";
   @import "./editor/follow_links";
   @import "./editor/scroll_bar";
+  @import "./editor/toolbar";
 
   @include user-select(none);
   background-color: #fff;
@@ -45,15 +51,6 @@ $selection-color: red;
     fill: inherit;
   }
 
-  rect.selection {
-    fill: none;
-    stroke: #aaa;
-    stroke-width: 2px;
-    shape-rendering: crispEdges;
-    cursor: default;
-    vector-effect: non-scaling-stroke;
-  }
-
   .scroll_bar_x {
     position: absolute;
     bottom: 1px;
@@ -70,47 +67,18 @@ $selection-color: red;
     width: 13px;
   }
 
-  .toolbar {
-    position: absolute;
-    right: 100px;
-    top: 10px;
-
-    > * {
-      display: inline-block;
-    }
-  }
-
-  .scale_slider {
-    width: 300px;
-  }
-
-  .scale_minus,
-  .scale_plus {
-    @include background-icon-center($font-size: 16px);
-    width: 40px;
-    height: 16px;
-  }
-
-  .scale_minus {
-    @include fa-search-minus-icon;
-  }
-
-  .scale_plus {
-    @include fa-search-plus-icon;
-  }
-
   .button {
     display: block;
     position: absolute;
     z-index: 100000;
     font-size: 13px;
     cursor: pointer;
+  }
 
-    &.close {
-      height: 25px;
-      width: 80px;
-      top: 10px;
-      right: 10px;
-    }
+  .close {
+    height: 25px;
+    width: 80px;
+    top: 10px;
+    right: 10px;
   }
 }

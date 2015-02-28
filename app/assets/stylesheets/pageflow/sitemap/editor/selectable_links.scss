@@ -11,19 +11,6 @@
     }
   }
 
-  &.dragged {
-    .arrow {
-      display: block;
-    }
-  }
-
-  &.dragged,
-  &.highlight {
-    .arrow {
-      stroke: $highlight-color;
-      stroke-width: 2px;
-    }
-  }
   .selection_highlight {
     fill: none;
     stroke: transparent;
@@ -49,6 +36,22 @@
       fill: rgba(0, 0, 0, 0.4);
     }
   }
+}
+
+&.editor_mode .selectable_link {
+  &.dragged {
+    .arrow {
+      display: block;
+    }
+  }
+
+  &.dragged,
+  &.highlight {
+    .arrow {
+      stroke: $highlight-color;
+      stroke-width: 2px;
+    }
+  }
 
   &.dragged {
     .drag_target {
@@ -62,5 +65,11 @@
 
   &.dragged .selection_highlight {
     stroke: transparent;
+  }
+}
+
+&.selection_mode .selectable_link {
+  .drag_target {
+    display: none;
   }
 }

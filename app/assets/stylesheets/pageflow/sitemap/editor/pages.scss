@@ -7,10 +7,6 @@
     font: $font;
   }
 
-  &.hover .bg {
-    @include highlight;
-  }
-
   .title {
     fill: #fff;
     pointer-events: none;
@@ -31,5 +27,18 @@
 
   image {
     pointer-events: none;
+  }
+}
+
+&.editor_mode .page {
+  &.hover .bg {
+    @include highlight;
+  }
+}
+
+&.selection_mode .page {
+  &.hover .bg {
+    stroke: $selection-color;
+    stroke-width: 2px;
   }
 }

@@ -8,6 +8,16 @@
     stroke: #eee;
   }
 
+  .title_text {
+    color: #000;
+    font: $font;
+    text-align: center;
+    pointer-events: none;
+    padding-top: 2px;
+  }
+}
+
+&.editor_mode .chapter {
   &.dragged,
   &.hover {
     .handle {
@@ -30,13 +40,5 @@
     .border {
       stroke: $selection-color;
     }
-  }
-
-  .title_text {
-    color: #000;
-    font: $font;
-    text-align: center;
-    pointer-events: none;
-    padding-top: 2px;
   }
 }
