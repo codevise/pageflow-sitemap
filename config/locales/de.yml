@@ -1,2 +1,6 @@
 de:
-  sitemap: "Sitemap"
+  pageflow:
+    sitemap:
+      feature_name: "Sitemap"
+      editor:
+        main_menu_item: "Sitemap"
