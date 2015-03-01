@@ -104,6 +104,13 @@ sitemap.behavior.scrollAndZoom = function(options) {
     return Math.min(1, size.y / (_maxY - _minY));
   };
 
+  behavior.pointTo = function(coords) {
+    var p = [coords.x, coords.y];
+    var l = location(p);
+
+    return {x: l[0], y: l[1]};
+  };
+
   function dispatchChange() {
     dispatch.change({
       scale: view.k,

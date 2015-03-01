@@ -53,6 +53,15 @@
                                       layout.laneWidth / 2,
                                       layout.rowHeight / 2);
 
+      svg
+        .on('dblclick', function() {
+          if (d3.event.target !== svg.node()) {
+            return;
+          }
+
+          controller.addChapter(layout.laneAndRowFromPoint(scrollAndZoom.pointTo(d3.event)));
+        });
+
       svgChapters.call(s.chaptersView(viewModel.chapters, {
         mousedown: function(source) {
           controller.chapterSelected(source.chapter, d3.event);
