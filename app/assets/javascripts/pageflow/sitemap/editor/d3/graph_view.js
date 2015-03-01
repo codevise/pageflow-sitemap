@@ -107,14 +107,18 @@
         },
 
         dragend: function(options) {
-          var layout = s.layout.create(entry, selection, {
-            dragDelta: {
-              x: options.dx,
-              y: options.dy
-            }
-          });
+          if (options.dx > 10 || options.dy > 10) {
+            var layout = s.layout.create(entry, selection, {
+              dragDelta: {
+                x: options.dx,
+                y: options.dy
+              }
+            });
 
-          controller.pagesMoved(layout.pagesGroupedByChapters);
+            controller.pagesMoved(layout.pagesGroupedByChapters,
+                                  layout.laneAndRowFromPoint(scrollAndZoom.pointTo(d3.event.sourceEvent)));
+          }
+
           update(entry, selection);
         },
       }));
