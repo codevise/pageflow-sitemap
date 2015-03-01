@@ -86,7 +86,7 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
         y: row(chapter) * rowHeight
       };
 
-      chapterHeights[chapter.cid] = group.pages.length * rowHeight - 2 * options.pageMarginHeight;
+      chapterHeights[chapter.cid] = Math.max(1, group.pages.length) * rowHeight - 2 * options.pageMarginHeight;
 
       _.each(group.pages, function(page, index) {
         positions[page.cid] = {

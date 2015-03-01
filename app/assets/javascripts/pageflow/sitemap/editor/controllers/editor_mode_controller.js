@@ -23,9 +23,11 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   },
 
   pageSelected: function (page, event) {
-    this.selection.select('pages', [page], {
-      additive: event.ctrlKey
-    });
+    if (!this.selection.contains(page)) {
+      this.selection.select('pages', [page], {
+        additive: event.ctrlKey
+      });
+    }
   },
 
   pageLinkSelected: function (pageLink) {
@@ -45,7 +47,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   },
 
   successorLinkDroppedOnPage: function(page, targetPage) {
-    if (targetPage) {
+    if (targetPage && targetPage !== page) {
       page.configuration.set('scroll_successor_id', targetPage.get('perma_id'));
     }
     else {
@@ -64,31 +66,47 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   },
 
   pagesMoved: function(pagesGroupedByChapters) {
-    window.console.log(pagesGroupedByChapters);
+    _.each(pagesGroupedByChapters, function(update) {
+      _.each(update.pages, function(page, index) {
+        page.set('position', index);
+
+        if (page.chapter !== update.chapter) {
+          page.chapter.pages.remove(page);
+          update.chapter.pages.add(page);
+        }
+      });
+
+      update.chapter.pages.sort();
+      update.chapter.pages.saveOrder();
+    });
   },
 
-  // FIXME, remove sitemap models
-  addPageAfter: function (page) {
-    var sitemapPage = this._page('after', 0, 0);
-    var chapter = page.group().get('chapter');
+  addPage: function (chapter) {
+    chapter.addPage();
+  },
 
-    chapter.once('sync', function() {
-      this.showPageInSidebar(sitemapPage);
-    }, this);
+  insertPageAfter: function (targetPage) {
+    var chapter = targetPage.chapter;
+    var delta = 0;
 
-    // Create new pageflow page
-    var pageflowPage = chapter.addPage({
-      position: page.index()
+    chapter.pages.each(function(page, index) {
+      page.set('position', index + delta);
+
+      if (page === targetPage) {
+        delta = 1;
+      }
     });
 
-    sitemapPage.set('page', pageflowPage);
-    pageflowPage.sitemapPage = sitemapPage;
+    var newPage = chapter.addPage({
+      position: targetPage.get('position') + 1
+    });
 
-    page.group().addPageAfter(sitemapPage, page);
+    chapter.pages.sort();
+    chapter.pages.saveOrder();
   },
 
-  addChapter: function(options) {
-    var chapter = pageflow.entry.addChapter({configuration: options});
+  addChapter: function(configuration) {
+    var chapter = pageflow.entry.addChapter({configuration: configuration});
 
     chapter.once('sync', function() {
       chapter.addPage();

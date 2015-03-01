@@ -1,4 +1,4 @@
-sitemap.ViewModel = function(entry, selection, layout, options) {
+pageflow.sitemap.ViewModel = function(entry, selection, layout, options) {
   var chapters = this.chapters = [];
   var nodes = this.nodes = this.pages = [];
   var followLinks = this.followLinks = [];
@@ -63,6 +63,7 @@ sitemap.ViewModel = function(entry, selection, layout, options) {
         selected: selection.contains(chapter),
         dragged: layout.isDragging(chapter),
         droppable: layout.isLegal(),
+        empty: chapterNodes.length === 0,
 
         x: layout.position(chapter).x,
         y: layout.position(chapter).y,

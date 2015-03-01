@@ -10,6 +10,20 @@ pageflow.sitemap.utils = {
       return function(d) {
         return d[property];
       };
+    },
+
+    translate: function(x, y) {
+      return function(d) {
+        return 'translate(' + d[x] + ',' + d[y] + ')';
+      };
+    },
+
+    trigger: function(fn) {
+      return function(d) {
+        if (typeof fn === 'function') {
+          fn.apply(this, arguments);
+        }
+      };
     }
   }
 };

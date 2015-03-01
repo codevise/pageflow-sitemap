@@ -30,6 +30,10 @@ pageflow.sitemap.groupView = {
             return nodes;
           },
 
+          call: function(fn) {
+            nodes.call(fn);
+          },
+
           child: childFactory(nodesEnter, nodes, options)
         }, pageflow.sitemap);
 

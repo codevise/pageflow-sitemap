@@ -81,6 +81,10 @@
           }));
 
           update(entry, selection);
+        },
+
+        addPageButtonClick: function(d) {
+          controller.addPage(d.chapter);
         }
       }));
 
@@ -135,6 +139,9 @@
       }));
 
       svgLinks.call(s.followLinksView(viewModel.followLinks, {
+        addPageButtonClick: function(d) {
+          controller.insertPageAfter(d.page);
+        }
       }));
 
       svgLinks.call(s.successorLinksView(viewModel.successorLinks, {
@@ -153,6 +160,10 @@
                                                 targetPage);
 
           update(entry, selection);
+        },
+
+        addPageButtonClick: function(d) {
+          controller.addPage(d.page.chapter);
         }
       }));
 

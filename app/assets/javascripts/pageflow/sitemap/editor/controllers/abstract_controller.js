@@ -21,7 +21,9 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   pagesMoved: function(pagesGroupedByChapters) {},
 
-  addPageAfter: function (page) {},
+  addPage: function (chapter) {},
+
+  insertPageAfter: function (page) {},
 
   addChapter: function(options) {},
 

@@ -15,3 +15,4 @@
 //= require ./d3/views/page_links_view
 //= require ./d3/views/successor_links_view
 //= require ./d3/views/follow_links_view
+//= require ./d3/views/add_page_button_view

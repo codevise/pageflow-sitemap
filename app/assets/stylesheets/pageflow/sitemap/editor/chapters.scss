@@ -41,4 +41,10 @@
       stroke: $selection-color;
     }
   }
+
+  &.empty {
+    .add_page {
+      visibility: visible;
+    }
+  }
 }

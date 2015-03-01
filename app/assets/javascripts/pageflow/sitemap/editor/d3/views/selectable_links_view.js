@@ -1,4 +1,4 @@
-pageflow.sitemap.selectableLinksView = function(className, path) {
+pageflow.sitemap.selectableLinksView = function(className, path, fn) {
   return pageflow.sitemap.groupView.define(className, function(s) {
     this.enter()
       .classed('selectable_link', true)
@@ -56,5 +56,9 @@ pageflow.sitemap.selectableLinksView = function(className, path) {
         .attr('cy', function(d) { return path.points(d).end.y; })
       ;
     });
+
+    if (fn) {
+      fn.call(this, s);
+    }
   });
 };

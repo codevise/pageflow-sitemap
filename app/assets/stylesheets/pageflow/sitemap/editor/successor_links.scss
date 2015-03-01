@@ -12,11 +12,22 @@
 }
 
 &.editor_mode .successor_link {
+  pointer-events: bounding-box;
+
   &.dragged,
   &.highlight {
     .arrow {
       marker-end: url(#successor_link_triangle_highlight);
     }
+  }
+
+  &.placeholder:hover .add_page {
+    visibility: visible;
+  }
+
+  &.dragged:hover .add_page {
+    visibility: hidden;
+    transition: none;
   }
 }
 

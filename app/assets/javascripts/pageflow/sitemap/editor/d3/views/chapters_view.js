@@ -9,6 +9,7 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
   this.update()
     .classed('selected', s.utils.fn.d('selected'))
     .classed('dragged', s.utils.fn.d('dragged'))
+    .classed('empty', s.utils.fn.d('empty'))
     .attr('transform', function(d) {
       return 'translate(' +
         (d.x - options.page.width / 2 - 5) + ',' +
@@ -68,4 +69,17 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
     d3.selectAll(this.getElementsByTagName('div'))
       .text(d.chapter.get('title'));
   });
+
+  this.call(s.addPageButtonView(addButtonData, {
+    click: s.utils.fn.trigger(this.options.addPageButtonClick)
+  }));
+
+  function addButtonData(d) {
+    return [{
+      id: d.id + ':add_page',
+      chapter: d.chapter,
+      x: options.page.width / 2 + 5,
+      y: options.page.height / 2 + 20
+    }];
+  }
 });
