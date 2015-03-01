@@ -1,25 +1,25 @@
-pageflow.sitemap.ScrollNavigator = function(slideshow, history) {
+pageflow.sitemap.ScrollNavigator = function() {
   function goToConfiguredSuccessor(currentPage) {
-    var configuration = currentPage.page('configuration');
+    var configuration = currentPage.page('getConfiguration');
 
     if('scroll_successor_id' in configuration) {
-      return slideshow.goToByPermaId(configuration.scroll_successor_id, {direction: 'forwards'});
+      return pageflow.slides.goToByPermaId(configuration.scroll_successor_id);
     }
 
     return false;
   }
 
   function goToPreviousPageInChapter(currentPage) {
-    return goToPageInChapter(currentPage, currentPage.prev('.page'), {direction: 'backwards', position: 'bottom'});
+    return goToPageInChapter(currentPage, currentPage.prev('.page'), {position: 'bottom'});
   }
 
   function goToNextPageInChapter(currentPage) {
-    return goToPageInChapter(currentPage, currentPage.next('.page'), {direction: 'forwards'});
+    return goToPageInChapter(currentPage, currentPage.next('.page'));
   }
 
   function goToPageInChapter(currentPage, targetPage, options) {
-    if (targetPage.data('chapterId') == currentPage.data('chapterId')) {
-      slideshow.goTo(targetPage, options);
+    if (sameChapter(currentPage, targetPage)) {
+      pageflow.slides.goTo(targetPage, options);
       return true;
     }
 
@@ -27,7 +27,11 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, history) {
   }
 
   function goToPreviouslyVisitedPage() {
-    return history.back();
+    return pageflow.history.back();
+  }
+
+  function sameChapter(page1, page2) {
+    return (page1.data('chapterId') == page2.data('chapterId'));
   }
 
   this.back = function(currentPage) {
@@ -38,5 +42,18 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, history) {
   this.next = function(currentPage) {
     return goToNextPageInChapter(currentPage) ||
       goToConfiguredSuccessor(currentPage);
+  };
+
+  this.getTransitionDirection = function(previousPage, currentPage, options) {
+    var direction;
+
+    if (sameChapter(previousPage, currentPage)) {
+      direction = (currentPage.index() > previousPage.index() ? 'forwards' : 'backwards');
+    }
+    else {
+      direction = options.back ? 'backwards' : 'forwards';
+    }
+
+    return direction;
   };
 };
