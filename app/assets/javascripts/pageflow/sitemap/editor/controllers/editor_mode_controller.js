@@ -30,6 +30,10 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }
   },
 
+  pageDblClick: function(page) {
+    this.trigger('showPage', page);
+  },
+
   pageLinkSelected: function (pageLink) {
     this.selection.select('pageLinks', [pageLink]);
   },

@@ -33,16 +33,9 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
         d3.select(this.parentNode).classed('hover', false);
         d3.selectAll('.highlight').classed('highlight', false);
       })
-      .on('click', function() {
-        if (opts.click) {
-          opts.click.apply(this, arguments);
-        }
-      })
-      .on('mousedown', function() {
-        if (opts.mousedown) {
-          opts.mousedown.apply(this, arguments);
-        }
-      })
+      .on('click', s.utils.fn.trigger(this.options.click))
+      .on('dblclick', s.utils.fn.trigger(this.options.dblclick))
+      .on('mousedown', s.utils.fn.trigger(this.options.mousedown))
     ;
   });
 

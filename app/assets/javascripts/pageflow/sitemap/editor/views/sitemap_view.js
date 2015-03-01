@@ -19,6 +19,10 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
     this.listenTo(this, 'close', function() {
       this.graphView.on('change.scaleSlider', null);
     });
+
+    this.listenTo(this.options.controller, 'showPage', function(page) {
+      this.close();
+    });
   },
 
   onRender: function() {

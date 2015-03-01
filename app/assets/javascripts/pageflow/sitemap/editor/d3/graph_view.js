@@ -102,6 +102,10 @@
           controller.pageSelected(source.page, d3.event);
         },
 
+        dblclick: function(source) {
+          controller.pageDblClick(source.page, d3.event);
+        },
+
         drag: function(options) {
           update(entry, selection, {dragDelta: {x: options.dx, y: options.dy}});
         },

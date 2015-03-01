@@ -7,6 +7,8 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   pageSelected: function (page, event) {},
 
+  pageDblClick: function (page, event) {},
+
   pageLinkSelected: function (pageLink) {},
 
   pageLinkDroppedOnPage: function(links, link, page) {},
