@@ -96,11 +96,17 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   },
 
   addPage: function (chapter) {
-    chapter.addPage();
+    var page = chapter.addPage();
+    var selection = this.selection;
+
+    page.once('sync', function() {
+      selection.select('pages', [page]);
+    });
   },
 
   insertPageAfter: function (targetPage) {
     var chapter = targetPage.chapter;
+    var selection = this.selection;
     var delta = 0;
 
     chapter.pages.each(function(page, index) {
@@ -117,6 +123,10 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
 
     chapter.pages.sort();
     chapter.pages.saveOrder();
+
+    newPage.once('sync', function() {
+      selection.select('pages', [newPage]);
+    });
   },
 
   addChapter: function(configuration) {
@@ -136,7 +146,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       handler(pageflow.entry, that.selection);
     });
 
-    pageflow.pages.on('add remove change:configuration', function() {
+    pageflow.pages.on('add remove destroy change change:configuration', function() {
       handler(pageflow.entry, that.selection);
     });
 
