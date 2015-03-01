@@ -22,9 +22,19 @@ pageflow.features.register('editor', 'sitemap', function() {
   pageflow.editor.registerMainMenuItem({
     translationKey: 'pageflow.sitemap.editor.main_menu_item',
     click: function() {
-      pageflow.editor.showViewInMainPanel(new pageflow.sitemap.SitemapView({
-        controller: new pageflow.sitemap.EditorModeController(pageflow.entry)
-      }));
+      showSitemap()
     }
   });
+
+  $(document).on('keydown', function(event) {
+    if (event.altKey && event.which === 83) {
+      showSitemap();
+    }
+  });
+
+  function showSitemap() {
+    pageflow.editor.showViewInMainPanel(new pageflow.sitemap.SitemapView({
+      controller: new pageflow.sitemap.EditorModeController(pageflow.entry)
+    }));
+  }
 });
