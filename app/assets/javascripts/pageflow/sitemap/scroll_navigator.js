@@ -1,18 +1,12 @@
-pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
-  var predecessorIds = _(configurations).reduce(function(result, configuration, permaId) {
-    result[configuration.scroll_successor_id] = permaId;
-    return result;
-  }, {});
+pageflow.sitemap.ScrollNavigator = function(slideshow, history) {
+  function goToConfiguredSuccessor(currentPage) {
+    var configuration = currentPage.page('configuration');
 
-  function goToConfiguredSuccessor(configuration) {
     if('scroll_successor_id' in configuration) {
       return slideshow.goToByPermaId(configuration.scroll_successor_id, {direction: 'forwards'});
     }
-    return false;
-  }
 
-  function goToConfiguredPredecessor(currentPage) {
-    return slideshow.goToById(predecessorIds[currentPage.data('id')], {direction: 'backwards', position: 'bottom'});
+    return false;
   }
 
   function goToPreviousPageInChapter(currentPage) {
@@ -33,17 +27,16 @@ pageflow.sitemap.ScrollNavigator = function(slideshow, configurations) {
   }
 
   function goToPreviouslyVisitedPage() {
-    return pageflow.history.back();
+    return history.back();
   }
 
-  this.back = function(currentPage, configuration) {
+  this.back = function(currentPage) {
     return goToPreviouslyVisitedPage() ||
-      goToPreviousPageInChapter(currentPage) ||
-      goToConfiguredPredecessor(currentPage);
+      goToPreviousPageInChapter(currentPage);
   };
 
-  this.next = function(currentPage, configuration) {
-    return goToConfiguredSuccessor(configuration) ||
-      goToNextPageInChapter(currentPage);
+  this.next = function(currentPage) {
+    return goToNextPageInChapter(currentPage) ||
+      goToConfiguredSuccessor(currentPage);
   };
 };

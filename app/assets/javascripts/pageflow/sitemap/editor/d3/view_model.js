@@ -32,19 +32,7 @@ pageflow.sitemap.ViewModel = function(entry, selection, layout, options) {
           y0: layout.position(page).y,
           x: layout.position(page).x,
           y: layout.position(page).y,
-
-          availKnobs: [],
-          visibleKnobs: []
         };
-
-        if (page.pageLinks() && !options.hideKnobs) {
-          node.availKnobs.push({
-            pid: id,
-            id: 'default',
-            text: 'default',
-            exceeded: !page.pageLinks().canAddLink()
-          });
-        }
 
         chapterNodes.push(node);
         nodes.push(node);
