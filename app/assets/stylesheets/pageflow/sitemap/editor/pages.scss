@@ -12,7 +12,8 @@
     pointer-events: none;
   }
 
-  &.selected {
+  &.selected,
+  &.highlighted {
     .title {
       fill: $selection-color;
     }
@@ -40,5 +41,9 @@
   &.hover .bg {
     stroke: $selection-color;
     stroke-width: 2px;
+  }
+
+  &.highlighted {
+    pointer-events: none;
   }
 }

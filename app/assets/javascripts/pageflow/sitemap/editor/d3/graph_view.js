@@ -1,32 +1,32 @@
 (function() {
   var s = pageflow.sitemap;
 
-  s.GraphView = function(svgElement, controller, viewModelOptions) {
-    var svg = d3.select(svgElement)
-      .attr("width", "100%")
-      .attr("height", "100%");
+  s.GraphView = function(svgElement, controller, options) {
+    options = options || {};
 
-    var svgGroup = svg.select("g.all");
-    var svgChapters = svg.select("g.chapters");
-    var svgPages = svg.select("g.pages");
-    var svgLinks = svg.select("g.links");
+    var svg = d3.select(svgElement)
+      .attr('width', '100%')
+      .attr('height', '100%');
+
+    var svgGroup = svg.select('g.all');
+    var svgChapters = svg.select('g.chapters');
+    var svgPages = svg.select('g.pages');
+    var svgLinks = svg.select('g.links');
 
     var scrollAndZoom = s.behavior.scrollAndZoom({
-      margin: 50
-    })
-      .on('change.graphView', function(event) {
+      margin: 50,
+      change: function(event) {
         svgGroup.attr('transform', 'translate(' + event.translate + ')scale(' + event.scale + ')');
-      });
+      }
+    });
 
-    svg
-      .call(scrollAndZoom)
-      .call(s.behavior.selectionRect({
-        container: 'g.all',
-        targets: '.chapter',
-        selected: function(chapters) {
-          controller.chaptersSelected(_(chapters).pluck('chapter'));
-        }
-      }));
+    var selectionRect = s.behavior.selectionRect({
+      container: 'g.all',
+      targets: '.chapter',
+      selected: function(chapters) {
+        controller.chaptersSelected(_(chapters).pluck('chapter'));
+      }
+    });
 
     this.resize = function() {
       scrollAndZoom.updateSize(parseInt(svg.style('width'), 10),
@@ -35,23 +35,50 @@
 
     d3.rebind(this, scrollAndZoom,
               'on',
+              'getViewport',
               'getScale', 'setScale',
               'getScrollX', 'setScrollX',
               'getScrollY', 'setScrollY',
               'getScrollWindowProportionX',
               'getScrollWindowProportionY');
 
-    var update = function (entry, selection, updateOptions) {
+    svg
+      .call(scrollAndZoom)
+      .call(selectionRect);
+
+    controller.addUpdateHandler(update);
+
+    function updateScrollAndZoom(session, layout) {
+      var selection = session.selection;
+
+      scrollAndZoom.updateConstraints({
+        minX: -(layout.size.x + layout.laneWidth / 2),
+        minY: -(layout.size.y + layout.rowHeight / 2),
+        maxX: layout.laneWidth / 2,
+        maxY: layout.rowHeight / 2,
+      });
+
+      var centerTarget = session.highlightedPage ||
+        selection.get('pages')[0] ||
+        selection.get('chapters')[0];
+
+      scrollAndZoom.ensureViewport({
+        centerAt: centerTarget && layout.position(centerTarget),
+        defaultViewport: options.defaultViewport
+      });
+    }
+
+    function update(session, layoutOptions) {
+      var entry = session.entry;
+      var selection = session.selection;
+
       var layout =
-        s.layout.create(entry, selection, updateOptions);
+        s.layout.create(entry, selection, layoutOptions);
 
       var viewModel =
-        new s.ViewModel(entry, selection, layout, viewModelOptions || {});
+        new s.ViewModel(session, layout);
 
-      scrollAndZoom.updateConstraints(-(layout.size.x + layout.laneWidth / 2),
-                                      -(layout.size.y + layout.rowHeight / 2),
-                                      layout.laneWidth / 2,
-                                      layout.rowHeight / 2);
+      updateScrollAndZoom(session, layout);
 
       svg
         .on('dblclick', function() {
@@ -68,7 +95,7 @@
         },
 
         drag: function(options) {
-          update(entry, selection, {dragDelta: {x: options.dx, y: options.dy}});
+          update(session, {dragDelta: {x: options.dx, y: options.dy}});
         },
 
         dragend: function(options) {
@@ -89,7 +116,7 @@
             };
           }));
 
-          update(entry, selection);
+          update(session);
         },
 
         addPageButtonClick: function(d) {
@@ -107,7 +134,7 @@
         },
 
         drag: function(options) {
-          update(entry, selection, {dragDelta: {x: options.dx, y: options.dy}});
+          update(session, {dragDelta: {x: options.dx, y: options.dy}});
         },
 
         dragend: function(options) {
@@ -123,7 +150,7 @@
                                   layout.laneAndRowFromPoint(scrollAndZoom.pointTo(d3.event.sourceEvent)));
           }
 
-          update(entry, selection);
+          update(session);
         },
       }));
 
@@ -133,7 +160,7 @@
         },
 
         drag: function(options) {
-          update(entry, selection, {dragPosition: options.position});
+          update(session, {dragPosition: options.position});
         },
 
         dragend: function(options) {
@@ -151,7 +178,7 @@
             }
           }
 
-          update(entry, selection);
+          update(session);
         }
       }));
 
@@ -167,7 +194,7 @@
         },
 
         drag: function(options) {
-          update(entry, selection, {dragPosition: options.position});
+          update(session, {dragPosition: options.position});
         },
 
         dragend: function(options) {
@@ -175,8 +202,7 @@
 
           controller.successorLinkDroppedOnPage(options.data.page,
                                                 targetPage);
-
-          update(entry, selection);
+          update(session);
         },
 
         addPageButtonClick: function(d) {
@@ -188,8 +214,6 @@
         node.page.x0 = node.x;
         node.page.y0 = node.y;
       });
-    };
-
-    controller.addUpdateHandler(update);
+    }
   };
 }());

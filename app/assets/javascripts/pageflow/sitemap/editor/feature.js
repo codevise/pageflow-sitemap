@@ -3,8 +3,7 @@ pageflow.features.register('editor', 'sitemap', function() {
     var result = $.Deferred(),
         controller = new pageflow.sitemap.SelectionModeController(pageflow.entry),
         graphView = new pageflow.sitemap.SitemapView({
-          controller: controller,
-          viewModelOptions: {hideKnobs: true}
+          controller: controller
         });
 
     controller.once('selected', function (selected) {

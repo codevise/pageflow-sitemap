@@ -2,9 +2,16 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   name: 'editor_mode',
 
   initialize: function() {
-    this.selection = new pageflow.sitemap.Selection();
+    var s = pageflow.sitemap;
 
-    new pageflow.sitemap.SelectionNavigator({
+    this.selection = new s.Selection();
+
+    new s.FragmentParser(
+      pageflow.entry,
+      Backbone.history.fragment
+    ).select(this.selection);
+
+    new s.SelectionNavigator({
       selection: this.selection,
       multiSelectionPath: '/'
     }).attach();
@@ -142,20 +149,23 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   },
 
   addUpdateHandler: function (handler) {
-    var that = this;
+    var session = {
+      entry: pageflow.entry,
+      selection: this.selection
+    };
 
-    handler(pageflow.entry, this.selection);
+    handler(session);
 
     pageflow.chapters.on('add remove change:configuration', function() {
-      handler(pageflow.entry, that.selection);
+      handler(session);
     });
 
     pageflow.pages.on('add remove destroy change change:configuration', function() {
-      handler(pageflow.entry, that.selection);
+      handler(session);
     });
 
     this.selection.on('change', function() {
-      handler(pageflow.entry, that.selection);
+      handler(session);
     });
   }
 });

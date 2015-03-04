@@ -3,7 +3,7 @@ sitemap.behavior = sitemap.behavior || {};
 sitemap.behavior.scrollAndZoom = function(options) {
   options = options || {};
 
-  var view = {x: options.x || 0, y: options.y || 0, k: 1};
+  var view = {x: 0, y: 0, k: 1};
   var dispatch = d3.dispatch('change');
 
   var minScale = options.minScale || 0.1;
@@ -14,7 +14,10 @@ sitemap.behavior.scrollAndZoom = function(options) {
   var maxX = 100;
   var maxY = 100;
   var size = {x: 0, y: 0};
-  var initPos = false;
+
+  var sizeAvailable = new $.Deferred();
+  var constraintsAvaiable = new $.Deferred();
+  var viewportInitialized = false;
 
   function behavior(g) {
     g.call(sitemap.behavior.mouseWheel()
@@ -22,17 +25,17 @@ sitemap.behavior.scrollAndZoom = function(options) {
       .on('mousedown', onMouseDown);
   }
 
-  behavior.updateConstraints = function(newMinX, newMinY, newMaxX, newMaxY) {
-    minX = newMinX;
-    minY = newMinY;
-    maxX = newMaxX;
-    maxY = newMaxY;
+  if (options.change) {
+    dispatch.on('change.option', options.change);
+  }
 
-    if (!initPos) {
-      view.x = Infinity;
-      view.y = Infinity;
-      initPos = true;
-    }
+  behavior.updateConstraints = function(options) {
+    minX = options.minX;
+    minY = options.minY;
+    maxX = options.maxX;
+    maxY = options.maxY;
+
+    constraintsAvaiable.resolve();
 
     normalize();
     dispatchChange();
@@ -41,6 +44,52 @@ sitemap.behavior.scrollAndZoom = function(options) {
   behavior.updateSize = function(x, y) {
     size.x = x;
     size.y = y;
+
+    sizeAvailable.resolve();
+
+    normalize();
+    dispatchChange();
+  };
+
+  behavior.ensureViewport = function(options) {
+    if (viewportInitialized) {
+      return;
+    }
+
+    viewportInitialized = true;
+
+    $.when(sizeAvailable, constraintsAvaiable).then(function() {
+      behavior.setViewport(options.defaultViewport);
+
+      if (options.centerAt) {
+        behavior.centerAt(options.centerAt);
+      }
+    });
+  };
+
+  behavior.centerAt = function(pos) {
+    var k = view.k;
+
+    view = {
+      x: size.x / 2 - pos.x * k,
+      y: size.y / 2 - pos.y * k,
+      k: k
+    };
+
+    normalize();
+    dispatchChange();
+  };
+
+  behavior.getViewport = function() {
+    return _.clone(view);
+  };
+
+  behavior.setViewport = function(viewport) {
+    view = _.extend({
+      x: Infinity,
+      y: Infinity,
+      k: view.k
+    }, viewport || {});
 
     normalize();
     dispatchChange();

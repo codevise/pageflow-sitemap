@@ -6,16 +6,22 @@ pageflow.sitemap.SelectionModeController = pageflow.sitemap.AbstractController.e
   },
 
   addUpdateHandler: function (handler) {
-    var selection = new pageflow.sitemap.Selection();
+    var fragmentParser = new pageflow.sitemap.FragmentParser(pageflow.entry, Backbone.history.fragment);
 
-    handler(pageflow.entry, selection);
+    var session = {
+      entry: pageflow.entry,
+      selection: new pageflow.sitemap.Selection(),
+      highlightedPage: fragmentParser.getModel('pages')
+    };
+
+    handler(session);
 
     pageflow.chapters.on('add remove change:configuration', function() {
-      handler(pageflow.entry, selection);
+      handler(session);
     });
 
     pageflow.pages.on('add remove change:configuration', function() {
-      handler(pageflow.entry, selection);
+      handler(session);
     });
   }
 });

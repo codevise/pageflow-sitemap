@@ -18,6 +18,7 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
   initialize: function() {
     this.listenTo(this, 'close', function() {
       this.graphView.on('change.scaleSlider', null);
+      sitemap.SitemapView.lastViewport = this.graphView.getViewport();
     });
 
     this.listenTo(this.options.controller, 'showPage', function(page) {
@@ -28,9 +29,9 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
   onRender: function() {
     this.$el.addClass(this.options.controller.name);
 
-    this.graphView = new sitemap.GraphView(this.$el.find('svg')[0],
-                                           this.options.controller,
-                                           this.options.viewModelOptions);
+    this.graphView = new sitemap.GraphView(this.$el.find('svg')[0], this.options.controller, {
+                                             defaultViewport: sitemap.SitemapView.lastViewport
+                                           });
 
     this.listenTo(pageflow.app, 'resize', this.graphView.resize);
 

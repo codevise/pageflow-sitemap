@@ -3,6 +3,7 @@
 pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(s) {
   this.update()
     .classed('selected', function(d) { return d.selected; })
+    .classed('highlighted', function(d) { return d.highlighted; })
     .attr('transform', transformStart)
     .transition().duration(options.duration)
     .attr('transform', transformFinal)

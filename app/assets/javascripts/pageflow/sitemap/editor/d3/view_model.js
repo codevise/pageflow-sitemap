@@ -1,4 +1,8 @@
-pageflow.sitemap.ViewModel = function(entry, selection, layout, options) {
+pageflow.sitemap.ViewModel = function(session, layout) {
+  var entry = session.entry;
+  var selection = session.selection;
+  var highlightedPage = session.highlightedPage;
+
   var chapters = this.chapters = [];
   var nodes = this.nodes = this.pages = [];
   var followLinks = this.followLinks = [];
@@ -28,6 +32,7 @@ pageflow.sitemap.ViewModel = function(entry, selection, layout, options) {
 
           selected: selection.contains(page),
           dragged: layout.isDragging(page),
+          highlighted: highlightedPage === page,
           x0: layout.position(page).x,
           y0: layout.position(page).y,
           x: layout.position(page).x,
