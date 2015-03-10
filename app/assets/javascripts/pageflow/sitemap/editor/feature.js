@@ -48,12 +48,15 @@ pageflow.features.register('editor', 'sitemap', function() {
         controller: new pageflow.sitemap.EditorModeController(pageflow.entry)
       });
 
+      currentSitemapView.once('close', function() {
+        currentSitemapView = null;
+      });
+
       pageflow.editor.showViewInMainPanel(currentSitemapView);
     }
   }
 
   function hideSitemap() {
     currentSitemapView.close();
-    currentSitemapView = null;
   }
 });
