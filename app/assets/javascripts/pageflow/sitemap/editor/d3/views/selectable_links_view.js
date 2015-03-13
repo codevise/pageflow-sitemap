@@ -22,6 +22,9 @@ pageflow.sitemap.selectableLinksView = function(className, path, fn) {
     this.child('path.arrow', function() {
       this.update()
         .attr('d', path)
+        .attr('marker-end', function(d) {
+          return 'url(#' + className + (d.dragged ? '_triangle_highlight)' : '_triangle)');
+        })
       ;
     });
 
@@ -29,10 +32,16 @@ pageflow.sitemap.selectableLinksView = function(className, path, fn) {
       this.enter()
         .on('mousedown', this.options.click)
         .on('mouseover', function() {
-          d3.select(this.parentNode).classed('highlight', true);
+          d3.select(this.parentNode)
+            .classed('highlight', true)
+            .select('.arrow').attr('marker-end', 'url(#' + className + '_triangle_highlight)')
+          ;
         })
         .on('mouseout', function() {
-          d3.select(this.parentNode).classed('highlight', false);
+          d3.select(this.parentNode)
+            .classed('highlight', false)
+            .select('.arrow').attr('marker-end', 'url(#' + className + '_triangle)')
+          ;
         })
       ;
 

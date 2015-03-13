@@ -2,6 +2,7 @@ pageflow.sitemap.followLinksView = pageflow.sitemap.groupView.define('follow_lin
   this.child('path', function() {
     this.update()
       .attr("d", sitemap.followPath)
+      .attr('marker-end', 'url(#follow_triangle)')
     ;
   });
 
