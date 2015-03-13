@@ -1,10 +1,16 @@
 pageflow.features.register('editor', 'sitemap', function() {
-  pageflow.editor.selectPage = function () {
-    var result = $.Deferred(),
-        controller = new pageflow.sitemap.SelectionModeController(pageflow.entry),
-        graphView = new pageflow.sitemap.SitemapView({
-          controller: controller
-        });
+  var s = pageflow.sitemap;
+
+  pageflow.editor.selectPage = function (options) {
+    options = options || {};
+
+    var result = $.Deferred();
+    var controller = new s.SelectionModeController(pageflow.entry, options);
+    var graphView = new s.SitemapView({
+      controller: controller,
+      headerText: I18n.t(options.header || 'pageflow.sitemap.editor.headers.select_page'),
+      cancelButton: true
+    });
 
     controller.once('selected', function (selected) {
       graphView.close();

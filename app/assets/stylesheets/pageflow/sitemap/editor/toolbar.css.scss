@@ -1,10 +1,11 @@
 .toolbar {
   position: absolute;
   right: 100px;
-  top: 10px;
+  top: 5px;
 
   > * {
     display: inline-block;
+    vertical-align: middle;
   }
 
   .scale_slider {
@@ -15,7 +16,7 @@
   .scale_plus {
     @include background-icon-center($font-size: 16px);
     width: 40px;
-    height: 16px;
+    height: 25px;
   }
 
   .scale_minus {
@@ -24,5 +25,18 @@
 
   .scale_plus {
     @include fa-search-plus-icon;
+  }
+
+  .items a {
+    display: inline-block;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 5px 15px 5px 30px;
+    border-right: solid 1px #aaa;
+  }
+
+  a.select_start_page {
+    @include background-icon-left($font-size: 16px);
+    @include logout-icon;
   }
 }

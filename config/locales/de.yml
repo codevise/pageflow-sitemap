@@ -4,3 +4,12 @@ de:
       feature_name: "Sitemap"
       editor:
         main_menu_item: "Sitemap"
+        templates:
+          sitemap:
+            close: "Schließen"
+            cancel: "Abbrechen"
+        toolbar_items:
+          select_start_page: "Startseite auswählen"
+        headers:
+          select_page: "Klicken Sie auf eine Zielseite für den Verweis"
+          select_start_page: "Klicken Sie auf eine Seite, um diese zu Startseite zu machen"

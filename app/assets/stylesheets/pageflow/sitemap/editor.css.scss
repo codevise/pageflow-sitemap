@@ -35,6 +35,12 @@ $page-link-color: #9ecae1;
   bottom: 0;
   z-index: 100000;
 
+  h2 {
+    font-size: 13px;
+    font-weight: normal;
+    margin: 10px;
+  }
+
   div.svgcontainer {
     cursor: default;
     border: solid 1px #ddd;
