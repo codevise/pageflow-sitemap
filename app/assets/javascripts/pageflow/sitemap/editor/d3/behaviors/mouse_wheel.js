@@ -15,13 +15,14 @@ sitemap.behavior.mouseWheel = function() {
       delta: delta(),
       point: d3.mouse(this),
       ctrlKey: d3.event.ctrlKey,
+      shiftKey: d3.event.shiftKey,
       altKey: d3.event.altKey
     });
   }
 
   if ('onwheel' in window.document) {
     delta = function() {
-      return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1);
+      return -(d3.event.deltaY || d3.event.deltaX) * (d3.event.deltaMode ? 120 : 1);
     };
     eventName =  'wheel';
   }

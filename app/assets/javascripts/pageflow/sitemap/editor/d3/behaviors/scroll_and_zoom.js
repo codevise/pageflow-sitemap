@@ -216,15 +216,15 @@ sitemap.behavior.scrollAndZoom = function(options) {
     var center0 = event.point;
     var translate0 = location(event.point);
 
-    if (event.ctrlKey) {
+    if (event.altKey) {
       scaleTo(Math.pow(2, event.delta * 0.002) * view.k);
       translateTo(center0, translate0);
     }
-    else if (event.shiftKey || d3.event.altKey) {
-      center0[0] += Math.sign(event.delta) * 50;
+    else if (event.shiftKey) {
+      center0[0] += sign(event.delta) * 50;
     }
     else {
-      center0[1] += Math.sign(event.delta) * 50;
+      center0[1] += sign(event.delta) * 50;
     }
 
     translateTo(center0, translate0);
@@ -259,6 +259,14 @@ sitemap.behavior.scrollAndZoom = function(options) {
       clearTimeout(timeout);
       subject.on(mousemove, null).on(mouseup, null);
     }
+  }
+
+  function sign(x) {
+    x = +x; // convert to a number
+    if (x === 0 || isNaN(x)) {
+      return x;
+    }
+    return x > 0 ? 1 : -1;
   }
 
   return d3.rebind(behavior, dispatch, 'on');
