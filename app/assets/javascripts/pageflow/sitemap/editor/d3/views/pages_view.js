@@ -53,11 +53,9 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
       .each(function(d) {
         var thumb = d.page.thumbnailFile();
 
-        if (thumb) {
-          d3.select(this)
-            .attr('xlink:href', thumb.get('thumbnail_url'))
-          ;
-        }
+        d3.select(this)
+          .attr('xlink:href', thumb ? thumb.get('thumbnail_url') : '')
+        ;
       })
     ;
   });
