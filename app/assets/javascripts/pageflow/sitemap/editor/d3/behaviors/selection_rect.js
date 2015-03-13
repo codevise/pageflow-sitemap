@@ -1,4 +1,4 @@
-sitemap.behavior.selectionRect = function(options) {
+pageflow.sitemap.behavior.selectionRect = function(options) {
   options = options || {};
 
   var mousedown = 'mousedown.selectionRect';
@@ -29,6 +29,12 @@ sitemap.behavior.selectionRect = function(options) {
 
       g.on(mousemove, onMouseMove);
       eventTarget.on(mouseup, onMouseUp);
+
+      dispatchSelectEvent([]);
+
+      rect
+        .attr('width', 0)
+        .attr('height', 0);
 
       function onMouseMove() {
         var point = d3.mouse(this);
@@ -63,12 +69,12 @@ sitemap.behavior.selectionRect = function(options) {
         rect
           .style('visibility', 'hidden');
 
-        dispatchSelectEvents();
+        dispatchSelectEvent(selectedTargets().data());
       }
 
-      function dispatchSelectEvents() {
+      function dispatchSelectEvent(targets) {
         if (options.selected) {
-          options.selected(selectedTargets().data());
+          options.selected(targets);
         }
       }
 
@@ -92,12 +98,6 @@ sitemap.behavior.selectionRect = function(options) {
       rect1.left < rect2.right &&
       rect1.bottom > rect2.top &&
       rect1.top < rect2.bottom;
-  }
-
-  function dispatchEvent(node, eventName) {
-    var event = document.createEvent('Event');
-    event.initEvent(eventName, true, true);
-    node.dispatchEvent(event);
   }
 
   return behavior;
