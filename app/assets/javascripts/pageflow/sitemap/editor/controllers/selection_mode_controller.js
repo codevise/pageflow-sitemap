@@ -21,11 +21,11 @@ pageflow.sitemap.SelectionModeController = pageflow.sitemap.AbstractController.e
 
     handler(session);
 
-    this.entry.chapters.on('add remove change:configuration', function() {
+    this.listenTo(this.entry.chapters, 'add remove change:configuration', function() {
       handler(session);
     });
 
-    this.entry.pages.on('add remove change:configuration', function() {
+    this.listenTo(this.entry.pages, 'add remove destroy change:configuration', function() {
       handler(session);
     });
   }

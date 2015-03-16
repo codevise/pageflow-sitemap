@@ -156,15 +156,23 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
 
     handler(session);
 
-    pageflow.chapters.on('add remove change:configuration', function() {
+    this.listenTo(pageflow.chapters, 'remove', function() {
+      this.selection.reset();
+    });
+
+    this.listenTo(pageflow.pages, 'destroying', function() {
+      this.selection.reset();
+    });
+
+    this.listenTo(pageflow.chapters, 'add remove change:configuration', function() {
       handler(session);
     });
 
-    pageflow.pages.on('add remove destroy change change:configuration', function() {
+    this.listenTo(pageflow.pages, 'add remove destroy change change:configuration', function() {
       handler(session);
     });
 
-    this.selection.on('change', function() {
+    this.listenTo(this.selection, 'change', function() {
       handler(session);
     });
   }

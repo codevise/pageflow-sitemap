@@ -29,7 +29,11 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   addChapter: function(options) {},
 
-  addUpdateHandler: function (handler) {}
+  addUpdateHandler: function (handler) {},
+
+  dispose: function() {
+    this.stopListening();
+  }
 });
 
 _.extend(sitemap.AbstractController, Backbone.Events);

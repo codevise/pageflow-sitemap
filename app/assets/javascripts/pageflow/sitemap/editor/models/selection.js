@@ -31,5 +31,9 @@ pageflow.sitemap.Selection = Backbone.Model.extend({
     this.set(attributes);
 
     this.trigger('select:' + name, attributes[name]);
+  },
+
+  reset: function() {
+    this.select('pages', []);
   }
 });
