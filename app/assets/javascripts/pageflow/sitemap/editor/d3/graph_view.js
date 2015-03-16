@@ -138,7 +138,7 @@
         },
 
         dragend: function(options) {
-          if (options.dx > 10 || options.dy > 10) {
+          if (Math.abs(options.dx) > 10 || Math.abs(options.dy) > 10) {
             var layout = s.layout.create(entry, selection, {
               dragDelta: {
                 x: options.dx,
