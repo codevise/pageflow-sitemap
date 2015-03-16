@@ -1,5 +1,6 @@
 pageflow.features.register('editor', 'sitemap', function() {
   var s = pageflow.sitemap;
+  var currentSitemapView = null;
 
   pageflow.editor.selectPage = function (options) {
     options = options || {};
@@ -11,6 +12,10 @@ pageflow.features.register('editor', 'sitemap', function() {
       headerText: I18n.t(options.header || 'pageflow.sitemap.editor.headers.select_page'),
       cancelButton: true
     });
+
+    if (currentSitemapView) {
+      result.always(showSitemap);
+    }
 
     controller.once('selected', function (selected) {
       graphView.close();
@@ -37,8 +42,6 @@ pageflow.features.register('editor', 'sitemap', function() {
     }
   });
 
-  var currentSitemapView = null;
-
   function toggleSitemap() {
     if (currentSitemapView) {
       hideSitemap();
@@ -63,9 +66,6 @@ pageflow.features.register('editor', 'sitemap', function() {
               })
                 .done(function(page) {
                   s.startPage.update(pageflow.entry, page);
-                })
-                .always(function() {
-                  showSitemap();
                 });
             }
           }
