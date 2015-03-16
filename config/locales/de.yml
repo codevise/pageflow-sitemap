@@ -9,7 +9,7 @@ de:
             close: "Schließen"
             cancel: "Abbrechen"
         toolbar_items:
-          select_start_page: "Startseite auswählen"
+          select_start_page: "Startseite festlegen"
         headers:
           select_page: "Klicken Sie auf eine Zielseite für den Verweis"
           select_start_page: "Klicken Sie auf eine Seite, um diese zu Startseite zu machen"

@@ -11,6 +11,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   var size = this.size = {x: 0, y: 0};
 
   var nodesByName = {};
+  var startPageFound = false;
 
   buildChaptersAndPages();
   buildFollowLinks();
@@ -23,6 +24,11 @@ pageflow.sitemap.ViewModel = function(session, layout) {
 
       chapter.pages.each(function(page) {
         var id = "page:" + page.cid;
+        var isStartPage = !!page.configuration.get('start_page');
+
+        if (isStartPage) {
+          startPageFound = true;
+        }
 
         var node = {
           id: id,
@@ -33,7 +39,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           selected: selection.contains(page),
           dragged: layout.isDragging(page),
           highlighted: highlightedPage === page,
-          startPage: !!page.configuration.get('start_page'),
+          startPage: isStartPage,
           x0: layout.position(page).x,
           y0: layout.position(page).y,
           x: layout.position(page).x,
@@ -64,6 +70,8 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         height: layout.chapterHeight(chapter)
       });
     });
+
+    ensureStartPage();
   }
 
   function buildSuccesor(chapter) {
@@ -78,6 +86,16 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           pid: lastPage.cid,
           chapter: chapter
         };
+      }
+    }
+  }
+
+  function ensureStartPage() {
+    if (!startPageFound) {
+      var page = entry.pages.first();
+
+      if (page) {
+        nodesByName[page.cid].startPage = true;
       }
     }
   }
