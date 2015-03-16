@@ -33,6 +33,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           selected: selection.contains(page),
           dragged: layout.isDragging(page),
           highlighted: highlightedPage === page,
+          startPage: !!page.configuration.get('start_page'),
           x0: layout.position(page).x,
           y0: layout.position(page).y,
           x: layout.position(page).x,

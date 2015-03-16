@@ -5,6 +5,10 @@ pageflow.sitemap.utils = {
       .attr('height', h);
   },
 
+  translate: function(x, y) {
+    return 'translate(' + x + ',' + y + ')';
+  },
+
   fn: {
     d: function(property) {
       return function(d) {

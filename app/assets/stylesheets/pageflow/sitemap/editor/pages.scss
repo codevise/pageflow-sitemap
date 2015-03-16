@@ -12,6 +12,14 @@
     pointer-events: none;
   }
 
+  .start_page_indicator {
+    display: none;
+  }
+
+  &.start_page .start_page_indicator {
+    display: block;
+  }
+
   &.selected,
   &.highlighted {
     .title {

@@ -50,8 +50,26 @@ pageflow.features.register('editor', 'sitemap', function() {
 
   function showSitemap() {
     if (!currentSitemapView) {
-      currentSitemapView = new pageflow.sitemap.SitemapView({
-        controller: new pageflow.sitemap.EditorModeController(pageflow.entry)
+      currentSitemapView = new s.SitemapView({
+        controller: new s.EditorModeController(pageflow.entry),
+
+        toolbarItems: [
+          {
+            name: 'select_start_page',
+            click: function() {
+              pageflow.editor.selectPage({
+                header: 'pageflow.sitemap.editor.headers.select_start_page',
+                noHighlight: true
+              })
+                .done(function(page) {
+                  s.startPage.update(pageflow.entry, page);
+                })
+                .always(function() {
+                  showSitemap();
+                });
+            }
+          }
+        ]
       });
 
       currentSitemapView.once('close', function() {

@@ -4,6 +4,7 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
   this.update()
     .classed('selected', function(d) { return d.selected; })
     .classed('highlighted', function(d) { return d.highlighted; })
+    .classed('start_page', function(d) { return d.startPage; })
     .attr('transform', transformStart)
     .transition().duration(options.duration)
     .attr('transform', transformFinal)
@@ -83,6 +84,10 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
       d3.selectAll(this.getElementsByTagName('div')).text(d.page.title() || '');
     })
   ;
+
+  this.update().call(s.startPageIndicatorView(function(d) {
+    return [{id: d.id + ':start_page_indicator'}];
+  }));
 
   function transformStart(d) { return 'translate(' + d.x0 + ',' + d.y0 + ')'; }
   function transformFinal(d) { return 'translate(' + d.x + ',' + d.y + ')'; }
