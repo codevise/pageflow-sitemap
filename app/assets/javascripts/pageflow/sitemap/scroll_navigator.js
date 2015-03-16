@@ -34,6 +34,21 @@ pageflow.sitemap.ScrollNavigator = function() {
     return (page1.data('chapterId') == page2.data('chapterId'));
   }
 
+  this.getLandingPage = function(pages) {
+    var result = pages.first();
+
+    pages.each(function() {
+      var page = $(this);
+      var configuration = page.page('getConfiguration');
+
+      if (configuration.start_page) {
+        result = page;
+      }
+    });
+
+    return result;
+  };
+
   this.back = function(currentPage) {
     return goToPreviouslyVisitedPage() ||
       goToPreviousPageInChapter(currentPage);
