@@ -50,8 +50,7 @@ pageflow.sitemap.ScrollNavigator = function() {
   };
 
   this.back = function(currentPage) {
-    return goToPreviouslyVisitedPage() ||
-      goToPreviousPageInChapter(currentPage);
+    return goToPreviousPageInChapter(currentPage);
   };
 
   this.next = function(currentPage) {
