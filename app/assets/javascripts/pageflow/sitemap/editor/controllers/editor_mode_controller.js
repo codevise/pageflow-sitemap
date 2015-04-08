@@ -164,11 +164,11 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       this.selection.reset();
     });
 
-    this.listenTo(pageflow.chapters, 'add remove change:configuration', function() {
+    this.listenTo(pageflow.chapters, 'add remove destroying change:configuration', function() {
       handler(session);
     });
 
-    this.listenTo(pageflow.pages, 'add remove destroy change change:configuration', function() {
+    this.listenTo(pageflow.pages, 'add remove destroying destroy change change:configuration', function() {
       handler(session);
     });
 

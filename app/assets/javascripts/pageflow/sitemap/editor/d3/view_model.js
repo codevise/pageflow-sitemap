@@ -40,6 +40,8 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           dragged: layout.isDragging(page),
           highlighted: highlightedPage === page,
           startPage: isStartPage,
+          destroying: page.isDestroying() || chapter.isDestroying(),
+
           x0: layout.position(page).x,
           y0: layout.position(page).y,
           x: layout.position(page).x,
@@ -64,6 +66,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         dragged: layout.isDragging(chapter),
         droppable: layout.isLegal(),
         empty: chapterNodes.length === 0,
+        destroying: chapter.isDestroying(),
 
         x: layout.position(chapter).x,
         y: layout.position(chapter).y,
@@ -112,14 +115,16 @@ pageflow.sitemap.ViewModel = function(session, layout) {
     entry.pages.each(function(page) {
       if (page.pageLinks()) {
         page.pageLinks().each(function(link) {
-          if (link.targetPage()) {
+          var targetPage = link.targetPage();
+
+          if (targetPage) {
             pageLinks.push({
-              id: 'link' + ':' + page.cid + '-' + link.targetPage().cid,
+              id: 'link' + ':' + page.cid + '-' + targetPage.cid,
               link: link,
               links: page.pageLinks(),
 
               source: layout.linkSource(page),
-              target: layout.linkTarget(link.targetPage(), link),
+              target: layout.linkTarget(targetPage, link),
 
               selected: selection.contains(link),
               dragged: layout.isDragging(link),
@@ -128,20 +133,22 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           }
         });
 
-        var link = {placeholder: page};
+        if (!page.isDestroying() && !page.chapter.isDestroying()) {
+          var link = {placeholder: page};
 
-        pageLinks.push({
-          id: 'dangling-link' + ':' + page.cid,
-          link: link,
-          links: page.pageLinks(),
+          pageLinks.push({
+            id: 'dangling-link' + ':' + page.cid,
+            link: link,
+            links: page.pageLinks(),
 
-          source:  layout.linkSource(page),
-          target: layout.linkTarget(page, link),
+            source:  layout.linkSource(page),
+            target: layout.linkTarget(page, link),
 
-          selected: selection.contains(link),
-          dragged: layout.isDragging(link),
-          placeholder: true
-        });
+            selected: selection.contains(link),
+            dragged: layout.isDragging(link),
+            placeholder: true
+          });
+        }
       }
     });
   }
@@ -168,7 +175,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
             placeholder: false
           });
         }
-        else {
+        else if (!lastPage.isDestroying() && !chapter.isDestroying()) {
           successorLinks.push({
             id: 'dangling-successor:' + lastPage.cid,
             page: lastPage,

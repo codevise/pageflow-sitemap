@@ -10,6 +10,7 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
     .classed('selected', s.utils.fn.d('selected'))
     .classed('dragged', s.utils.fn.d('dragged'))
     .classed('empty', s.utils.fn.d('empty'))
+    .classed('destroying', s.utils.fn.d('destroying'))
     .attr('transform', function(d) {
       return 'translate(' +
         (d.x - options.page.width / 2 - 5) + ',' +

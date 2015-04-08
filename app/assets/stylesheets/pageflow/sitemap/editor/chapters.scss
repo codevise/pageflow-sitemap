@@ -15,6 +15,10 @@
     pointer-events: none;
     padding-top: 2px;
   }
+
+  &.destroying {
+    opacity: 0.5;
+  }
 }
 
 &.editor_mode .chapter {
