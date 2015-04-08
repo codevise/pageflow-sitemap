@@ -25,6 +25,7 @@ $page-link-color: #9ecae1;
   @import "./editor/follow_links";
   @import "./editor/scroll_bar";
   @import "./editor/toolbar";
+  @import "./editor/text_label";
 
   @include user-select(none);
   background-color: #fff;

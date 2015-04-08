@@ -36,6 +36,17 @@
       fill: rgba(0, 0, 0, 0.4);
     }
   }
+
+  .text_label {
+    opacity: 0;
+    @include transition(opacity 0.3s ease);
+  }
+
+  &.highlight {
+    .text_label {
+      opacity: 1;
+    }
+  }
 }
 
 &.editor_mode .selectable_link {

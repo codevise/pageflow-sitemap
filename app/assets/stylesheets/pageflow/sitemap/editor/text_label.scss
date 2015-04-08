@@ -1,0 +1,20 @@
+.text_label {
+  pointer-events: none;
+
+  &.empty {
+    display: none;
+  }
+
+  rect {
+    fill: rgba(0,0,0,0.6);
+    stroke: #444;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+  }
+
+  text {
+    text-anchor: end;
+    fill: #fff;
+    font-size: 12px;
+  }
+}

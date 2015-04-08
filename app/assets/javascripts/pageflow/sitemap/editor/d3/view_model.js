@@ -126,6 +126,8 @@ pageflow.sitemap.ViewModel = function(session, layout) {
               source: layout.linkSource(page),
               target: layout.linkTarget(targetPage, link),
 
+              label: link.label(),
+
               selected: selection.contains(link),
               dragged: layout.isDragging(link),
               placeholder: false

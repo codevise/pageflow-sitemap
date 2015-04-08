@@ -54,17 +54,19 @@ pageflow.sitemap.groupView = {
 
         var child = nodes.select(selector);
 
-        fn.call({
-          options: options,
+        if (fn) {
+          fn.call({
+            options: options,
 
-          enter: function() {
-            return enteredChild;
-          },
+            enter: function() {
+              return enteredChild;
+            },
 
-          update: function() {
-            return child;
-          },
-        });
+            update: function() {
+              return child;
+            },
+          });
+        }
 
         return child;
       };

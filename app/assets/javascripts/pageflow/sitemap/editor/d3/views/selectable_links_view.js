@@ -49,6 +49,15 @@ pageflow.sitemap.selectableLinksView = function(className, path, fn) {
         .attr('d', path);
     });
 
+    this.update().call(s.textLabelView(function(d) {
+      return [{
+        id: d.id + ':label',
+        label: d.label,
+        x: path.points(d).end.x,
+        y: path.points(d).end.y
+      }];
+    }));
+
     this.child('circle.drag_target', function() {
       this.enter()
         .attr('r', function(d) { return d.placeholder ? 20 : 10; })
