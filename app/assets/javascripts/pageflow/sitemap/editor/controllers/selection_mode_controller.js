@@ -10,7 +10,7 @@ pageflow.sitemap.SelectionModeController = pageflow.sitemap.AbstractController.e
     this.trigger('selected', page);
   },
 
-  addUpdateHandler: function (handler) {
+  addDebouncedUpdateHandler: function (handler) {
     var fragmentParser = new pageflow.sitemap.FragmentParser(this.entry, Backbone.history.fragment);
 
     var session = {
@@ -21,11 +21,11 @@ pageflow.sitemap.SelectionModeController = pageflow.sitemap.AbstractController.e
 
     handler(session);
 
-    this.listenTo(this.entry.chapters, 'add remove change:configuration', function() {
+    this.listenTo(this.entry.chapters, 'add remove destroying change:configuration', function() {
       handler(session);
     });
 
-    this.listenTo(this.entry.pages, 'add remove destroy change:configuration', function() {
+    this.listenTo(this.entry.pages, 'add remove destroying destroy change change:configuration', function() {
       handler(session);
     });
   }

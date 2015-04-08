@@ -148,7 +148,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     });
   },
 
-  addUpdateHandler: function (handler) {
+  addDebouncedUpdateHandler: function (handler) {
     var session = {
       entry: pageflow.entry,
       selection: this.selection

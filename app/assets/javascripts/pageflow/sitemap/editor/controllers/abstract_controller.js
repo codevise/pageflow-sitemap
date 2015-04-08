@@ -29,7 +29,20 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   addChapter: function(options) {},
 
-  addUpdateHandler: function (handler) {},
+  addUpdateHandler: function (handler) {
+    var timeout;
+
+    this.addDebouncedUpdateHandler(function(/* args */) {
+      var args = arguments;
+
+      timeout = timeout || setTimeout(function() {
+        timeout = null;
+        handler.apply(this, args);
+      }, 1);
+    });
+  },
+
+  addDebouncedUpdateHandler: function(handler) {},
 
   dispose: function() {
     this.stopListening();
