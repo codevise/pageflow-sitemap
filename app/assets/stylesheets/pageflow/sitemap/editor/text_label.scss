@@ -13,8 +13,11 @@
   }
 
   text {
-    text-anchor: end;
     fill: #fff;
     font-size: 12px;
+  }
+
+  &.anchor_right text {
+    text-anchor: end;
   }
 }

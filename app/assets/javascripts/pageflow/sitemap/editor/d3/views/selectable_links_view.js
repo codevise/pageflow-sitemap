@@ -50,11 +50,14 @@ pageflow.sitemap.selectableLinksView = function(className, path, fn) {
     });
 
     this.update().call(s.textLabelView(function(d) {
+      var p = path.points(d);
+
       return [{
         id: d.id + ':label',
         label: d.label,
-        x: path.points(d).end.x,
-        y: path.points(d).end.y
+        x: p.end.x,
+        y: p.end.y,
+        anchor: p.end.x - p.start.x < 10 ? 'left' : 'right'
       }];
     }));
 
