@@ -164,6 +164,10 @@
         },
 
         dragend: function(options) {
+          var layout = s.layout.create(entry, selection, {
+            dragPosition: options.position
+          });
+
           var page = layout.pageFromPoint(options.position);
 
           if (page) {
@@ -198,6 +202,10 @@
         },
 
         dragend: function(options) {
+          var layout = s.layout.create(entry, selection, {
+            dragPosition: options.position
+          });
+
           var targetPage = layout.pageFromPoint(options.position);
 
           controller.successorLinkDroppedOnPage(options.data.page,
