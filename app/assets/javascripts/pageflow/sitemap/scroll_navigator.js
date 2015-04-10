@@ -58,6 +58,14 @@ pageflow.sitemap.ScrollNavigator = function() {
       goToConfiguredSuccessor(currentPage);
   };
 
+  this.nextPageExists = function(currentPage, pages) {
+    return sameChapter(currentPage, currentPage.next('.page'));
+  };
+
+  this.previousPageExists = function(currentPage, pages) {
+    return sameChapter(currentPage, currentPage.prev('.page'));
+  };
+
   this.getTransitionDirection = function(previousPage, currentPage, options) {
     var direction;
 
