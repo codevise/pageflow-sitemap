@@ -11,6 +11,7 @@
 
 //= require ./d3/graph_view
 //= require ./d3/views/chapters_view
+//= require ./d3/views/chapter_placeholders_view
 //= require ./d3/views/pages_view
 //= require ./d3/views/page_links_view
 //= require ./d3/views/successor_links_view

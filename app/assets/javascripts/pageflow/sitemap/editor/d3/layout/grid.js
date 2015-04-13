@@ -45,6 +45,15 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
             Math.abs(position.y - pagePosition.y) <= (options.pageHeight + options.pageMarginHeight) / 2);
   };
 
+  this.pointInsideChapter = function(chapter, position) {
+    var chapterPosition = this.position(chapter);
+    var chapterHeight = this.chapterHeight(chapter);
+
+    return (Math.abs(position.x - chapterPosition.x) < laneWidth / 2 &&
+            position.y >= chapterPosition.y - rowHeight / 2 &&
+            position.y < chapterPosition.y + chapterHeight);
+  };
+
   this.isBelowChapter = function(chapter, position) {
     var chapterPosition = this.position(chapter);
     var chapterBottom =
@@ -60,8 +69,39 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
   this.laneAndRowFromPoint = function(position) {
     return {
       lane: Math.round(position.x / laneWidth),
-      row: Math.round(position.y / rowHeight),
+      row: Math.round(position.y / rowHeight)
     };
+  };
+
+  this.freeGridCellFromPoint = function(position) {
+    if (!this.chapterFromPoint(position) &&
+        !this.pageFromPoint(position)) {
+
+      return this.gridCellFromPoint(position);
+    }
+  };
+
+  this.gridCellFromPoint = function(position) {
+    var laneAndRow = this.laneAndRowFromPoint(position);
+
+    if (laneAndRow.lane >= 0 && laneAndRow.row >= 0) {
+      return {
+        laneAndRow: laneAndRow,
+        x: laneAndRow.lane * laneWidth,
+        y: laneAndRow.row * rowHeight,
+        width: options.pageWidth,
+        height: options.pageHeight
+      };
+    }
+  };
+
+  this.chapterFromPoint = function(position) {
+    var that = this;
+
+    return _(pagesGroupedByChapters).reduce(function(result, group) {
+      return result || (group.chapter &&
+                        that.pointInsideChapter(group.chapter, position));
+    }, null);
   };
 
   this.pageFromPoint = function(position) {

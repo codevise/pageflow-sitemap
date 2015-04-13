@@ -8,6 +8,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   var followLinks = this.followLinks = [];
   var successorLinks = this.successorLinks = [];
   var pageLinks = this.links = [];
+  var chapterPlaceholders = this.chapterPlaceholders = [];
   var size = this.size = {x: 0, y: 0};
 
   var nodesByName = {};
@@ -17,6 +18,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   buildFollowLinks();
   buildSuccessorLinks();
   buildPageLinks();
+  buildChapterPlaceholders();
 
   function buildChaptersAndPages() {
     entry.chapters.each(function(chapter) {
@@ -122,6 +124,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
               id: 'link' + ':' + page.cid + '-' + targetPage.cid,
               link: link,
               links: page.pageLinks(),
+              sourcePage: page,
 
               source: layout.linkSource(page),
               target: layout.linkTarget(targetPage, link),
@@ -142,6 +145,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
             id: 'dangling-link' + ':' + page.cid,
             link: link,
             links: page.pageLinks(),
+            sourcePage: page,
 
             source:  layout.linkSource(page),
             target: layout.linkTarget(page, link),
@@ -193,6 +197,14 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         }
       }
     });
+  }
+
+  function buildChapterPlaceholders() {
+    if (layout.chapterPlaceholder) {
+      chapterPlaceholders.push(_.extend({
+        id: 'chapter-placeholder'
+      }, layout.chapterPlaceholder));
+    }
   }
 
   function buildLink(idPrefix, sourcePage, targetPage, options) {

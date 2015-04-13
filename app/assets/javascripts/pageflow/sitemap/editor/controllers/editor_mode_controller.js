@@ -49,8 +49,32 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     links.updateLink(link, page.get('perma_id'));
   },
 
-  pageLinkPlaceholderDroppedOnPage: function(links, page) {
+  newPageLinkDroppedOnPage: function(links, page) {
     links.addLink(page.get('perma_id'));
+  },
+
+  pageLinkDroppedOnPlaceholder: function(sourcePage, links, link, laneAndRow) {
+    var configuration = _.extend({
+      parent_page_perma_id: sourcePage.get('perma_id')
+    }, laneAndRow);
+
+    this.addChapter(configuration).then(function(page) {
+      page.once('sync', function() {
+        links.updateLink(link, page.get('perma_id'));
+      });
+    });
+  },
+
+  newPageLinkDroppedOnPlaceholder: function(sourcePage, links, laneAndRow) {
+    var configuration = _.extend({
+      parent_page_perma_id: sourcePage.get('perma_id')
+    }, laneAndRow);
+
+    this.addChapter(configuration).then(function(page) {
+      page.once('sync', function() {
+        links.addLink(page.get('perma_id'));
+      });
+    });
   },
 
   successorLinkSelected: function (link) {
@@ -64,6 +88,18 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     else {
       page.configuration.unset('scroll_successor_id');
     }
+  },
+
+  successorLinkDroppedOnPlaceholder: function(page, laneAndRow) {
+    var configuration = _.extend({
+      parent_page_perma_id: page.chapter.configuration.get('parent_page_perma_id')
+    }, laneAndRow);
+
+    this.addChapter(configuration).then(function(newPage) {
+      newPage.once('sync', function() {
+        page.configuration.set('scroll_successor_id', newPage.get('perma_id'));
+      });
+    });
   },
 
   chaptersPositioned: function(updates) {
@@ -143,9 +179,11 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   addChapter: function(configuration) {
     var chapter = pageflow.entry.addChapter({configuration: configuration});
 
-    chapter.once('sync', function() {
-      chapter.addPage();
-    });
+    return new $.Deferred(function(deferred) {
+      chapter.once('sync', function() {
+        deferred.resolve(chapter.addPage());
+      });
+    }).promise();
   },
 
   addDebouncedUpdateHandler: function (handler) {

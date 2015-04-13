@@ -172,13 +172,26 @@
 
           if (page) {
             if (options.data.link.placeholder) {
-              controller.pageLinkPlaceholderDroppedOnPage(options.data.links,
-                                                          page);
+              controller.newPageLinkDroppedOnPage(options.data.links,
+                                                  page);
             }
             else {
               controller.pageLinkDroppedOnPage(options.data.links,
                                                options.data.link,
                                                page);
+            }
+          }
+          else if (layout.chapterPlaceholder) {
+            if (options.data.link.placeholder) {
+              controller.newPageLinkDroppedOnPlaceholder(options.data.sourcePage,
+                                                         options.data.links,
+                                                         layout.chapterPlaceholder.laneAndRow);
+            }
+            else {
+              controller.pageLinkDroppedOnPlaceholder(options.data.sourcePage,
+                                                      options.data.links,
+                                                      options.data.link,
+                                                      layout.chapterPlaceholder.laneAndRow);
             }
           }
 
@@ -208,8 +221,15 @@
 
           var targetPage = layout.pageFromPoint(options.position);
 
-          controller.successorLinkDroppedOnPage(options.data.page,
-                                                targetPage);
+          if (targetPage) {
+            controller.successorLinkDroppedOnPage(options.data.page,
+                                                  targetPage);
+          }
+          else if (layout.chapterPlaceholder) {
+            controller.successorLinkDroppedOnPlaceholder(options.data.page,
+                                                         layout.chapterPlaceholder.laneAndRow);
+          }
+
           update(session);
         },
 
@@ -217,6 +237,8 @@
           controller.addPage(d.page.chapter);
         }
       }));
+
+      svgChapters.call(s.chapterPlaceholdersView(viewModel.chapterPlaceholders));
 
       viewModel.nodes.forEach(function(node) {
         node.page.x0 = node.x;

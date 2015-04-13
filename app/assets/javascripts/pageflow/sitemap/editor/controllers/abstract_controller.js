@@ -13,11 +13,17 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   pageLinkDroppedOnPage: function(links, link, page) {},
 
-  pageLinkPlaceholderDroppedOnPage: function(links, page) {},
+  newPageLinkDroppedOnPage: function(links, page) {},
+
+  pageLinkDroppedOnPlaceholder: function(sourcePage, links, link, laneAndRow) {},
+
+  newPageLinkDroppedOnPlaceholder: function(sourcePage, links, laneAndRow) {},
 
   successorLinkSelected: function (link) {},
 
   successorLinkDroppedOnPage: function(page, targetPage) {},
+
+  successorLinkDroppedOnPlaceholder: function(page, laneAndRow) {},
 
   chaptersPositioned: function(updates) {},
 
