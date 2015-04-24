@@ -86,7 +86,10 @@
             return;
           }
 
-          controller.addChapter(layout.laneAndRowFromPoint(scrollAndZoom.pointTo(d3.event)));
+          controller.addChapter(layout.laneAndRowFromPoint(scrollAndZoom.pointTo({
+            x: d3.event.clientX,
+            y: d3.event.clientY,
+          })));
         });
 
       svgChapters.call(s.chaptersView(viewModel.chapters, {
@@ -147,7 +150,10 @@
             });
 
             controller.pagesMoved(layout.pagesGroupedByChapters,
-                                  layout.laneAndRowFromPoint(scrollAndZoom.pointTo(d3.event.sourceEvent)));
+                                  layout.laneAndRowFromPoint(scrollAndZoom.pointTo({
+                                    x: d3.event.sourceEvent.clientX,
+                                    y: d3.event.sourceEvent.clientY
+                                  })));
           }
 
           update(session);
