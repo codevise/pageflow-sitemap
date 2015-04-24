@@ -86,7 +86,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       page.configuration.set('scroll_successor_id', targetPage.get('perma_id'));
     }
     else {
-      page.configuration.unset('scroll_successor_id');
+      page.configuration.set('scroll_successor_id', null);
     }
   },
 
