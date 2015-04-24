@@ -114,6 +114,13 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
 
   pagesMoved: function(pagesGroupedByChapters, laneAndRow) {
     _.each(pagesGroupedByChapters, function(update) {
+      if (!update.chapter &&
+          update.pages.length === update.pages[0].chapter.pages.length) {
+
+        update.pages[0].chapter.configuration.set(laneAndRow);
+        return;
+      }
+
       var chapter = update.chapter || pageflow.entry.addChapter({configuration: laneAndRow});
 
       _.each(update.pages, function(page, index) {
