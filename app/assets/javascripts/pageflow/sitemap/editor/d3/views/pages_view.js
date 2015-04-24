@@ -30,7 +30,7 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
       .style('fill', 'lightsteelblue')
       .on('mouseover', function(d) {
         d3.select(this.parentNode).classed('hover', true);
-        d3.selectAll('[id^="link:' + d.page.cid +'"]').classed('highlight', true);
+        d3.selectAll('[id^="link:' + d.pageCid +'"]').classed('highlight', true);
       })
       .on('mouseout', function(d) {
         d3.select(this.parentNode).classed('hover', false);
@@ -53,10 +53,8 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
 
     this.update()
       .each(function(d) {
-        var thumb = d.page.thumbnailFile();
-
         d3.select(this)
-          .attr('xlink:href', thumb ? thumb.get('thumbnail_url') : '')
+          .attr('xlink:href', d.thumbnailUrl)
         ;
       })
     ;
@@ -82,7 +80,7 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
 
   this.update()
     .each(function(d) {
-      d3.selectAll(this.getElementsByTagName('div')).text(d.page.title() || '');
+      d3.selectAll(this.getElementsByTagName('div')).text(d.title || '');
     })
   ;
 

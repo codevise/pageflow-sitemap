@@ -68,7 +68,7 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
 
   this.update().each(function(d) {
     d3.selectAll(this.getElementsByTagName('div'))
-      .text(d.chapter.get('title'));
+      .text(d.title);
   });
 
   this.call(s.addPageButtonView(addButtonData, {

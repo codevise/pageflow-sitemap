@@ -239,11 +239,6 @@
       }));
 
       svgChapters.call(s.chapterPlaceholdersView(viewModel.chapterPlaceholders));
-
-      viewModel.nodes.forEach(function(node) {
-        node.page.x0 = node.x;
-        node.page.y0 = node.y;
-      });
     }
   };
 }());

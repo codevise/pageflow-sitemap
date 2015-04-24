@@ -32,11 +32,17 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           startPageFound = true;
         }
 
+        var thumbnailFile = page.thumbnailFile();
+
         var node = {
           id: id,
 
           page: page,
           chapter: chapter,
+
+          pageCid: page.cid,
+          title: page.title(),
+          thumbnailUrl: thumbnailFile ? thumbnailFile.get('thumbnail_url') : '',
 
           selected: selection.contains(page),
           dragged: layout.isDragging(page),
@@ -60,9 +66,9 @@ pageflow.sitemap.ViewModel = function(session, layout) {
 
       chapters.push({
         id: 'group:' + chapter.cid,
-
         chapter: chapter,
-        nodes: chapterNodes,
+
+        title: chapter.get('title'),
 
         selected: selection.contains(chapter),
         dragged: layout.isDragging(chapter),
