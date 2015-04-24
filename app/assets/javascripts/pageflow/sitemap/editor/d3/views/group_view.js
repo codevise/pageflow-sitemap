@@ -6,14 +6,32 @@ pageflow.sitemap.groupView = {
       options = options || {};
 
       return function(container) {
-        var nodes = container
-          .selectAll('.' + className)
+        var previousNodes = container
+          .selectAll('.' + className);
+
+        var previousData = {};
+
+        if (previousNodes.length) {
+          previousData = _(previousNodes.data()).reduce(function(result, data) {
+            result[data.id] = withoutModels(data);
+            return result;
+          }, {});
+        }
+
+        var nodes = previousNodes
           .data(data, s.utils.fn.d('id'))
           .order();
 
         var nodesEnter = nodes
           .enter()
           .append('g');
+
+        var nodesUpdate = nodes
+          .filter(function(d) {
+            var prev = previousData[d.id];
+
+            return !prev || !_.isEqual(prev, withoutModels(d));
+          });
 
         nodesEnter
           .attr('id', s.utils.fn.d('id'))
@@ -27,22 +45,24 @@ pageflow.sitemap.groupView = {
           },
 
           update: function() {
-            return nodes;
+            return nodesUpdate;
           },
 
           call: function(fn) {
-            nodes.call(fn);
+            nodesUpdate.call(fn);
           },
 
-          child: childFactory(nodesEnter, nodes, options)
+          child: childFactory(nodesEnter, nodesUpdate, options)
         }, pageflow.sitemap);
 
-        nodes.exit()
-          .remove();
+        if (!window.dontRemove) {
+          nodes.exit()
+            .remove();
+        }
       };
     };
 
-    function childFactory(nodesEnter, nodes, options) {
+    function childFactory(nodesEnter, nodesUpdate, options) {
       return function(selector, fn) {
         var components = selector.split('.');
         var tagName = components[0];
@@ -52,7 +72,7 @@ pageflow.sitemap.groupView = {
           .append(tagName)
           .attr('class', className);
 
-        var child = nodes.select(selector);
+        var child = nodesUpdate.select(selector);
 
         if (fn) {
           fn.call({
@@ -70,6 +90,15 @@ pageflow.sitemap.groupView = {
 
         return child;
       };
+    }
+
+    function withoutModels(item) {
+      return _(item).reduce(function(result, value, key) {
+        if (!value || !value.cid) {
+          result[key] = value;
+        }
+        return result;
+      }, {});
     }
   }
 };
