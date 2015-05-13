@@ -10,13 +10,17 @@ pageflow.sitemap.ScrollNavigator = function() {
   }
 
   function hasConfiguredSuccessor(currentPage, pages) {
+    return !!configuredSuccessor(currentPage, pages).length;
+  }
+
+  function configuredSuccessor(currentPage, pages) {
     var configuration = currentPage.page('getConfiguration');
 
     if ('scroll_successor_id' in configuration) {
-      return !!pages.filter('#' + configuration.scroll_successor_id).length;
+      return pages.filter('#' + configuration.scroll_successor_id);
     }
 
-    return false;
+    return $();
   }
 
   function goToPreviousPageInChapter(currentPage) {
@@ -25,6 +29,16 @@ pageflow.sitemap.ScrollNavigator = function() {
 
   function goToNextPageInChapter(currentPage) {
     return goToPageInChapter(currentPage, currentPage.next('.page'));
+  }
+
+  function nextPageInChapter(currentPage) {
+    var page = currentPage.next('.page');
+
+    if (sameChapter(currentPage, page)) {
+      return page;
+    }
+
+    return $();
   }
 
   function goToPageInChapter(currentPage, targetPage, options) {
@@ -75,6 +89,11 @@ pageflow.sitemap.ScrollNavigator = function() {
 
   this.previousPageExists = function(currentPage, pages) {
     return sameChapter(currentPage, currentPage.prev('.page'));
+  };
+
+  this.getNextPage = function(currentPage, pages) {
+    return nextPageInChapter(currentPage) ||
+      configuredSuccessor(currentPage, pages);
   };
 
   this.getTransitionDirection = function(previousPage, currentPage, options) {
