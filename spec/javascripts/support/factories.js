@@ -2,14 +2,34 @@ support.factories = {
   entry: function(attributes) {
     var entry = new Backbone.Model(attributes);
 
+    entry.storylines = new pageflow.StorylinesCollection();
     entry.chapters = new pageflow.ChaptersCollection();
     entry.pages = new pageflow.PagesCollection();
 
     return entry;
   },
 
-  chapter: function(entry, attributes) {
+  storyline: function(entry, attributes) {
     entry = entry || this.entry();
+
+    attributes = attributes || {};
+    attributes.id = _.uniqueId();
+
+    var storyline = new Backbone.Model(_(attributes).omit('configuration'));
+
+    storyline.configuration = new Backbone.Model(attributes.configuration);
+    storyline.chapter = new pageflow.StorylineChaptersCollection({
+      chapters: entry.chapters,
+      storyline: storyline
+    });
+
+    entry.storylines.add(storyline);
+
+    return storyline;
+  },
+
+  chapter: function(entry, storyline, attributes) {
+    storyline = storyline || this.storyline();
 
     attributes = attributes || {};
     attributes.id = _.uniqueId();

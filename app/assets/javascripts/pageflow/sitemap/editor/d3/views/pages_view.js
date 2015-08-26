@@ -27,7 +27,6 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
       .attr('width', options.page.width)
       .attr('height', options.page.height)
       .attr('transform', 'translate(' + trX + ',' + (-trY) + ')')
-      .style('fill', 'lightsteelblue')
       .on('mouseover', function(d) {
         d3.select(this.parentNode).classed('hover', true);
         d3.selectAll('[id^="link:' + d.pageCid +'"]').classed('highlight', true);

@@ -7,7 +7,9 @@ pageflow.sitemap.layout.DraggingDecorator = function(selection, layout, selectio
       var pos = layout.position(target);
 
       if (selection.contains(target) ||
-          (target.chapter && selection.contains(target.chapter))) {
+          (target.chapter && selection.contains(target.chapter)) ||
+          (target.chapter && target.chapter.storyline && selection.contains(target.chapter.storyline)) ||
+          (target.storyline && selection.contains(target.storyline))) {
 
         pos = selectionLayout.position(target);
 
@@ -23,14 +25,28 @@ pageflow.sitemap.layout.DraggingDecorator = function(selection, layout, selectio
 
     this.isDragging = isDragging;
 
-    this.draggedPages = options.delta ? selection.get('pages') : [];
+    this.draggedChapters = options.delta ? selection.get('chapters') : [];
 
-    this.nonDraggedPagesGroupedByChapters = _(layout.pagesGroupedByChapters).map(function(group) {
+    this.nonDraggedChaptersGroupedByStorylines = _(layout.chaptersGroupedByStorylines).map(function(group) {
       return {
-        chapter: group.chapter,
-        pages: _.reject(group.pages, isDragging)
+        storyline: group.storyline,
+        chapters: _.reject(group.chapters, isDragging)
       };
     });
+
+    this.draggedPages = options.delta ? selection.get('pages') : [];
+
+    this.nonDraggedPagesGroupedByChapters = _.chain(layout.pagesGroupedByChapters)
+      .reject(function(group) {
+        return group.chapter && isDragging(group.chapter);
+      })
+      .map(function(group) {
+        return {
+          chapter: group.chapter,
+          pages: _.reject(group.pages, isDragging)
+        };
+      })
+      .value();
   };
 
   decorator.prototype = layout;

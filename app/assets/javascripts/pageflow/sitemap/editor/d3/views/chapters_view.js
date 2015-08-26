@@ -3,8 +3,8 @@
 sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
   var opts = this.options;
 
-  var w = 90,
-      barHeight = 15;
+  var w = 100,
+      barHeight = 20;
 
   this.update()
     .classed('selected', s.utils.fn.d('selected'))
@@ -13,8 +13,8 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
     .classed('destroying', s.utils.fn.d('destroying'))
     .attr('transform', function(d) {
       return 'translate(' +
-        (d.x - options.page.width / 2 - 5) + ',' +
-        (d.y - options.page.height / 2 - 20) +
+        (d.x - options.page.width / 2 - 10) + ',' +
+        (d.y - options.page.height / 2 - 25) +
         ')';
     })
   ;
@@ -25,7 +25,7 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
     ;
 
     this.update()
-      .attr('height', function (d) { var h = d.height + 25; return h > 0 ? h : 0; })
+      .attr('height', function (d) { var h = d.height + 35; return h > 0 ? h : 0; })
     ;
   });
 

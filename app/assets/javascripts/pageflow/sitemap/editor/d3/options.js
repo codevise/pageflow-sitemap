@@ -9,7 +9,7 @@
     page: {
       height: 80,
       width: 80,
-      verticalMargin: 20,
+      verticalMargin: 30,
       horizontalMargin: 30
     },
 
