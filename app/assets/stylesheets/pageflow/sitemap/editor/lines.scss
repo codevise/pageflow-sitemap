@@ -1,0 +1,33 @@
+.line {
+  .handle {
+    fill: #eee;
+  }
+
+  .border {
+    fill: #eee;
+  }
+}
+
+&.editor_mode .line {
+  &.hover {
+    .handle {
+      fill: $highlight-color;
+    }
+  }
+}
+
+&.editor_mode .line {
+  &.selected {
+    > .handle {
+      fill: #5AA5F9;
+
+      .title_text {
+        color: #fff;
+      }
+    }
+
+    > .border {
+      fill: #D2E5FA;
+    }
+  }
+}

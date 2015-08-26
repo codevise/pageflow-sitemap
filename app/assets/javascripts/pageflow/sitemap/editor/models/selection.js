@@ -1,6 +1,7 @@
 pageflow.sitemap.Selection = Backbone.Model.extend({
   defaults: function() {
     return {
+      storylines: [],
       pages: [],
       chapters: [],
       pageLinks: [],
@@ -9,7 +10,8 @@ pageflow.sitemap.Selection = Backbone.Model.extend({
   },
 
   contains: function(model) {
-    return _(this.get('chapters')).contains(model) ||
+    return _(this.get('storylines')).contains(model) ||
+      _(this.get('chapters')).contains(model) ||
       _(this.get('pages')).contains(model) ||
       _(this.get('pageLinks')).some(function(link) {
         return link === model |

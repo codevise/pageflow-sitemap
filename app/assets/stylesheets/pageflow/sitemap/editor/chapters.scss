@@ -1,19 +1,21 @@
 .chapter {
   .handle {
-    fill: #eee;
+    fill: #ddd;
   }
 
   .border {
     fill: none;
-    stroke: #eee;
+    stroke: none;
   }
 
   .title_text {
     color: #000;
     font: $font;
-    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
     pointer-events: none;
-    padding-top: 2px;
+    padding-top: 3px;
+    padding-left: 5px;
   }
 
   &.destroying {
@@ -26,23 +28,24 @@
   &.hover {
     .handle {
       fill: $highlight-color;
-      @include highlight;
     }
 
     .border {
       fill: #f9f9f9;
-      @include highlight;
     }
   }
 
   &.selected {
     .handle {
-      fill: $selection-color;
-      stroke: $selection-color;
+      fill: #5AA5F9;
     }
 
     .border {
-      stroke: $selection-color;
+      fill: #D2E5FA;
+    }
+
+    .title_text {
+      color: #fff;
     }
   }
 

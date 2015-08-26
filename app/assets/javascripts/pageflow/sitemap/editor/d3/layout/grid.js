@@ -1,11 +1,14 @@
-pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
+pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupedByChapters, options) {
   var positions = {};
-  var chapterHeights = {};
+  var storylineHeights = {};
+  var chapterSizes = {};
+  var heights = {};
   var size = {x: 0, y: 0};
 
   var laneWidth = this.laneWidth = options.pageWidth + 2 * options.pageMarginWidth;
   var rowHeight = this.rowHeight = options.pageHeight + 2 * options.pageMarginHeight;
 
+  this.chaptersGroupedByStorylines = chaptersGroupedByStorylines;
   this.pagesGroupedByChapters = pagesGroupedByChapters;
   this.size = size;
 
@@ -27,7 +30,15 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
   };
 
   this.chapterHeight = function(chapter) {
-    return chapterHeights[chapter.cid];
+    return heights[chapter.cid];
+  };
+
+  this.height = function(target) {
+    if (!heights[target.cid]) {
+      debugger;
+    }
+
+    return heights[target.cid];
   };
 
   this.isAbovePage = function(page, position) {
@@ -36,6 +47,14 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
     return (Math.abs(position.x - pagePosition.x) < laneWidth / 2 &&
             Math.abs(position.y - pagePosition.y) <= rowHeight / 2 &&
             position.y < pagePosition.y + rowHeight / 2);
+  };
+
+  this.isAboveChapter = function(chapter, position) {
+    var chapterPosition = this.position(chapter);
+
+    return (Math.abs(position.x - chapterPosition.x) < laneWidth / 2 &&
+            Math.abs(position.y - chapterPosition.y) <= rowHeight / 2 &&
+            position.y < chapterPosition.y + rowHeight / 2);
   };
 
   this.pointInsidePage = function(page, position) {
@@ -64,6 +83,18 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
     return (Math.abs(position.x - chapterPosition.x) < laneWidth / 2 &&
             Math.abs(position.y - chapterBottom) <= rowHeight / 2 &&
             position.y < chapterBottom + rowHeight / 2);
+  };
+
+  this.isBelowStoryline = function(storyline, position) {
+    var storylinePosition = this.position(storyline);
+    var storylineBottom =
+      this.position(storyline).y +
+      this.height(storyline) +
+      2 * options.pageMarginHeight;
+
+    return (Math.abs(position.x - storylinePosition.x) < laneWidth / 2 &&
+            Math.abs(position.y - storylineBottom) <= rowHeight / 2 &&
+            position.y < storylineBottom + rowHeight / 2);
   };
 
   this.laneAndRowFromPoint = function(position) {
@@ -121,17 +152,56 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
     var chapter = group.chapter;
 
     if (chapter) {
-      positions[chapter.cid] = {
-        x: lane(chapter) * laneWidth,
-        y: row(chapter) * rowHeight
+      var chapterSize = Math.max(1, group.pages.length);
+      chapterSizes[chapter.cid] = chapterSize;
+      heights[chapter.cid] = chapterSize * rowHeight - 2 * options.pageMarginHeight;
+    }
+  });
+
+  _.each(chaptersGroupedByStorylines, function(group) {
+    var storyline = group.storyline;
+
+    if (storyline) {
+      positions[storyline.cid] = {
+        x: lane(storyline) * laneWidth,
+        y: row(storyline) * rowHeight
       };
 
-      chapterHeights[chapter.cid] = Math.max(1, group.pages.length) * rowHeight - 2 * options.pageMarginHeight;
+      var storylineSize = _.reduce(group.chapters, function(offset, chapter) {
+        var chapterSize = chapterSizes[chapter.cid];
+
+      var storylineLane = lane(storyline);
+        var storylineRow = row(storyline) + offset;
+
+        positions[chapter.cid] = {
+          _lane: storylineLane,
+          _row: storylineRow,
+          x: storylineLane * laneWidth,
+          y: storylineRow * rowHeight
+        };
+
+        return offset + chapterSize;
+      }, 0);
+
+      heights[storyline.cid] = Math.max(1, storylineSize) * rowHeight;
+
+      if (!heights[storyline.cid]) {
+        debugger;
+      }
+    }
+  });
+
+  _.each(pagesGroupedByChapters, function(group) {
+    var chapter = group.chapter;
+
+    if (chapter && positions[chapter.cid]) {
+      var chapterLane = positions[chapter.cid]._lane;
+      var chapterRow = positions[chapter.cid]._row;
 
       _.each(group.pages, function(page, index) {
         positions[page.cid] = {
-          x: lane(chapter) * laneWidth,
-          y: (row(chapter) + index) * rowHeight
+          x: chapterLane * laneWidth,
+          y: (chapterRow + index) * rowHeight
         };
 
         size.x = Math.max(size.x, positions[page.cid].x + laneWidth);
@@ -140,11 +210,11 @@ pageflow.sitemap.layout.Grid = function(pagesGroupedByChapters, options) {
     }
   });
 
-  function lane(chapter) {
-    return chapter.configuration.get('lane') || 0;
+  function lane(storyline) {
+    return storyline.configuration.get('lane') || 0;
   }
 
-  function row(chapter) {
-    return chapter.configuration.get('row') || 0;
+  function row(storyline) {
+    return storyline.configuration.get('row') || 0;
   }
 };

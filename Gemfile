@@ -5,7 +5,7 @@ source "https://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-gem 'pageflow', git: 'https://github.com/codevise/pageflow.git', :branch => 'master'
+gem 'pageflow', path: '.bundle/linked/pageflow' #, git: 'https://github.com/codevise/pageflow.git', :branch => 'master'
 
 gem 'sqlite3'
 
@@ -18,7 +18,7 @@ gem 'ejs'
 
 gem 'pageflow-support', path: '../pageflow/spec/support'
 
-gem 'teaspoon', git: 'https://github.com/modeset/teaspoon'
+gem 'teaspoon', '~> 0.9.0'
 
 gem "spring-commands-rspec", group: :development
 gem "spring-commands-teaspoon", group: :development

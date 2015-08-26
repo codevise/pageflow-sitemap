@@ -1,6 +1,8 @@
 /*globals _, sitemap, pageflow */
 
 sitemap.AbstractController = pageflow.Object.extend({
+  lineSelected: function (line, event) {},
+
   chapterSelected: function (chapter, event) {},
 
   chaptersSelected: function (chapters) {},

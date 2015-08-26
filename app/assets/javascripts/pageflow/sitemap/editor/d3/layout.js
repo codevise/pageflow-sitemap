@@ -12,7 +12,7 @@
       pageWidth: 80,
       pageHeight: 80,
       pageMarginWidth: 30,
-      pageMarginHeight: 20
+      pageMarginHeight: 30
     },
 
     create: function(entry, selection, options) {
@@ -23,7 +23,8 @@
       // We begin by layouting chapters and pages in a grid.
 
       var originalLayout =
-        new s.layout.Grid(pagesGroupedByChapters(entry),
+        new s.layout.Grid(chaptersGroupedByStorylines(entry),
+                          pagesGroupedByChapters(entry),
                           options.grid);
 
       // Then we create a layout in which the selected pages are
@@ -34,13 +35,13 @@
                                        originalLayout,
                                        originalLayout,
                                        {delta: options.dragDelta});
-
       // When dragging pages, the reset of the layout collapses as if
       // the dragged pages were removed. This is the layout we want to
       // consider when we check collision with dragged pages.
 
       var collapsedLayout =
-        new s.layout.Grid(draggingLayout.nonDraggedPagesGroupedByChapters,
+        new s.layout.Grid(draggingLayout.nonDraggedChaptersGroupedByStorylines,
+                          draggingLayout.nonDraggedPagesGroupedByChapters,
                           options.grid);
 
       // Group pages as if they already had been dropped into a target
@@ -51,7 +52,8 @@
         new s.layout.Collision(draggingLayout, collapsedLayout);
 
       var spacingLayout =
-        new s.layout.Grid(collision.pagesGroupedByDragTargetChapters(),
+        new s.layout.Grid(collision.chaptersGroupedByDragTargetStorylines(),
+                          collision.pagesGroupedByDragTargetChapters(),
                           options.grid);
 
       // The final layout that we want to draw is split into two
@@ -71,6 +73,15 @@
                                                 {dragPosition: options.dragPosition});
     }
   };
+
+  function chaptersGroupedByStorylines(entry) {
+    return entry.storylines.map(function(storyline) {
+      return {
+        storyline: storyline,
+        chapters: storyline.chapters.toArray()
+      };
+    });
+  }
 
   function pagesGroupedByChapters(entry) {
     return entry.chapters.map(function(chapter) {

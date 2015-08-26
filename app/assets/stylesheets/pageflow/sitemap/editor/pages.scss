@@ -1,8 +1,8 @@
 .page {
   .bg {
     cursor: pointer;
-    fill: #fff;
-    stroke: $stroke-color;
+    fill: #444;
+    stroke: #444;
     stroke-width: $stroke-width;
     font: $font;
   }
@@ -23,7 +23,7 @@
   &.selected,
   &.highlighted {
     .title {
-      fill: $selection-color;
+      fill: #5AA5F9;
     }
   }
 

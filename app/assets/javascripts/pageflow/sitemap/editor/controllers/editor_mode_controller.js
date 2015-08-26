@@ -17,6 +17,12 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }).attach();
   },
 
+  storylineSelected: function (storyline, event) {
+    this.selection.select('storylines', [storyline], {
+      additive: event.ctrlKey
+    });
+  },
+
   chapterSelected: function (chapter, event) {
     if (!this.selection.contains(chapter)) {
       this.selection.select('chapters', [chapter], {
@@ -102,14 +108,51 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     });
   },
 
-  chaptersPositioned: function(updates) {
+  storylinesPositioned: function(updates) {
     // FIXME should have batch update for chapters
     _.each(updates, function(update) {
-      update.chapter.configuration.set({
+      update.storyline.configuration.set({
         row: update.row,
         lane: update.lane
       });
     }, this);
+  },
+
+  chaptersMoved: function(chaptersGroupedByStorylines, laneAndRow) {
+    _.each(chaptersGroupedByStorylines, function(update) {
+      if (!update.storyline &&
+          update.chapters.length === update.chapters[0].storyline.chapters.length) {
+
+        update.chapters[0].storyline.configuration.set(laneAndRow);
+        return;
+      }
+
+      var storyline = update.storyline || pageflow.entry.addStoryline({configuration: laneAndRow});
+
+      _.each(update.chapters, function(chapter, index) {
+        chapter.set('position', index);
+
+        if (chapter.storyline !== storyline) {
+          chapter.storyline.chapters.remove(chapter);
+          storyline.chapters.add(chapter);
+        }
+      });
+
+      storyline.chapter.sort();
+
+      whenSaved(storyline, function() {
+        storyline.chapters.saveOrder();
+      });
+    });
+
+    function whenSaved(chapter, fn) {
+      if (chapter.isNew()) {
+        chapter.once('sync', fn);
+      }
+      else {
+        fn();
+      }
+    }
   },
 
   pagesMoved: function(pagesGroupedByChapters, laneAndRow) {
@@ -220,5 +263,47 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     this.listenTo(this.selection, 'change', function() {
       handler(session);
     });
+  },
+
+  _makeLines: function() {
+    var chaptersByLane = pageflow.entry.chapters.groupBy(function(chapter) {
+      return chapter.configuration.get('lane');
+    });
+
+    _(chaptersByLane).each(function(chapters) {
+      var c = _(chapters).sortBy(function(chapter) {
+        return chapter.configuration.get('row');
+      });
+
+      if (c.length > 0) {
+        c[0].configuration.set('line_id', null);
+      }
+
+      eachPair(c, function(upperChapter, lowerChapter) {
+        var successorPage = upperChapter.pages.length &&
+          pageflow.pages.getByPermaId(upperChapter.pages.last().configuration.get('scroll_successor_id'));
+
+        if (lowerChapter.configuration.get('row') === upperChapter.configuration.get('row') + upperChapter.pages.length &&
+            successorPage &&
+            lowerChapter.pages.length &&
+            successorPage.id === lowerChapter.pages.first().id) {
+          lowerChapter.configuration.set('line_id', upperChapter.configuration.get('line_id') || upperChapter.id);
+        }
+        else {
+          lowerChapter.configuration.set('line_id', null);
+        }
+      });
+    });
+
+    function eachPair(collection, fn) {
+      if (collection.length < 2) {
+        return;
+      }
+
+      _.reduce(collection, function(last, item) {
+        fn(last, item);
+        return item;
+      });
+    }
   }
 });

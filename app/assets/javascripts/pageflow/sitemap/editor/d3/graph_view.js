@@ -9,6 +9,7 @@
       .attr('height', '100%');
 
     var svgGroup = svg.select('g.all');
+    var svgStorylines = svg.select('g.lines');
     var svgChapters = svg.select('g.chapters');
     var svgPages = svg.select('g.pages');
     var svgLinks = svg.select('g.links');
@@ -92,6 +93,37 @@
           })));
         });
 
+      svgStorylines.call(s.storylinesView(viewModel.storylines, {
+        mousedown: function(source) {
+          controller.storylineSelected(source.storyline, d3.event);
+        },
+
+        drag: function(options) {
+          update(session, {dragDelta: {x: options.dx, y: options.dy}});
+        },
+
+        dragend: function(options) {
+          var layout = s.layout.create(entry, selection, {
+            dragDelta: {
+              x: options.dx,
+              y: options.dy
+            }
+          });
+
+          controller.storyLinesPositioned(_.map(selection.get('storylines'), function(storyline) {
+            var coordinates = layout.laneAndRowFromPoint(layout.position(storyline));
+
+            return {
+              storyline: storyline,
+              lane: coordinates.lane,
+              row: coordinates.row
+            };
+          }));
+
+          update(session);
+        },
+      }));
+
       svgChapters.call(s.chaptersView(viewModel.chapters, {
         mousedown: function(source) {
           controller.chapterSelected(source.chapter, d3.event);
@@ -109,15 +141,7 @@
             }
           });
 
-          controller.chaptersPositioned(_.map(selection.get('chapters'), function(chapter) {
-            var coordinates = layout.laneAndRowFromPoint(layout.position(chapter));
-
-            return {
-              chapter: chapter,
-              lane: coordinates.lane,
-              row: coordinates.row
-            };
-          }));
+          controller.chaptersMoved(layout.chaptersGroupedByStorylines);
 
           update(session);
         },

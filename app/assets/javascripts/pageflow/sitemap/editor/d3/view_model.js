@@ -3,6 +3,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   var selection = session.selection;
   var highlightedPage = session.highlightedPage;
 
+  var storylines = this.storylines = [];
   var chapters = this.chapters = [];
   var nodes = this.nodes = this.pages = [];
   var followLinks = this.followLinks = [];
@@ -14,14 +15,69 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   var nodesByName = {};
   var startPageFound = false;
 
-  buildChaptersAndPages();
+  buildStorylines();
   buildFollowLinks();
   buildSuccessorLinks();
   buildPageLinks();
   buildChapterPlaceholders();
 
-  function buildChaptersAndPages() {
-    entry.chapters.each(function(chapter) {
+  function buildLines() {
+    var chaptersGroupedByLine = entry.chapters.groupBy(function(chapter) {
+      return chapter.configuration.get('line_id') || chapter.id;
+    });
+
+    _(chaptersGroupedByLine).each(function(chapters, lineId) {
+      var c = _(chapters).select(function(chapter) {
+        return !layout.isDragging(chapter);
+      });
+
+      var height = _(chapters).reduce(function(sum, chapter) {
+        return sum + layout.original.chapterHeight(chapter) + 2 * 30;
+      }, 0);
+
+      if (!c.length) {
+        c = chapters;
+      }
+
+      var minY = _(c).reduce(function(result, chapter) {
+        return Math.min(result, layout.position(chapter).y);
+      }, Infinity);
+
+      this.lines.push({
+        id: lineId,
+
+        selected: selection.contains(lineId),
+
+        x: layout.position(c[0]).x,
+        y: minY,
+        height: height
+      });
+    });
+  }
+
+  function buildStorylines() {
+    entry.storylines.each(function(storyline) {
+      storylines.push({
+        id: 'storyline:' + storyline.cid,
+        storyline: storyline,
+
+        title: storyline.get('title'),
+
+        selected: selection.contains(storyline),
+        dragged: layout.isDragging(storyline),
+        droppable: layout.isLegal(),
+
+        x: layout.position(storyline).x,
+        y: layout.position(storyline).y,
+        height: layout.height(storyline)
+      });
+
+      buildChapters(storyline.chapters);
+    });
+  }
+
+  function buildChapters(chaptersCollection) {
+    chaptersCollection.each(function(chapter) {
       var chapterNodes = [];
 
       chapter.pages.each(function(page) {
