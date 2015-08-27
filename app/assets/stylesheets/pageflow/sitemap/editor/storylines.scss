@@ -1,14 +1,14 @@
-.line {
+.storyline {
   .handle {
-    fill: #eee;
+    fill: #ccc;
   }
 
   .border {
-    fill: #eee;
+    fill: #ddd;
   }
 }
 
-&.editor_mode .line {
+&.editor_mode .storyline {
   &.hover {
     .handle {
       fill: $highlight-color;
@@ -16,7 +16,7 @@
   }
 }
 
-&.editor_mode .line {
+&.editor_mode .storyline {
   &.selected {
     > .handle {
       fill: #5AA5F9;

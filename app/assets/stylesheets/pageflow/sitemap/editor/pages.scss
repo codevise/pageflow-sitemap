@@ -7,8 +7,16 @@
     font: $font;
   }
 
+  .border {
+    fill: transparent;
+    strole: none;
+    pointer-events: none;
+    stroke-width: 4px;
+  }
+
   .title {
-    fill: #fff;
+    fill: #000;
+    opacity: 0.5;
     pointer-events: none;
   }
 
@@ -20,11 +28,8 @@
     display: block;
   }
 
-  &.selected,
-  &.highlighted {
-    .title {
-      fill: #5AA5F9;
-    }
+  &.highlighted .border {
+    stroke: #5AA5F9;
   }
 
   &.destroying {
@@ -32,10 +37,11 @@
   }
 
   .title_text {
-    color: #000;
-    font: $font;
-    text-align: center;
+    color: #fff;
+    font: 13px sans-serif;
+    font-weight: bold;
     pointer-events: none;
+    padding: 15px 5px;
   }
 
   image {
@@ -44,15 +50,18 @@
 }
 
 &.editor_mode .page {
-  &.hover .bg {
-    @include highlight;
+  &.hover .border {
+    stroke: $highlight-color;
+  }
+
+  &.selected .border {
+    stroke: #5AA5F9;
   }
 }
 
 &.selection_mode .page {
-  &.hover .bg {
+  &.hover .border {
     stroke: $selection-color;
-    stroke-width: 2px;
   }
 
   &.highlighted {

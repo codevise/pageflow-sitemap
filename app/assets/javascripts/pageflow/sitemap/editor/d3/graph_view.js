@@ -110,7 +110,7 @@
             }
           });
 
-          controller.storyLinesPositioned(_.map(selection.get('storylines'), function(storyline) {
+          controller.storylinesPositioned(_.map(selection.get('storylines'), function(storyline) {
             var coordinates = layout.laneAndRowFromPoint(layout.position(storyline));
 
             return {
@@ -141,7 +141,11 @@
             }
           });
 
-          controller.chaptersMoved(layout.chaptersGroupedByStorylines);
+          controller.chaptersMoved(layout.chaptersGroupedByStorylines,
+                                   layout.laneAndRowFromPoint(scrollAndZoom.pointTo({
+                                     x: d3.event.sourceEvent.clientX,
+                                     y: d3.event.sourceEvent.clientY
+                                   })));
 
           update(session);
         },
@@ -226,12 +230,6 @@
           }
 
           update(session);
-        }
-      }));
-
-      svgLinks.call(s.followLinksView(viewModel.followLinks, {
-        addPageButtonClick: function(d) {
-          controller.insertPageAfter(d.page);
         }
       }));
 

@@ -3,7 +3,7 @@
 sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
   var opts = this.options;
 
-  var w = 100,
+  var w = options.page.width + 20,
       barHeight = 20;
 
   this.update()

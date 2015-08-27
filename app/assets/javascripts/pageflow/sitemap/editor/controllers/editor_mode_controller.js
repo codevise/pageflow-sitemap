@@ -138,7 +138,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
         }
       });
 
-      storyline.chapter.sort();
+      storyline.chapters.sort();
 
       whenSaved(storyline, function() {
         storyline.chapters.saveOrder();
