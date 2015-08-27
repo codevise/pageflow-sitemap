@@ -150,8 +150,8 @@
           update(session);
         },
 
-        addPageButtonClick: function(d) {
-          controller.addPage(d.chapter);
+        addChapterButtonClick: function(d) {
+          controller.insertChapterAfter(d.chapter);
         }
       }));
 
@@ -186,6 +186,10 @@
 
           update(session);
         },
+
+        addPageButtonClick: function(d) {
+          controller.insertPageAfter(d.page);
+        }
       }));
 
       svgLinks.call(s.pageLinksView(viewModel.links, {
@@ -259,10 +263,6 @@
           }
 
           update(session);
-        },
-
-        addPageButtonClick: function(d) {
-          controller.addPage(d.page.chapter);
         }
       }));
 

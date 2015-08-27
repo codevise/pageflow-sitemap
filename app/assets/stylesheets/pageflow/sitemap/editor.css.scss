@@ -19,7 +19,7 @@ $page-link-color: #9ecae1;
   @import "./editor/chapters";
   @import "./editor/chapter_placeholders";
   @import "./editor/pages";
-  @import "./editor/add_page_button";
+  @import "./editor/add_button";
   @import "./editor/start_page_indicator";
   @import "./editor/selectable_links";
   @import "./editor/page_links";
@@ -28,6 +28,7 @@ $page-link-color: #9ecae1;
   @import "./editor/scroll_bar";
   @import "./editor/toolbar";
   @import "./editor/text_label";
+  @import "./editor/tooltip";
 
   @include user-select(none);
   background-color: #fff;

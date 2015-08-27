@@ -1,6 +1,7 @@
 .chapter {
   .handle {
     fill: #eee;
+    cursor: pointer;
   }
 
   .border {
@@ -38,6 +39,7 @@
   &.selected {
     .handle {
       fill: #5AA5F9;
+      cursor: move;
     }
 
     .border {

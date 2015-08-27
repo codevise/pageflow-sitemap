@@ -1,0 +1,25 @@
+.add_button {
+
+  text  {
+    -visibility: hidden;
+    opacity: 0;
+    @include transition(opacity 0.1s ease);
+    pointer-events: none;
+    font-family: 'entypo';
+    font-size: 20px;
+    fill: #000;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  rect {
+    cursor: pointer;
+    fill: transparent;
+  }
+
+  &.hover {
+    text {
+      opacity: 0.5;
+    }
+  }
+}

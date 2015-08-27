@@ -1,6 +1,7 @@
 .storyline {
   .handle {
     fill: #ccc;
+    cursor: pointer;
   }
 
   .border {
@@ -20,6 +21,7 @@
   &.selected {
     > .handle {
       fill: #5AA5F9;
+      cursor: move;
 
       .title_text {
         color: #fff;
