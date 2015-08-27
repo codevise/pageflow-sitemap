@@ -4,6 +4,16 @@
     cursor: pointer;
   }
 
+  text {
+    fill: #444;
+    font: $font;
+    font-size: 12px;
+    font-weight: bold;
+    pointer-events: none;
+    padding-top: 3px;
+    padding-left: 5px;
+  }
+
   .border {
     fill: #ddd;
   }
@@ -22,10 +32,10 @@
     > .handle {
       fill: #5AA5F9;
       cursor: move;
+    }
 
-      .title_text {
-        color: #fff;
-      }
+    > text {
+      fill: #fff;
     }
 
     > .border {

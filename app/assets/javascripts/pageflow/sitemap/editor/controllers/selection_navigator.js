@@ -14,6 +14,10 @@ pageflow.sitemap.SelectionNavigator = pageflow.Object.extend({
       return '/chapters/' + chapter.id;
     });
 
+    this.listenToSelection('storylines', function(storyline) {
+      return '/storylines/' + storyline.id;
+    });
+
     this.listenToSelection('pageLinks', function(pageLink) {
       return pageLink.editPath ? pageLink.editPath() : this.options.emptySelectionPath;
     });

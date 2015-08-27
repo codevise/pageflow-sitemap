@@ -50,7 +50,6 @@ sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
         }
       })
     ;
-
     function rectRounedAtTop() {
       var radius = 5;
 
@@ -63,6 +62,17 @@ sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
         'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + -radius +
         'z';
     }
+  });
+
+
+  this.child('text', function() {
+    this.enter()
+      .attr('transform', s.utils.translate(7, 15))
+    ;
+
+    this.update()
+      .text(s.utils.fn.d('title'))
+    ;
   });
 
   this.enter().call(sitemap.behavior.multiDrag({
