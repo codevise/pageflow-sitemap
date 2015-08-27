@@ -73,7 +73,10 @@ pageflow.sitemap.ViewModel = function(session, layout) {
       });
 
       buildChapters(storyline.chapters);
+      buildSuccesor(storyline);
     });
+
+    ensureStartPage();
   }
 
   function buildChapters(chaptersCollection) {
@@ -98,7 +101,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
 
           pageCid: page.cid,
           title: page.title(),
-          thumbnailUrl: thumbnailFile ? thumbnailFile.get('thumbnail_url') : '',
+          thumbnailUrl: thumbnailFile ? thumbnailFile.get('link_thumbnail_url') : '',
 
           selected: selection.contains(page),
           dragged: layout.isDragging(page),
@@ -118,8 +121,6 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         nodesByName[page.cid] = node;
       });
 
-      buildSuccesor(chapter);
-
       chapters.push({
         id: 'group:' + chapter.cid,
         chapter: chapter,
@@ -137,12 +138,11 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         height: layout.chapterHeight(chapter)
       });
     });
-
-    ensureStartPage();
   }
 
-  function buildSuccesor(chapter) {
-    var lastPage = chapter.pages.last();
+  function buildSuccesor(storyline) {
+    var chapter = storyline.chapters.last();
+    var lastPage = chapter && chapter.pages.last();
 
     if (lastPage) {
       var successorPage = entry.pages.getByPermaId(lastPage.configuration.get('scroll_successor_id'));
@@ -222,8 +222,9 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   }
 
   function buildSuccessorLinks() {
-    entry.chapters.each(function(chapter) {
-      var lastPage = chapter.pages.last();
+    entry.storylines.each(function(storyline) {
+      var chapter = storyline.chapters.last();
+      var lastPage = chapter && chapter.pages.last();
 
       if (lastPage) {
         var successorPage = entry.pages.getByPermaId(lastPage.configuration.get('scroll_successor_id'));

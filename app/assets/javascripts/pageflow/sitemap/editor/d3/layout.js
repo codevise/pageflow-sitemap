@@ -9,10 +9,10 @@
 
   s.layout = {
     defaultGrid: {
-      pageWidth: 80,
-      pageHeight: 80,
+      pageWidth: 125,
+      pageHeight: 70,
       pageMarginWidth: 30,
-      pageMarginHeight: 30
+      pageMarginHeight: 10
     },
 
     create: function(entry, selection, options) {

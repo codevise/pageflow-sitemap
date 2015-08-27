@@ -61,9 +61,17 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
 
   this.child('rect.title', function() {
     this.enter()
-      .attr('width', options.page.width-2)
-      .attr('height', 12)
-      .attr('transform', 'translate(' + (trX+1) + ',' + (-trY) + ')')
+      .attr('width', options.page.width)
+      .attr('height', options.page.height)
+      .attr('transform', 'translate(' + (trX) + ',' + (-trY) + ')')
+    ;
+  });
+
+  this.child('rect.border', function() {
+    this.enter()
+      .attr('width', options.page.width + 8)
+      .attr('height', options.page.height +8 )
+      .attr('transform', 'translate(' + (trX -4) + ',' + (-trY -4) + ')')
     ;
   });
 
@@ -71,7 +79,7 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
     .append('foreignObject')
     .style('pointer-events', 'none')
     .attr('width', options.page.width-2)
-    .attr('height', 12)
+    .attr('height', options.page.height)
     .attr('transform', 'translate(' + (trX+1) + ',' + (-trY) + ')')
     .append('xhtml:body')
     .html('<div class="title_text"></div>')

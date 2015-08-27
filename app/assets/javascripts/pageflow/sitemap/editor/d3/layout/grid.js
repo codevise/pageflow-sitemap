@@ -153,7 +153,7 @@ pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupe
 
     if (chapter) {
       var chapterSize = Math.max(1, group.pages.length);
-      chapterSizes[chapter.cid] = chapterSize;
+      chapterSizes[chapter.cid] = chapterSize + 0.5;
       heights[chapter.cid] = chapterSize * rowHeight - 2 * options.pageMarginHeight;
     }
   });

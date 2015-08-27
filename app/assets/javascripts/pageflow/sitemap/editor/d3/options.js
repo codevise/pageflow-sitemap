@@ -7,8 +7,8 @@
       left: 60
     },
     page: {
-      height: 80,
-      width: 80,
+      height: 70,
+      width: 125,
       verticalMargin: 30,
       horizontalMargin: 30
     },

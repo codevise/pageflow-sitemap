@@ -1,34 +1,38 @@
-sitemap.storylinesView = sitemap.groupView.define('line', function(s) {
-  var width = 100;
+sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
+  var width = s.settings.page.width + 35;
   var options = this.options;
 
   this.update()
     .classed('selected', s.utils.fn.d('selected'))
     .attr('transform', function(d) {
       return s.utils.translate(
-        d.x - s.settings.page.width / 2 - 10,
-        d.y - s.settings.page.height / 2 - 30
+        d.x - s.settings.page.width / 2 - 17,
+        d.y - s.settings.page.height / 2 - 50
       );
     })
   ;
 
   this.child('rect.border', function() {
     this.enter()
+      .attr('rx', 5)
+      .attr('ry', 5)
       .attr('width', width)
     ;
 
     this.update()
       .attr('height', function (d) {
-        return d.height - 10;
+        return d.height + 10;
       })
     ;
   });
 
-  this.child('rect.handle', function() {
+  this.child('path.handle', function() {
+    var height = 20;
+
     this.enter()
+      .attr('d', rectRounedAtTop)
       .attr('width', width)
-      .attr('height', 20)
-      .attr('transform', s.utils.translate(0, -20))
+      .attr('height', height)
       .on('mouseover', function() {
         d3.select(this.parentNode).classed('hover', true);
       })
@@ -46,6 +50,19 @@ sitemap.storylinesView = sitemap.groupView.define('line', function(s) {
         }
       })
     ;
+
+    function rectRounedAtTop() {
+      var radius = 5;
+
+      return 'M' + radius + ',' + 0 +
+        'h' + (width - 2 * radius) +
+        'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius +
+        'v' + (height - radius) +
+        'h' + (-width) +
+        'v' + (radius - height) +
+        'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + -radius +
+        'z';
+    }
   });
 
   this.enter().call(sitemap.behavior.multiDrag({
