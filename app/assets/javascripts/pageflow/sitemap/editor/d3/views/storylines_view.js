@@ -21,7 +21,7 @@ sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
 
     this.update()
       .attr('height', function (d) {
-        return d.height + 10;
+        return d.height + 25;
       })
     ;
   });

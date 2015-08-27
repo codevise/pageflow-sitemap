@@ -54,8 +54,14 @@
     stroke: $highlight-color;
   }
 
-  &.selected .border {
-    stroke: #5AA5F9;
+  &.selected {
+    .border {
+      stroke: #5AA5F9;
+    }
+
+    .bg {
+      cursor: move;
+    }
   }
 }
 

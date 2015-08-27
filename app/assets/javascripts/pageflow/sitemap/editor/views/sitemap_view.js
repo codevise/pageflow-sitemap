@@ -23,6 +23,14 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
           item.click();
         }
       });
+    },
+
+    'requesttooltip': function(event, options) {
+      this.tooltip.show(options.translationKey, options.position);
+    },
+
+    'resettooltip': function(event) {
+      this.tooltip.hide();
     }
   },
 
@@ -42,9 +50,11 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
   onRender: function() {
     this.$el.addClass(this.options.controller.name);
 
+    this.appendSubview(this.tooltip = new sitemap.TooltipView());
     this.graphView = new sitemap.GraphView(this.$el.find('svg')[0], this.options.controller, {
                                              defaultViewport: sitemap.SitemapView.lastViewport
                                            });
+
 
     this.listenTo(pageflow.app, 'resize', this.graphView.resize);
 

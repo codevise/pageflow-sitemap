@@ -95,6 +95,24 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
     return [{id: d.id + ':start_page_indicator'}];
   }));
 
+
+  this.call(s.addButtonView(addPageButtonData, {
+    tooltipTranslationKey: 'Seite einfügen',
+    click: s.utils.fn.trigger(this.options.addPageButtonClick)
+  }));
+
+  function addPageButtonData(d) {
+    return [{
+      id: d.id + ':add_page',
+      page: d.page,
+      left: trX - 1,
+      top: 37,
+      width: options.page.width + 2,
+      height: 20
+    }];
+  }
+
+
   function transformStart(d) { return 'translate(' + d.x0 + ',' + d.y0 + ')'; }
   function transformFinal(d) { return 'translate(' + d.x + ',' + d.y + ')'; }
 });

@@ -12,7 +12,7 @@
       pageWidth: 125,
       pageHeight: 70,
       pageMarginWidth: 30,
-      pageMarginHeight: 10
+      pageMarginHeight: 12
     },
 
     create: function(entry, selection, options) {

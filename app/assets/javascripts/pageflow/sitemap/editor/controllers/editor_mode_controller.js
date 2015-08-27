@@ -236,6 +236,32 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }).promise();
   },
 
+  insertChapterAfter: function(targetChapter) {
+    var storyline = targetChapter.storyline;
+    var selection = this.selection;
+    var delta = 0;
+
+    storyline.chapters.each(function(chapter, index) {
+      chapter.set('position', index + delta);
+
+      if (chapter === targetChapter) {
+        delta = 1;
+      }
+    });
+
+    var newChapter = storyline.addChapter({
+      position: targetChapter.get('position') + 1
+    });
+
+    storyline.chapters.sort();
+    storyline.chapters.saveOrder();
+
+    newChapter.once('sync', function() {
+      newChapter.addPage();
+      selection.select('chapters', [newChapter]);
+    });
+  },
+
   addDebouncedUpdateHandler: function (handler) {
     var session = {
       entry: pageflow.entry,

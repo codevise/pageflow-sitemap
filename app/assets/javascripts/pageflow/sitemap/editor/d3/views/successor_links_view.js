@@ -1,8 +1,8 @@
 pageflow.sitemap.successorLinksView =
   pageflow.sitemap.selectableLinksView('successor_link', pageflow.sitemap.successorPath, function(s) {
-    this.call(s.addPageButtonView(addButtonData, {
-      click: s.utils.fn.trigger(this.options.addPageButtonClick)
-    }));
+//    this.call(s.addPageButtonView(addButtonData, {
+//      click: s.utils.fn.trigger(this.options.addPageButtonClick)
+//    }));
 
     function addButtonData(d) {
       var start = s.successorPath.points(d).start;

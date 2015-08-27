@@ -25,7 +25,7 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
     ;
 
     this.update()
-      .attr('height', function (d) { var h = d.height + 35; return h > 0 ? h : 0; })
+      .attr('height', function (d) { var h = d.height + 35 + 13; return h > 0 ? h : 0; })
     ;
   });
 
@@ -71,16 +71,19 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
       .text(d.title);
   });
 
-  this.call(s.addPageButtonView(addButtonData, {
-    click: s.utils.fn.trigger(this.options.addPageButtonClick)
+  this.call(s.addButtonView(addChapterButtonData, {
+    tooltipTranslationKey: 'Kapitel einfügen',
+    click: s.utils.fn.trigger(this.options.addChapterButtonClick)
   }));
 
-  function addButtonData(d) {
+  function addChapterButtonData(d) {
     return [{
-      id: d.id + ':add_page',
+      id: d.id + ':add_chapter',
       chapter: d.chapter,
-      x: options.page.width / 2 + 5,
-      y: options.page.height / 2 + 20
+      left: 0,
+      top: d.height + 38 + 11,
+      width: w,
+      height: 21
     }];
   }
 });
