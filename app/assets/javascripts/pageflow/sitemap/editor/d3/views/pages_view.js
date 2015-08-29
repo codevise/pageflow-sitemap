@@ -112,7 +112,6 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
     }];
   }
 
-
   function transformStart(d) { return 'translate(' + d.x0 + ',' + d.y0 + ')'; }
   function transformFinal(d) { return 'translate(' + d.x + ',' + d.y + ')'; }
 });

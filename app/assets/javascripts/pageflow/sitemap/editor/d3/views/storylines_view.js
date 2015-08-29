@@ -50,6 +50,7 @@ sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
         }
       })
     ;
+
     function rectRounedAtTop() {
       var radius = 5;
 

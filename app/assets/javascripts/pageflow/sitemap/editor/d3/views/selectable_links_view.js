@@ -1,4 +1,4 @@
-pageflow.sitemap.selectableLinksView = function(className, path, fn) {
+pageflow.sitemap.selectableLinksView = function(className, path, direction, fn) {
   return pageflow.sitemap.groupView.define(className, function(s) {
     this.enter()
       .classed('selectable_link', true)
@@ -61,9 +61,8 @@ pageflow.sitemap.selectableLinksView = function(className, path, fn) {
       }];
     }));
 
-    this.child('circle.drag_target', function() {
+    this.child('path.drag_target', function() {
       this.enter()
-        .attr('r', function(d) { return d.placeholder ? 20 : 10; })
         .on('mousedown', this.options.click)
         .call(sitemap.behavior.multiDrag({
           drag: this.options.drag,
@@ -71,11 +70,19 @@ pageflow.sitemap.selectableLinksView = function(className, path, fn) {
         }));
 
       this.update()
-        .attr('cx', function(d) {
-          return path.points(d).end.x;
+        .attr('d', function(d) {
+          var point = path.points(d).end;
+          return direction === 'down' ? halfCircleBottom(point) : halfCircleRight(point);
         })
-        .attr('cy', function(d) { return path.points(d).end.y; })
       ;
+
+      function halfCircleBottom(point) {
+        return 'M' + point.x + ',' + (point.y + 5) + ' h20 a20,20 0 0 1 -20,20 a20,20 0 0 1 -20,-20 z';
+      }
+
+      function halfCircleRight(point) {
+        return 'M' + point.x + ',' + point.y + ' v-20 a20,20 0 0 1 20,20 a20,20 0 0 1 -20,20 z';
+      }
     });
 
     if (fn) {

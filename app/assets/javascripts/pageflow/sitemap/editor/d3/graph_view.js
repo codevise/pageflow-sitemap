@@ -87,7 +87,7 @@
             return;
           }
 
-          controller.addChapter(layout.laneAndRowFromPoint(scrollAndZoom.pointTo({
+          controller.addStoryline(layout.laneAndRowFromPoint(scrollAndZoom.pointTo({
             x: d3.event.clientX,
             y: d3.event.clientY,
           })));
@@ -254,11 +254,11 @@
           var targetPage = layout.pageFromPoint(options.position);
 
           if (targetPage) {
-            controller.successorLinkDroppedOnPage(options.data.page,
+            controller.successorLinkDroppedOnPage(options.data.storyline,
                                                   targetPage);
           }
           else if (layout.chapterPlaceholder) {
-            controller.successorLinkDroppedOnPlaceholder(options.data.page,
+            controller.successorLinkDroppedOnPlaceholder(options.data.storyline,
                                                          layout.chapterPlaceholder.laneAndRow);
           }
 
