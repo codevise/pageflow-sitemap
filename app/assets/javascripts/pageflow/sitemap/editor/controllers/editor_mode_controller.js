@@ -64,7 +64,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       parent_page_perma_id: sourcePage.get('perma_id')
     }, laneAndRow);
 
-    this.addChapter(configuration).then(function(page) {
+    this.addStoryline(configuration).then(function(page) {
       page.once('sync', function() {
         links.updateLink(link, page.get('perma_id'));
       });
@@ -76,7 +76,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       parent_page_perma_id: sourcePage.get('perma_id')
     }, laneAndRow);
 
-    this.addChapter(configuration).then(function(page) {
+    this.addStoryline(configuration).then(function(page) {
       page.once('sync', function() {
         links.addLink(page.get('perma_id'));
       });
@@ -87,25 +87,17 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     this.selection.select('successorLinks', [link]);
   },
 
-  successorLinkDroppedOnPage: function(page, targetPage) {
-    if (targetPage && targetPage !== page) {
-      page.configuration.set('scroll_successor_id', targetPage.get('perma_id'));
+  successorLinkDroppedOnPage: function(storyline, targetPage) {
+    if (targetPage) {
+      storyline.configuration.set('scroll_successor_id', targetPage.get('perma_id'));
     }
     else {
-      page.configuration.set('scroll_successor_id', null);
+      storyline.configuration.set('scroll_successor_id', null);
     }
   },
 
-  successorLinkDroppedOnPlaceholder: function(page, laneAndRow) {
-    var configuration = _.extend({
-      parent_page_perma_id: page.chapter.configuration.get('parent_page_perma_id')
-    }, laneAndRow);
-
-    this.addChapter(configuration).then(function(newPage) {
-      newPage.once('sync', function() {
-        page.configuration.set('scroll_successor_id', newPage.get('perma_id'));
-      });
-    });
+  successorLinkDroppedOnPlaceholder: function(storyline, laneAndRow) {
+    storyline.configuration.set('scroll_successor_id', null);
   },
 
   storylinesPositioned: function(updates) {
@@ -226,8 +218,8 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     });
   },
 
-  addChapter: function(configuration) {
-    var chapter = pageflow.entry.addChapter({configuration: configuration});
+  addChapter: function(storyline, configuration) {
+    var chapter = storyline.addChapter({configuration: configuration});
 
     return new $.Deferred(function(deferred) {
       chapter.once('sync', function() {
@@ -262,6 +254,17 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     });
   },
 
+  addStoryline: function(configuration) {
+    var storyline = pageflow.entry.addStoryline({configuration: configuration});
+    var controller = this;
+
+    return new $.Deferred(function(deferred) {
+      storyline.once('sync', function() {
+        controller.addChapter(storyline).then(deferred.resolve);
+      });
+    }).promise();
+  },
+
   addDebouncedUpdateHandler: function (handler) {
     var session = {
       entry: pageflow.entry,
@@ -278,6 +281,10 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       this.selection.reset();
     });
 
+    this.listenTo(pageflow.storylines, 'add remove destroying change change:configuration', function() {
+      handler(session);
+    });
+
     this.listenTo(pageflow.chapters, 'add remove destroying change change:configuration', function() {
       handler(session);
     });
@@ -289,47 +296,5 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     this.listenTo(this.selection, 'change', function() {
       handler(session);
     });
-  },
-
-  _makeLines: function() {
-    var chaptersByLane = pageflow.entry.chapters.groupBy(function(chapter) {
-      return chapter.configuration.get('lane');
-    });
-
-    _(chaptersByLane).each(function(chapters) {
-      var c = _(chapters).sortBy(function(chapter) {
-        return chapter.configuration.get('row');
-      });
-
-      if (c.length > 0) {
-        c[0].configuration.set('line_id', null);
-      }
-
-      eachPair(c, function(upperChapter, lowerChapter) {
-        var successorPage = upperChapter.pages.length &&
-          pageflow.pages.getByPermaId(upperChapter.pages.last().configuration.get('scroll_successor_id'));
-
-        if (lowerChapter.configuration.get('row') === upperChapter.configuration.get('row') + upperChapter.pages.length &&
-            successorPage &&
-            lowerChapter.pages.length &&
-            successorPage.id === lowerChapter.pages.first().id) {
-          lowerChapter.configuration.set('line_id', upperChapter.configuration.get('line_id') || upperChapter.id);
-        }
-        else {
-          lowerChapter.configuration.set('line_id', null);
-        }
-      });
-    });
-
-    function eachPair(collection, fn) {
-      if (collection.length < 2) {
-        return;
-      }
-
-      _.reduce(collection, function(last, item) {
-        fn(last, item);
-        return item;
-      });
-    }
   }
 });

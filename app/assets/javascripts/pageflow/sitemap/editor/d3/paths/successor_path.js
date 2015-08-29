@@ -17,7 +17,7 @@ pageflow.sitemap.successorPath.points = function(d) {
       p2 = { x: d.target.x, y: d.target.y - 40},
       end = { x: d.target.x, y: d.target.y};
 
-  var offsetStart = d.source.height / 2,
+  var offsetStart = d.source.height - pageflow.sitemap.settings.page.height / 2 - 25,
       offsetEnd = d.target.height / 2 + pageflow.sitemap.settings.arrowSize;
 
   start.y += offsetStart;

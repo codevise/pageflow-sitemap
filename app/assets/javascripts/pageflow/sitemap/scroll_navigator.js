@@ -23,26 +23,26 @@ pageflow.sitemap.ScrollNavigator = function() {
     return $();
   }
 
-  function goToPreviousPageInChapter(currentPage) {
-    return goToPageInChapter(currentPage, currentPage.prev('.page'), {position: 'bottom'});
+  function goToPreviousPageInStoryline(currentPage) {
+    return goToPageInStoryline(currentPage, currentPage.prev('.page'), {position: 'bottom'});
   }
 
-  function goToNextPageInChapter(currentPage) {
-    return goToPageInChapter(currentPage, currentPage.next('.page'));
+  function goToNextPageInStoryline(currentPage) {
+    return goToPageInStoryline(currentPage, currentPage.next('.page'));
   }
 
-  function nextPageInChapter(currentPage) {
+  function nextPageInStoryline(currentPage) {
     var page = currentPage.next('.page');
 
-    if (sameChapter(currentPage, page)) {
+    if (sameStoryline(currentPage, page)) {
       return page;
     }
 
     return $();
   }
 
-  function goToPageInChapter(currentPage, targetPage, options) {
-    if (sameChapter(currentPage, targetPage)) {
+  function goToPageInStoryline(currentPage, targetPage, options) {
+    if (sameStoryline(currentPage, targetPage)) {
       pageflow.slides.goTo(targetPage, options);
       return true;
     }
@@ -54,8 +54,9 @@ pageflow.sitemap.ScrollNavigator = function() {
     return pageflow.history.back();
   }
 
-  function sameChapter(page1, page2) {
-    return (page1.data('chapterId') == page2.data('chapterId'));
+  function sameStoryline(page1, page2) {
+    return pageflow.entryData.getStorylineIdByPagePermaId(page1.page('getPermaId')) ==
+      pageflow.entryData.getStorylineIdByPagePermaId(page2.page('getPermaId'));
   }
 
   this.getLandingPage = function(pages) {
@@ -74,32 +75,32 @@ pageflow.sitemap.ScrollNavigator = function() {
   };
 
   this.back = function(currentPage) {
-    return goToPreviousPageInChapter(currentPage);
+    return goToPreviousPageInStoryline(currentPage);
   };
 
   this.next = function(currentPage) {
-    return goToNextPageInChapter(currentPage) ||
+    return goToNextPageInStoryline(currentPage) ||
       goToConfiguredSuccessor(currentPage);
   };
 
   this.nextPageExists = function(currentPage, pages) {
-    return sameChapter(currentPage, currentPage.next('.page')) ||
+    return sameStoryline(currentPage, currentPage.next('.page')) ||
       hasConfiguredSuccessor(currentPage, pages);
   };
 
   this.previousPageExists = function(currentPage, pages) {
-    return sameChapter(currentPage, currentPage.prev('.page'));
+    return sameStoryline(currentPage, currentPage.prev('.page'));
   };
 
   this.getNextPage = function(currentPage, pages) {
-    return nextPageInChapter(currentPage) ||
+    return nextPageInStoryline(currentPage) ||
       configuredSuccessor(currentPage, pages);
   };
 
   this.getTransitionDirection = function(previousPage, currentPage, options) {
     var direction;
 
-    if (sameChapter(previousPage, currentPage)) {
+    if (sameStoryline(previousPage, currentPage)) {
       direction = (currentPage.index() > previousPage.index() ? 'forwards' : 'backwards');
     }
     else {

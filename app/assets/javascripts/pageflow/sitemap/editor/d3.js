@@ -16,7 +16,6 @@
 //= require ./d3/views/pages_view
 //= require ./d3/views/page_links_view
 //= require ./d3/views/successor_links_view
-//= require ./d3/views/follow_links_view
 //= require ./d3/views/add_button_view
 //= require ./d3/views/start_page_indicator_view
 //= require ./d3/views/text_label_view

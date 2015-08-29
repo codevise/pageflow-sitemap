@@ -1,6 +1,5 @@
 pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupedByChapters, options) {
   var positions = {};
-  var storylineHeights = {};
   var chapterSizes = {};
   var heights = {};
   var size = {x: 0, y: 0};
@@ -21,7 +20,7 @@ pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupe
       x: this.position(page).x,
       y: this.position(page).y,
       width: options.pageWidth,
-      height: options.pageHeight
+      height: heights[page.cid] || options.pageHeight
     };
   };
 
