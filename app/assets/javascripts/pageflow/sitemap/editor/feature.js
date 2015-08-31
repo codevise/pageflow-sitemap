@@ -54,22 +54,7 @@ pageflow.features.register('editor', 'sitemap', function() {
   function showSitemap() {
     if (!currentSitemapView) {
       currentSitemapView = new s.SitemapView({
-        controller: new s.EditorModeController(pageflow.entry),
-
-        toolbarItems: [
-          {
-            name: 'select_start_page',
-            click: function() {
-              pageflow.editor.selectPage({
-                header: 'pageflow.sitemap.editor.headers.select_start_page',
-                noHighlight: true
-              })
-                .done(function(page) {
-                  s.startPage.update(pageflow.entry, page);
-                });
-            }
-          }
-        ]
+        controller: new s.EditorModeController(pageflow.entry)
       });
 
       currentSitemapView.once('close', function() {

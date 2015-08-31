@@ -4,7 +4,6 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
   this.update()
     .classed('selected', function(d) { return d.selected; })
     .classed('highlighted', function(d) { return d.highlighted; })
-    .classed('start_page', function(d) { return d.startPage; })
     .classed('destroying', s.utils.fn.d('destroying'))
     .attr('transform', transformStart)
     .transition().duration(options.duration)
@@ -90,11 +89,6 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
       d3.selectAll(this.getElementsByTagName('div')).text(d.title || '');
     })
   ;
-
-  this.update().call(s.startPageIndicatorView(function(d) {
-    return [{id: d.id + ':start_page_indicator'}];
-  }));
-
 
   this.call(s.addButtonView(addPageButtonData, {
     tooltipTranslationKey: 'Seite einfügen',

@@ -17,6 +17,16 @@
   .border {
     fill: #ddd;
   }
+
+  &.main {
+    > .handle {
+      fill: #444;
+    }
+
+    > text {
+      fill: #fff;
+    }
+  }
 }
 
 &.editor_mode .storyline {

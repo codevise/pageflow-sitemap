@@ -4,6 +4,7 @@ sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
 
   this.update()
     .classed('selected', s.utils.fn.d('selected'))
+    .classed('main', s.utils.fn.d('main'))
     .attr('transform', function(d) {
       return s.utils.translate(
         d.x - s.settings.page.width / 2 - 17,
