@@ -12,7 +12,6 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   var size = this.size = {x: 0, y: 0};
 
   var nodesByName = {};
-  var startPageFound = false;
 
   buildStorylines();
   buildSuccessorLinks();
@@ -27,6 +26,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
 
         title: storyline.title(),
 
+        main: storyline.isMain(),
         selected: selection.contains(storyline),
         dragged: layout.isDragging(storyline),
         droppable: layout.isLegal(),
@@ -38,8 +38,6 @@ pageflow.sitemap.ViewModel = function(session, layout) {
 
       buildChapters(storyline.chapters);
     });
-
-    ensureStartPage();
   }
 
   function buildChapters(chaptersCollection) {
@@ -48,11 +46,6 @@ pageflow.sitemap.ViewModel = function(session, layout) {
 
       chapter.pages.each(function(page) {
         var id = "page:" + page.cid;
-        var isStartPage = !!page.configuration.get('start_page');
-
-        if (isStartPage) {
-          startPageFound = true;
-        }
 
         var thumbnailFile = page.thumbnailFile();
 
@@ -69,7 +62,6 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           selected: selection.contains(page),
           dragged: layout.isDragging(page),
           highlighted: highlightedPage === page,
-          startPage: isStartPage,
           destroying: page.isDestroying() || chapter.isDestroying(),
 
           x0: layout.position(page).x,
@@ -101,16 +93,6 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         height: layout.chapterHeight(chapter)
       });
     });
-  }
-
-  function ensureStartPage() {
-    if (!startPageFound) {
-      var page = entry.pages.first();
-
-      if (page) {
-        nodesByName[page.cid].startPage = true;
-      }
-    }
   }
 
   function buildPageLinks() {
