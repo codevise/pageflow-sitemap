@@ -18,6 +18,10 @@ pageflow.sitemap.SelectionNavigator = pageflow.Object.extend({
       return '/storylines/' + storyline.id;
     });
 
+    this.listenToSelection('successorLinks', function(link) {
+      return '/storylines/' + link.successor.id;
+    });
+
     this.listenToSelection('pageLinks', function(pageLink) {
       return pageLink.editPath ? pageLink.editPath() : this.options.emptySelectionPath;
     });
