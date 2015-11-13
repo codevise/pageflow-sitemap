@@ -64,6 +64,7 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
 
     this.setupHeader();
     this.setupScrollBars();
+    this.setupScrollPane();
     this.setupScaleSlider();
     this.setupToolbar();
   },
@@ -87,6 +88,12 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
       el: this.ui.scrollBarY,
       graphView: this.graphView,
       orientation: 'vertical'
+    }));
+  },
+
+  setupScrollPane: function() {
+    this.appendSubview(new sitemap.ScrollPaneView({
+      graphView: this.graphView
     }));
   },
 

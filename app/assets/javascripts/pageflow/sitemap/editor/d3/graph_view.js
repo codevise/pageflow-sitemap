@@ -37,6 +37,7 @@
     d3.rebind(this, scrollAndZoom,
               'on',
               'getViewport',
+              'scrollBy',
               'getScale', 'setScale',
               'getScrollX', 'setScrollX',
               'getScrollY', 'setScrollY',

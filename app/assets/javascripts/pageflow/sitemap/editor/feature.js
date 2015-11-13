@@ -33,6 +33,7 @@ pageflow.features.register('editor', 'sitemap', function() {
     translationKey: 'pageflow.sitemap.editor.main_menu_item',
     click: function() {
       showSitemap();
+      this.blur();
     }
   });
 

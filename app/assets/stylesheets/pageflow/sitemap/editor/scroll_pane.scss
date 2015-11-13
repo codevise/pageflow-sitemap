@@ -1,0 +1,15 @@
+.scroll_pane {
+  display: none;
+  z-index: 10001;
+  cursor: move;
+
+  position: absolute;
+  top: 35px;
+  left: 1px;
+  right: 15px;
+  bottom: 15px;
+
+  &.active {
+    display: block;
+  }
+}

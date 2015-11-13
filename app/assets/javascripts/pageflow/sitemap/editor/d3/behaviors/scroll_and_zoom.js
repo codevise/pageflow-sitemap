@@ -95,6 +95,19 @@ sitemap.behavior.scrollAndZoom = function(options) {
     dispatchChange();
   };
 
+  behavior.scrollBy = function(x, y) {
+    var k = view.k;
+
+    view = {
+      x: view.x + x,
+      y: view.y + y,
+      k: k
+    };
+
+    normalize();
+    dispatchChange();
+  };
+
   behavior.getScale = function() {
     return (view.k - minScale) / (maxScale - minScale) * 100;
   };
