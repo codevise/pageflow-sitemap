@@ -3,9 +3,11 @@
 sitemap.AbstractController = pageflow.Object.extend({
   lineSelected: function (line, event) {},
 
-  chapterSelected: function (chapter, event) {},
+  storylineSelected: function (storyline, event) {},
 
-  chaptersSelected: function (chapters) {},
+  storylinesSelected: function (storylines) {},
+
+  chapterSelected: function (chapter, event) {},
 
   pageSelected: function (page, event) {},
 

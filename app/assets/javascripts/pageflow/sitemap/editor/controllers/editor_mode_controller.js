@@ -17,10 +17,16 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }).attach();
   },
 
+  storylinesSelected: function (storylines) {
+    this.selection.select('storylines', storylines);
+  },
+
   storylineSelected: function (storyline, event) {
-    this.selection.select('storylines', [storyline], {
-      additive: event.ctrlKey
-    });
+    if (!this.selection.contains(storyline)) {
+      this.selection.select('storylines', [storyline], {
+        additive: event.ctrlKey
+      });
+    }
   },
 
   chapterSelected: function (chapter, event) {
@@ -29,10 +35,6 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
         additive: event.ctrlKey
       });
     }
-  },
-
-  chaptersSelected: function (chapters) {
-    this.selection.select('chapters', chapters);
   },
 
   pageSelected: function (page, event) {

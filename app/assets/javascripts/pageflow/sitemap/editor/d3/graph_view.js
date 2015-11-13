@@ -23,9 +23,9 @@
 
     var selectionRect = s.behavior.selectionRect({
       container: 'g.all',
-      targets: '.chapter',
-      selected: function(chapters) {
-        controller.chaptersSelected(_(chapters).pluck('chapter'));
+      targets: '.storyline',
+      selected: function(storylines) {
+        controller.storylinesSelected(_(storylines).pluck('storyline'));
       }
     });
 
