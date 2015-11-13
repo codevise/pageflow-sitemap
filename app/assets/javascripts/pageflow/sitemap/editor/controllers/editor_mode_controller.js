@@ -67,9 +67,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }, laneAndRow);
 
     this.addStoryline(configuration).then(function(page) {
-      page.once('sync', function() {
-        links.updateLink(link, page.get('perma_id'));
-      });
+      links.updateLink(link, page.get('perma_id'));
     });
   },
 
@@ -79,9 +77,7 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }, laneAndRow);
 
     this.addStoryline(configuration).then(function(page) {
-      page.once('sync', function() {
-        links.addLink(page.get('perma_id'));
-      });
+      links.addLink(page.get('perma_id'));
     });
   },
 
@@ -93,13 +89,12 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     if (targetPage) {
       storyline.configuration.set('scroll_successor_id', targetPage.get('perma_id'));
     }
-    else {
-      storyline.configuration.set('scroll_successor_id', null);
-    }
   },
 
   successorLinkDroppedOnPlaceholder: function(storyline, laneAndRow) {
-    storyline.configuration.set('scroll_successor_id', null);
+    this.addStoryline(laneAndRow).then(function(page) {
+      storyline.configuration.set('scroll_successor_id', page.get('perma_id'));
+    });
   },
 
   storylinesPositioned: function(updates) {
@@ -225,7 +220,11 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
 
     return new $.Deferred(function(deferred) {
       chapter.once('sync', function() {
-        deferred.resolve(chapter.addPage());
+        var page = chapter.addPage();
+
+        page.once('sync', function() {
+          deferred.resolve(page);
+        });
       });
     }).promise();
   },
