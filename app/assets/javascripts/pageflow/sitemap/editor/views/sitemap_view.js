@@ -31,6 +31,10 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
 
     'resettooltip': function(event) {
       this.tooltip.hide();
+    },
+
+    'mousewheel': function(event) {
+      event.preventDefault();
     }
   },
 
