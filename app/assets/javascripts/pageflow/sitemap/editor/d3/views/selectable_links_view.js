@@ -1,4 +1,8 @@
-pageflow.sitemap.selectableLinksView = function(className, path, direction, fn) {
+pageflow.sitemap.selectableLinksView = function(options, fn) {
+  var className = options.className;
+  var path = options.path;
+  var direction = options.direction;
+
   return pageflow.sitemap.groupView.define(className, function(s) {
     this.enter()
       .classed('selectable_link', true)
@@ -63,6 +67,7 @@ pageflow.sitemap.selectableLinksView = function(className, path, direction, fn) 
 
     this.child('path.drag_target', function() {
       this.enter()
+        .call(s.behavior.tooltipTarget(options.placeholderTooltipTranslationKey))
         .on('mousedown', this.options.click)
         .call(sitemap.behavior.multiDrag({
           drag: this.options.drag,

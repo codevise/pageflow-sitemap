@@ -26,6 +26,7 @@
   }
 
   .drag_target {
+    display: none;
     fill: none;
     cursor: move;
     pointer-events: all;
@@ -33,6 +34,7 @@
 
   &.placeholder {
     .drag_target {
+      display: block;
       fill: rgba(0, 0, 0, 0.4);
     }
   }

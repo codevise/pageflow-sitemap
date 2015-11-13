@@ -22,6 +22,6 @@ sitemap.TooltipView = Backbone.Marionette.ItemView.extend({
       });
 
       this.$el.addClass('visible');
-    }, this), 1000);
+    }, this), 200);
   }
 });
