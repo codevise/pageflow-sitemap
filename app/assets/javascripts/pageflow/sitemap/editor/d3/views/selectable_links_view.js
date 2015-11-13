@@ -47,6 +47,13 @@ pageflow.sitemap.selectableLinksView = function(options, fn) {
             .select('.arrow').attr('marker-end', 'url(#' + className + '_triangle)')
           ;
         })
+        .call(sitemap.behavior.multiDrag({
+          drag: this.options.drag,
+          dragend: this.options.dragend,
+          enabled: function(d) {
+            return d.selected;
+          }
+        }))
       ;
 
       this.update()
