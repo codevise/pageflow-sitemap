@@ -121,21 +121,29 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       }
 
       var storyline = update.storyline || pageflow.entry.addStoryline({configuration: laneAndRow});
+      var changeFound = false;
 
       _.each(update.chapters, function(chapter, index) {
-        chapter.set('position', index);
+        if (chapter.get('position') !== index) {
+          changeFound = true;
+          chapter.set('position', index);
+        }
 
         if (chapter.storyline !== storyline) {
+          changeFound = true;
+
           chapter.storyline.chapters.remove(chapter);
           storyline.chapters.add(chapter);
         }
       });
 
-      storyline.chapters.sort();
+      if (changeFound) {
+        storyline.chapters.sort();
 
-      whenSaved(storyline, function() {
-        storyline.chapters.saveOrder();
-      });
+        whenSaved(storyline, function() {
+          storyline.chapters.saveOrder();
+        });
+      }
     });
 
     function whenSaved(chapter, fn) {
@@ -158,21 +166,29 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       }
 
       var chapter = update.chapter || pageflow.entry.addChapter({configuration: laneAndRow});
+      var changeFound = false;
 
       _.each(update.pages, function(page, index) {
-        page.set('position', index);
+        if (page.get('position') !== index) {
+          changeFound = true;
+          page.set('position', index);
+        }
 
         if (page.chapter !== chapter) {
+          changeFound = true;
+
           page.chapter.pages.remove(page);
           chapter.pages.add(page);
         }
       });
 
-      chapter.pages.sort();
+      if (changeFound) {
+        chapter.pages.sort();
 
-      whenSaved(chapter, function() {
-        chapter.pages.saveOrder();
-      });
+        whenSaved(chapter, function() {
+          chapter.pages.saveOrder();
+        });
+      }
     });
 
     function whenSaved(chapter, fn) {
