@@ -49,6 +49,11 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
     this.listenTo(this.options.controller, 'showPage', function(page) {
       this.close();
     });
+
+    this.listenTo(this.options.controller, 'showStoryline', function(storyline) {
+      pageflow.editor.navigate('?storyline=' + storyline.id, {trigger: true});
+      this.close();
+    });
   },
 
   onRender: function() {

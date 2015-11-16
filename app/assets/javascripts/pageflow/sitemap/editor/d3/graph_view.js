@@ -99,6 +99,10 @@
           controller.storylineSelected(source.storyline, d3.event);
         },
 
+        dblclick: function(source) {
+          controller.storylineDblClick(source.storyline, d3.event);
+        },
+
         drag: function(options) {
           update(session, {dragDelta: {x: options.dx, y: options.dy}});
         },

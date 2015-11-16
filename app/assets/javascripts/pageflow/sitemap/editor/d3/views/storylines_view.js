@@ -45,6 +45,7 @@ sitemap.storylinesView = sitemap.groupView.define('storyline', function(s) {
           options.clicked.apply(this, arguments);
         }
       })
+      .on('dblclick', s.utils.fn.trigger(this.options.dblclick))
       .on('mousedown', function() {
         if (options.mousedown) {
           options.mousedown.apply(this, arguments);

@@ -29,6 +29,10 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }
   },
 
+  storylineDblClick: function(storyline) {
+    this.trigger('showStoryline', storyline);
+  },
+
   chapterSelected: function (chapter, event) {
     if (!this.selection.contains(chapter)) {
       this.selection.select('chapters', [chapter], {
