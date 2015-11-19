@@ -1,5 +1,6 @@
 pageflow.sitemap.FragmentParser = pageflow.Object.extend({
   patterns: {
+    storylines: /^\/?storylines\/(\d+)/,
     chapters: /^\/?chapters\/(\d+)/,
     pages: /^\/?pages\/(\d+)/
   },

@@ -72,6 +72,15 @@ pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupe
             position.y < chapterPosition.y + chapterHeight);
   };
 
+  this.pointInsideStoryline = function(storyline, position) {
+    var storylinePosition = this.position(storyline);
+    var height = this.height(storyline);
+
+    return (Math.abs(position.x - storylinePosition.x) < laneWidth / 2 &&
+            position.y >= storylinePosition.y - rowHeight * 1.5 &&
+            position.y < storylinePosition.y + height);
+  };
+
   this.isBelowChapter = function(chapter, position) {
     var chapterPosition = this.position(chapter);
     var chapterBottom =
@@ -104,7 +113,8 @@ pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupe
   };
 
   this.freeGridCellFromPoint = function(position) {
-    if (!this.chapterFromPoint(position) &&
+    if (!this.storylineFromPoint(position) &&
+        !this.chapterFromPoint(position) &&
         !this.pageFromPoint(position)) {
 
       return this.gridCellFromPoint(position);
@@ -123,6 +133,15 @@ pageflow.sitemap.layout.Grid = function(chaptersGroupedByStorylines, pagesGroupe
         height: options.pageHeight
       };
     }
+  };
+
+  this.storylineFromPoint = function(position) {
+    var that = this;
+
+    return _(chaptersGroupedByStorylines).reduce(function(result, group) {
+      return result || (group.storyline &&
+                        that.pointInsideStoryline(group.storyline, position));
+    }, null);
   };
 
   this.chapterFromPoint = function(position) {

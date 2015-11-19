@@ -37,6 +37,60 @@ pageflow.features.register('editor', 'sitemap', function() {
     }
   });
 
+  pageflow.editor.on('scaffold:storyline', function(storyline) {
+    if (!storyline.configuration.has('lane')) {
+      storyline.configuration.set({
+        row: 0,
+        lane: firstEmptyLane()
+      });
+    }
+  });
+
+  function firstEmptyLane() {
+    return Math.max(-1, _.max(pageflow.storylines.map(function(storyline) {
+      return storyline.configuration.get('lane') || 0;
+    }))) + 1;
+  }
+
+  pageflow.editor.on('add:chapter', function(chapter) {
+    rearrangeLane(chapter.storyline);
+  });
+
+  pageflow.editor.on('add:page', function(page) {
+    rearrangeLane(page.chapter.storyline);
+  });
+
+  function rearrangeLane(changedStoryline) {
+    var storylinesBelow = pageflow.storylines.select(function(storyline) {
+      return (storyline.configuration.get('lane') ===
+              changedStoryline.configuration.get('lane') &&
+              storyline.configuration.get('row') >
+              changedStoryline.configuration.get('row'));
+    });
+
+    if (!storylinesBelow.length) {
+      return;
+    }
+
+    var minRowBelow = _.min(_(storylinesBelow).map(function(storyline) {
+      return storyline.configuration.get('row');
+    }));
+
+    var height = Math.ceil(changedStoryline.chapters.reduce(function(result, chapter) {
+      return result + chapter.pages.length + 0.5;
+    }, 0) + 0.5);
+
+    var delta = changedStoryline.configuration.get('row') + height - minRowBelow;
+
+    if (delta > 0) {
+      _(storylinesBelow).each(function(storyline) {
+        storyline.configuration.set({
+          row: (storyline.configuration.get('row') || 0) + delta
+        });
+      });
+    }
+  }
+
   $(document).on('keydown', function(event) {
     if (event.altKey && event.which === 83) {
       toggleSitemap();

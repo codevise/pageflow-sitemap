@@ -29,7 +29,7 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   successorLinkDroppedOnPlaceholder: function(page, laneAndRow) {},
 
-  chaptersPositioned: function(updates) {},
+  storylinesPositioned: function(updates) {},
 
   pagesMoved: function(pagesGroupedByChapters) {},
 
@@ -37,7 +37,13 @@ sitemap.AbstractController = pageflow.Object.extend({
 
   insertPageAfter: function (page) {},
 
-  addChapter: function(options) {},
+  addChapter: function(storyline, configuration) {},
+
+  insertChapterAfter: function(targetChapter) {},
+
+  chaptersMoved: function(chaptersGroupedByStorylines) {},
+
+  addStoryline: function(configuration) {},
 
   addUpdateHandler: function (handler) {
     var timeout;

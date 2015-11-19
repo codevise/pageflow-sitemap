@@ -10,7 +10,7 @@ pageflow.sitemap.selectableLinksView = function(options, fn) {
 
     this.update()
       .sort(function(d1, d2) {
-        return d1.selected ? 1 : -1;
+        return d1.placeholder || d1.selected ? 1 : -1;
       })
       .classed('selected', s.utils.fn.d('selected'))
       .classed('dragged', s.utils.fn.d('dragged'))

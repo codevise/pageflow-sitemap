@@ -70,7 +70,9 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       parent_page_perma_id: sourcePage.get('perma_id')
     }, laneAndRow);
 
-    this.addStoryline(configuration).then(function(page) {
+    pageflow.entry.addPageInNewStoryline({
+      storylineAttributes: {configuration: configuration}
+    }).persisted().then(function(page) {
       links.updateLink(link, page.get('perma_id'));
     });
   },
@@ -80,7 +82,9 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       parent_page_perma_id: sourcePage.get('perma_id')
     }, laneAndRow);
 
-    this.addStoryline(configuration).then(function(page) {
+    pageflow.entry.addPageInNewStoryline({
+      storylineAttributes: {configuration: configuration}
+    }).persisted().then(function(page) {
       links.addLink(page.get('perma_id'));
     });
   },
@@ -95,8 +99,10 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
     }
   },
 
-  successorLinkDroppedOnPlaceholder: function(storyline, laneAndRow) {
-    this.addStoryline(laneAndRow).then(function(page) {
+  successorLinkDroppedOnPlaceholder: function(storyline, configuration) {
+    pageflow.entry.addPageInNewStoryline({
+      storylineAttributes: {configuration: configuration}
+    }).persisted().then(function(page) {
       storyline.configuration.set('scroll_successor_id', page.get('perma_id'));
     });
   },
@@ -140,20 +146,11 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       if (changeFound) {
         storyline.chapters.sort();
 
-        whenSaved(storyline, function() {
+        storyline.persisted().then(function() {
           storyline.chapters.saveOrder();
         });
       }
     });
-
-    function whenSaved(chapter, fn) {
-      if (chapter.isNew()) {
-        chapter.once('sync', fn);
-      }
-      else {
-        fn();
-      }
-    }
   },
 
   pagesMoved: function(pagesGroupedByChapters, laneAndRow) {
@@ -165,7 +162,10 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
         return;
       }
 
-      var chapter = update.chapter || pageflow.entry.addChapter({configuration: laneAndRow});
+      var chapter = update.chapter || pageflow.entry.addChapterInNewStoryline({
+        storylineAttributes: {configuration: laneAndRow}
+      });
+
       var changeFound = false;
 
       _.each(update.pages, function(page, index) {
@@ -185,20 +185,11 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       if (changeFound) {
         chapter.pages.sort();
 
-        whenSaved(chapter, function() {
+        chapter.persisted().then(function() {
           chapter.pages.saveOrder();
         });
       }
     });
-
-    function whenSaved(chapter, fn) {
-      if (chapter.isNew()) {
-        chapter.once('sync', fn);
-      }
-      else {
-        fn();
-      }
-    }
   },
 
   addPage: function (chapter) {
@@ -236,17 +227,12 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
   },
 
   addChapter: function(storyline, configuration) {
-    var chapter = storyline.addChapter({configuration: configuration});
+    var selection = this.selection;
+    var chapter = storyline.scaffoldChapter({configuration: configuration}).chapter;
 
-    return new $.Deferred(function(deferred) {
-      chapter.once('sync', function() {
-        var page = chapter.addPage();
-
-        page.once('sync', function() {
-          deferred.resolve(page);
-        });
-      });
-    }).promise();
+    chapter.once('sync', function() {
+      selection.select('chapters', [chapter]);
+    });
   },
 
   insertChapterAfter: function(targetChapter) {
@@ -262,28 +248,22 @@ pageflow.sitemap.EditorModeController = pageflow.sitemap.AbstractController.exte
       }
     });
 
-    var newChapter = storyline.addChapter({
-      position: targetChapter.get('position') + 1
-    });
+    var newChapter = storyline.scaffoldChapter({
+      chapterAttributes: {position: targetChapter.get('position') + 1}
+    }).chapter;
 
     storyline.chapters.sort();
     storyline.chapters.saveOrder();
 
     newChapter.once('sync', function() {
-      newChapter.addPage();
       selection.select('chapters', [newChapter]);
     });
   },
 
   addStoryline: function(configuration) {
-    var storyline = pageflow.entry.addStoryline({configuration: configuration});
-    var controller = this;
-
-    return new $.Deferred(function(deferred) {
-      storyline.once('sync', function() {
-        controller.addChapter(storyline).then(deferred.resolve);
-      });
-    }).promise();
+    pageflow.entry.addPageInNewStoryline({
+      storylineAttributes: {configuration: configuration}
+    });
   },
 
   addDebouncedUpdateHandler: function (handler) {
