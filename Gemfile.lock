@@ -26,13 +26,13 @@ PATH
 PATH
   remote: ../pageflow/spec/support
   specs:
-    pageflow-support (0.9.0.alpha)
+    pageflow-support (0.10.0.alpha)
       mysql2
 
 PATH
   remote: .bundle/linked/pageflow
   specs:
-    pageflow (0.9.0.alpha)
+    pageflow (0.10.0.alpha)
       activeadmin (~> 0.6.0)
       ar_after_transaction (~> 0.4.0)
       aws-sdk (~> 1.60)
@@ -103,9 +103,9 @@ GEM
     arbre (1.0.3)
       activesupport (>= 3.0.0)
     arel (5.0.1.20140414130214)
-    aws-sdk (1.65.0)
-      aws-sdk-v1 (= 1.65.0)
-    aws-sdk-v1 (1.65.0)
+    aws-sdk (1.66.0)
+      aws-sdk-v1 (= 1.66.0)
+    aws-sdk-v1 (1.66.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
     backbone-rails (1.0.0.1)
@@ -154,7 +154,7 @@ GEM
     inherited_resources (1.4.1)
       has_scope (~> 0.6.0.rc)
       responders (~> 1.0.0.rc)
-    jbuilder (2.3.1)
+    jbuilder (2.3.2)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     jquery-fileupload-rails (0.4.1)
@@ -171,7 +171,7 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kramdown (1.8.0)
+    kramdown (1.9.0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     marionette-rails (1.1.0)
@@ -181,8 +181,8 @@ GEM
     minitest (5.8.0)
     mono_logger (1.1.0)
     multi_json (1.11.2)
-    mysql2 (0.3.20)
-    nokogiri (1.6.6.2)
+    mysql2 (0.4.1)
+    nokogiri (1.6.6.3)
       mini_portile (~> 0.6.0)
     orm_adapter (0.5.0)
     paperclip (4.2.4)
