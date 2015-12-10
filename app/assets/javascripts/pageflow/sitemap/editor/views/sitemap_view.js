@@ -59,7 +59,7 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
   onRender: function() {
     this.$el.addClass(this.options.controller.name);
 
-    this.appendSubview(this.tooltip = new sitemap.TooltipView());
+    this.appendSubview(this.tooltip = new pageflow.TooltipView());
     this.graphView = new sitemap.GraphView(this.$el.find('svg')[0], this.options.controller, {
                                              defaultViewport: sitemap.SitemapView.lastViewport
                                            });

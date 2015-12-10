@@ -14,6 +14,8 @@ $page-link-color: #9ecae1;
 }
 
 .sitemap {
+  @extend %pageflow-ui;
+
   @import "./editor/selection_rect";
   @import "./editor/storylines";
   @import "./editor/chapters";
@@ -27,7 +29,6 @@ $page-link-color: #9ecae1;
   @import "./editor/scroll_pane";
   @import "./editor/toolbar";
   @import "./editor/text_label";
-  @import "./editor/tooltip";
 
   @include user-select(none);
   background-color: #fff;
