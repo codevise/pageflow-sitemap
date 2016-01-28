@@ -7,7 +7,7 @@ sitemap.behavior.scrollAndZoom = function(options) {
   var dispatch = d3.dispatch('change');
 
   var minScale = options.minScale || 0.1;
-  var maxScale = options.maxScale || 10;
+  var maxScale = options.maxScale || 1;
   var margin = options.margin || 0;
   var minX = -100;
   var minY = -100;
