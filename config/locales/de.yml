@@ -1,62 +1,16 @@
 de:
   pageflow:
     sitemap:
-      feature_name: "Sitemap"
       editor:
-        main_menu_item: "Sitemap"
+        headers:
+          select_page: Klicke auf eine Zielseite für den Verweis
+        main_menu_item: Sitemap
         templates:
           sitemap:
-            close: "Schließen"
-            cancel: "Abbrechen"
-        toolbar_items:
-          select_start_page: "Startseite festlegen"
-        headers:
-          select_page: "Klicken Sie auf eine Zielseite für den Verweis"
-          select_start_page: "Klicken Sie auf eine Seite, um diese zu Startseite zu machen"
+            cancel: Abbrechen
+            close: Schließen
+      feature_name: Sitemap
       help_entries:
         main:
-          menu_item: "Sitemap"
-          text: ! '# Sitemap
-
-Die Sitemap unterstützt Dich bei der Visualisierung
-und der konkreten Umsetzung
-von Pageflows mit mehreren Erzählsträngen.
-
-
-Dabei kannst Du per Mausklick neue Kapitel erstellen,
-Seiten einfügen und per Drag&Drop Verweis-Ziele und Scroll-Nachfolge-Pfeile festlegen.
-Hierzu ziehst Du ausgehend vom Halbkreis am unteren Ende einer Box
-einen Pfeil zu einer bereits bestehenden Seite oder an die Position,
-an der Du einen neuen Erzählstrang erstellen möchstest.
-Bei Verweis-Seiten wird dieser Bereich zum Verknüpfen als Halbkreis an der rechten Seite angezeigt.
-
-
-Auf diese Weise kannst Du ein separates Storyboard einfach und schnell auf Pageflow übertragen.
-Ausserdem kann die Sitemap zur Navigation während des Editier-Prozesses genutzt werden.
-Denn: Sobald Du ein Element in der Sitemap anklickst, kannst Du es in der Seitenleiste editieren.
-
-
-Weitere Funktionen:
-
-
-- Mit dem Auswahl-Rechteck können auch mehrere Kapitel markiert und gemeinsam verschoben werden.
-
-- Durch ein Doppelklick auf die Kopfzeile wird der entsprechende Erzählstrang in der Gliederung angezeigt.
-
-- Ein Doppelklick auf eine Seite führt in die Vorschau der jeweiligen Seite.
-
-
-### Tastatur Shortcuts
-
-
-- Mausrad: Sitemap verikal scrollen
-
-- Umschalten + Mausrad: Sitemap horizontal scrollen
-
-- Alt + Mausrad: Sitemap zoomen
-
-- Strg + Umschalten + Drag&Drop: Bildauschnitt in der Sitemap verschieben
-
-- Alt + s: Sitemap anzeigen/ausblenden
-
-- Alt + x: Aktuellen Seite in der Seitenleiste bearbeiten'
+          menu_item: Sitemap
+          text: ! "# Sitemap\n\nDie Sitemap unterstützt Dich bei der Planung und der Umsetzung von Pageflows mit mehreren Erzählsträngen. Dabei kannst Du per Mausklick neue Kapitel erstellen, Seiten einfügen und per Drag&Drop Verweis-Ziele und Scroll-Nachfolge-Pfeile festlegen. Hierzu ziehst Du ausgehend vom Halbkreis am unteren Ende einer Box einen Pfeil zu einer bereits bestehenden Seite oder an die Position, an der Du einen neuen Erzählstrang erstellen möchtest. Bei Verweis-Seiten wird dieser Bereich zum Verknüpfen als Halbkreis an der rechten Seite angezeigt.\n\nAuf diese Weise behältst Du den Überblick und kannst zum Beispiel ein Storyboard auf Pageflow übertragen. Außerdem kann die Sitemap zur Navigation während des gesamten Editier-Prozesses genutzt werden, denn: Sobald Du ein Element in der Sitemap anklickst, kannst Du es in der Seitenleiste editieren.\n\nWeitere Optionen:\n\nMit dem Auswahl-Rechteck können auch mehrere Erzählstränge markiert und gemeinsam verschoben werden.\nDurch einen Doppelklick auf einen Erzählstrang-Header wird der entsprechende Erzählstrang in der Gliederung angezeigt.\nEin Doppelklick auf eine Seite führt in die Vorschau.\n\nDie folgenden Shortcuts sind möglich:\n\nMausrad: Sitemap vertikal Scrollen\nUmschalten + Mausrad: Sitemap horizontal Scrollen \nAlt + Mausrad: Sitemap zoomen\nStrg + Umschalten + Drag&Drop: Bildausschnitt in der Sitemap verschieben\nAlt + s: Sitemap anzeigen/ausblenden\nAlt + x: Aktuelle Seite in der Seitenleiste bearbeiten"

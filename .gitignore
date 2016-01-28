@@ -20,3 +20,5 @@ Gemfile.lock.bundle/
 log/*.log
 pkg/
 spec/dummy
+
+.localeapp
