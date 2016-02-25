@@ -17,6 +17,11 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
       this.close();
     },
 
+    'click .help_button': function() {
+      pageflow.app.trigger('toggle-help', 'pageflow.sitemap.help_entries.main');
+      return false;
+    },
+
     'click .toolbar .items': function(event) {
       _(this.options.toolbarItems).each(function(item) {
         if (item.name === $(event.target).data('name')) {

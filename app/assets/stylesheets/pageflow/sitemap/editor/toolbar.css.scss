@@ -8,6 +8,14 @@
     vertical-align: middle;
   }
 
+  .help_button {
+    @include background-icon-center($color: #a0c4e0, $font-size: 16px);
+    @include help-circled-icon;
+    width: 40px;
+    height: 25px;
+    margin-right: 5px;
+  }
+
   .scale_slider {
     width: 300px;
   }
