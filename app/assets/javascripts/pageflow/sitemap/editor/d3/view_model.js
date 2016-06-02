@@ -9,6 +9,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
   var successorLinks = this.successorLinks = [];
   var pageLinks = this.links = [];
   var chapterPlaceholders = this.chapterPlaceholders = [];
+  var parentPageLinks = this.parentPageLinks = [];
   var size = this.size = {x: 0, y: 0};
 
   var nodesByName = {};
@@ -37,6 +38,10 @@ pageflow.sitemap.ViewModel = function(session, layout) {
       });
 
       buildChapters(storyline.chapters);
+
+      if (selection.contains(storyline)) {
+        buildParentPageLink(storyline);
+      }
     });
   }
 
@@ -182,6 +187,27 @@ pageflow.sitemap.ViewModel = function(session, layout) {
       chapterPlaceholders.push(_.extend({
         id: 'chapter-placeholder'
       }, layout.chapterPlaceholder));
+    }
+  }
+
+  function buildParentPageLink(storyline) {
+    var parentPage = storyline.parentPage();
+    var s = pageflow.sitemap;
+    var pw = s.settings.page.width / 2;
+    var ph = s.settings.page.height / 2;
+    var sw = s.settings.page.width / 2 + 15;
+    var sh = s.settings.page.height / 2 + 50;
+
+    if (parentPage) {
+      parentPageLinks.push({
+        id: 'parent-page-link:' + storyline.cid,
+        points: [
+          [layout.position(parentPage).x + pw, layout.position(parentPage).y - ph],
+          [layout.position(storyline).x - sw, layout.position(storyline).y - sh],
+          [layout.position(storyline).x - sw, layout.position(storyline).y + layout.height(storyline) - sh + 25],
+          [layout.position(parentPage).x + pw, layout.position(parentPage).y + ph]
+        ]
+      });
     }
   }
 

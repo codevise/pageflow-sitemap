@@ -13,6 +13,7 @@
     var svgChapters = svg.select('g.chapters');
     var svgPages = svg.select('g.pages');
     var svgLinks = svg.select('g.links');
+    var svgParentPageLinks = svg.select('g.parent_page_links');
 
     var scrollAndZoom = s.behavior.scrollAndZoom({
       margin: 50,
@@ -272,6 +273,7 @@
       }));
 
       svgChapters.call(s.chapterPlaceholdersView(viewModel.chapterPlaceholders));
+      svgParentPageLinks.call(s.parentPageLinkView(viewModel.parentPageLinks));
     }
   };
 }());
