@@ -56,7 +56,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           chapter: chapter,
 
           pageCid: page.cid,
-          title: page.title() || 'Unbenannte Seite',
+          title: page.title() || I18n.t('pageflow.sitemap.editor.unnamed_page'),
           thumbnailUrl: thumbnailFile ? thumbnailFile.get('link_thumbnail_url') : '',
 
           selected: selection.contains(page),
@@ -80,7 +80,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         id: 'group:' + chapter.cid,
         chapter: chapter,
 
-        title: chapter.get('title') || 'Unbenanntes Kapitel',
+        title: chapter.get('title') || I18n.t('pageflow.sitemap.editor.unnamed_chapter'),
 
         selected: selection.contains(chapter),
         dragged: layout.isDragging(chapter),

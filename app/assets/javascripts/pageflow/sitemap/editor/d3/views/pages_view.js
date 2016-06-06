@@ -91,7 +91,7 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
   ;
 
   this.call(s.addButtonView(addPageButtonData, {
-    tooltipTranslationKey: 'Seite einfügen',
+    tooltipTranslationKey: 'pageflow.sitemap.editor.tooltips.insert_page',
     click: s.utils.fn.trigger(this.options.addPageButtonClick)
   }));
 

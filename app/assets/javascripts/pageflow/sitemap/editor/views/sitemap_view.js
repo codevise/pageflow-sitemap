@@ -31,7 +31,7 @@ sitemap.SitemapView = Backbone.Marionette.ItemView.extend({
     },
 
     'requesttooltip': function(event, options) {
-      this.tooltip.show(options.translationKey, options.position);
+      this.tooltip.show(I18n.t(options.translationKey), options.position);
     },
 
     'resettooltip': function(event) {

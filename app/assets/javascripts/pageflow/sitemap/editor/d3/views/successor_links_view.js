@@ -3,5 +3,5 @@ pageflow.sitemap.successorLinksView =
     className: 'successor_link',
     path: pageflow.sitemap.successorPath,
     direction: 'down',
-    placeholderTooltipTranslationKey: 'Ziehen um Scroll Nachfolger festzulegen'
+    placeholderTooltipTranslationKey: 'pageflow.sitemap.editor.tooltips.set_successor'
   });

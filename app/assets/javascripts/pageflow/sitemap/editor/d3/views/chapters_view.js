@@ -72,7 +72,7 @@ sitemap.chaptersView = sitemap.groupView.define('chapter', function(s) {
   });
 
   this.call(s.addButtonView(addChapterButtonData, {
-    tooltipTranslationKey: 'Kapitel einfügen',
+    tooltipTranslationKey: 'pageflow.sitemap.editor.tooltips.insert_chapter',
     click: s.utils.fn.trigger(this.options.addChapterButtonClick)
   }));
 

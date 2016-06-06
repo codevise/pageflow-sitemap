@@ -3,5 +3,5 @@ pageflow.sitemap.pageLinksView =
     className: 'page_link',
     path: pageflow.sitemap.linkpath,
     direction: 'right',
-    placeholderTooltipTranslationKey: 'Ziehen um Verweis zu erstellen'
+    placeholderTooltipTranslationKey: 'pageflow.sitemap.editor.tooltips.add_page_link'
   });
