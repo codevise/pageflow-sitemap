@@ -23,3 +23,7 @@
     }
   }
 }
+
+&.selection_mode .add_button {
+  display: none;
+}

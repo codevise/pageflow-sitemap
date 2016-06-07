@@ -5,6 +5,7 @@ pageflow.sitemap.pagesView = pageflow.sitemap.groupView.define('page', function(
     .classed('selected', function(d) { return d.selected; })
     .classed('highlighted', function(d) { return d.highlighted; })
     .classed('destroying', s.utils.fn.d('destroying'))
+    .classed('disabled', s.utils.fn.d('disabled'))
     .attr('transform', transformStart)
     .transition().duration(options.duration)
     .attr('transform', transformFinal)

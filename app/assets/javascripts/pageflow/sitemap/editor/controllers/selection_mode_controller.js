@@ -12,11 +12,16 @@ pageflow.sitemap.SelectionModeController = pageflow.sitemap.AbstractController.e
 
   addDebouncedUpdateHandler: function (handler) {
     var fragmentParser = new pageflow.sitemap.FragmentParser(this.entry, Backbone.history.fragment);
+    var options = this.options;
 
     var session = {
       entry: this.entry,
       selection: new pageflow.sitemap.Selection(),
-      highlightedPage: this.options.noHighlight ? null : fragmentParser.getModel('pages')
+      isPageDisabled: function(page) {
+        return options.isAllowed && !options.isAllowed(page);
+      },
+      highlightedPage: this.options.noHighlight ? null : fragmentParser.getModel('pages'),
+      highlightedStoryline: this.options.noHighlight ? null : fragmentParser.getModel('storylines')
     };
 
     handler(session);

@@ -1,7 +1,6 @@
 .chapter {
   .handle {
     fill: #eee;
-    cursor: pointer;
   }
 
   .border {
@@ -25,6 +24,10 @@
 }
 
 &.editor_mode .chapter {
+  .handle {
+    cursor: pointer;
+  }
+
   &.dragged,
   &.hover {
     .handle {

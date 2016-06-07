@@ -1,7 +1,6 @@
 .storyline {
   .handle {
     fill: #ccc;
-    cursor: pointer;
   }
 
   text {
@@ -38,18 +37,23 @@
 }
 
 &.editor_mode .storyline {
-  &.selected {
-    > .handle {
-      fill: #5AA5F9;
-      cursor: move;
-    }
+  .handle {
+    cursor: pointer;
+  }
+}
 
-    > text {
-      fill: #fff;
-    }
+&.editor_mode .storyline.selected,
+&.selection_mode .storyline.highlighted {
+  > .handle {
+    fill: #5AA5F9;
+    cursor: move;
+  }
 
-    > .border {
-      fill: #D2E5FA;
-    }
+  > text {
+    fill: #fff;
+  }
+
+  > .border {
+    fill: #D2E5FA;
   }
 }

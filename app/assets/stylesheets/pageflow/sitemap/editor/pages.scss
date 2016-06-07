@@ -32,6 +32,7 @@
     stroke: #5AA5F9;
   }
 
+  &.disabled,
   &.destroying {
     opacity: 0.5;
   }
@@ -70,7 +71,8 @@
     stroke: $selection-color;
   }
 
-  &.highlighted {
+  &.highlighted,
+  &.disabled {
     pointer-events: none;
   }
 }

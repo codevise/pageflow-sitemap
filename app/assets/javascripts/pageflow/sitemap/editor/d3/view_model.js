@@ -1,7 +1,9 @@
 pageflow.sitemap.ViewModel = function(session, layout) {
   var entry = session.entry;
   var selection = session.selection;
+  var highlightedStoryline = session.highlightedStoryline;
   var highlightedPage = session.highlightedPage;
+  var isPageDisabled = session.isPageDisabled || function() { return false; };
 
   var storylines = this.storylines = [];
   var chapters = this.chapters = [];
@@ -30,6 +32,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
         selected: selection.contains(storyline),
         dragged: layout.isDragging(storyline),
         droppable: layout.isLegal(),
+        highlighted: highlightedStoryline === storyline,
 
         x: layout.position(storyline).x,
         y: layout.position(storyline).y,
@@ -63,6 +66,7 @@ pageflow.sitemap.ViewModel = function(session, layout) {
           dragged: layout.isDragging(page),
           highlighted: highlightedPage === page,
           destroying: page.isDestroying() || chapter.isDestroying(),
+          disabled: isPageDisabled(page),
 
           x0: layout.position(page).x,
           y0: layout.position(page).y,
