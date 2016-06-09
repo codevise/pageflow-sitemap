@@ -16,7 +16,8 @@ test/tmp
 test/version_tmp
 tmp
 log
-Gemfile.lock.bundle/
+Gemfile.lock
+.bundle/
 log/*.log
 pkg/
 spec/dummy
