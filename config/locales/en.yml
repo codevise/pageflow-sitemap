@@ -9,40 +9,36 @@ en:
           sitemap:
             cancel: Cancel
             close: Close
+            help: Display help
+        tooltips:
+          add_page_link: Drag to create page link
+          insert_chapter: Insert chapter
+          insert_page: Insert page
+          set_successor: Drag to set scroll successor
+        unnamed_chapter: "(New chapter)"
+        unnamed_page: "(New page)"
       feature_name: Sitemap
       help_entries:
         main:
           menu_item: Sitemap
-          text: ! '# Sitemap
-
+          text: |-
+            # Sitemap
 
             The Sitemap assists you in planning and implementing a story with multiple storylines. In this way you can easily create new chapters and pages via mouse click. Dragging arrows creates links and defines scroll-successor pages. Just pull an arrow from the semicircle at the bottom of a box to the desired position to create a new storyline. The semicircle for connecting link pages is placed on the right side of a box.
 
-
             The Sitemap helps to keep the overview and lets you transfer a storyboard to the system. Besides that, the Sitemap can be used to navigate throughout the whole editing process. As soon as you click onto an element within the Sitemap, it appears in the sidebar, ready to be edited.
-
 
             ### Further options
 
-
             Drag a rectangle to select and move multiple storylines by using the left mouse button.
-
             With a double click on a storyline’s header its chapters will be displayed in the sidebar.
-
             A double click onto a page will open its preview.
-
 
             ### Keyboard Shortcuts
 
-
             * Mouse wheel: Scroll Sitemap vertically
-
             * Shift + Mouse wheel: Scroll Sitemap horizontally
-
             * Alt + Mouse wheel: Zoom Sitemap
-
             * Ctrl + Shift + drag&drop: Move Sitemap viewport
-
             * Alt + s: Show/hide Sitemap
-
-            * Alt + x: Edit current page in sidebar'
+            * Alt + x: Edit current page in sidebar
