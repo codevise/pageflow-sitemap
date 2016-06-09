@@ -23,4 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'pageflow-support'
   s.add_development_dependency 'teaspoon'
+
+  # Semantic versioning rake tasks
+  s.add_development_dependency 'semmy', '~> 0.2'
 end
