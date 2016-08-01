@@ -23,8 +23,8 @@ Include javascripts and stylesheets:
     # app/assets/javascripts/pageflow/editor.js
     //= require pageflow/sitemap/editor
 
-    # app/assets/stylesheets/pageflow/themes/default.css.scss
-    @import "pageflow/sitemap/themes/default";
+    # app/assets/stylesheets/pageflow/editor.css.scss
+    @import "pageflow/sitemap/editor";
 
 Execute `bundle install` and restart the application server.
 
