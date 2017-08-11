@@ -1,14 +1,11 @@
 # CHANGELOG
 
-### Version 1.0.0
+### Unreleased Changes
 
-2017-08-11
+[Compare changes](https://github.com/codevise/pageflow-sitemap/compare/1-0-stable...master)
 
-[Compare changes](https://github.com/codevise/pageflow-sitemap/compare/0-1-stable...v1.0.0)
-
-- Support pageflow 12
-  ([#3](https://github.com/codevise/pageflow-sitemap/pull/3))
+None so far.
 
 See
-[0-1-stable branch](https://github.com/codevise/pageflow-sitemap/blob/0-1-stable/CHANGELOG.md)
+[1-0-stable branch](https://github.com/codevise/pageflow-sitemap/blob/1-0-stable/CHANGELOG.md)
 for previous changes.
