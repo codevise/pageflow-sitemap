@@ -1,15 +1,14 @@
 # CHANGELOG
 
-### Changes on `master`
+### Version 1.0.0
 
-[Compare changes](http://pageflow.io/compare/v0.1.0...master)
+2017-08-11
 
-None so far.
+[Compare changes](https://github.com/codevise/pageflow-sitemap/compare/0-1-stable...v1.0.0)
 
-### Version 0.1.0
+- Support pageflow 12
+  ([#3](https://github.com/codevise/pageflow-sitemap/pull/3))
 
-2016-06-09
-
-[Compare changes](http://pageflow.io/compare/v0.0.0...v0.1.0)
-
-- Initial release
+See
+[0-1-stable branch](https://github.com/codevise/pageflow-sitemap/blob/0-1-stable/CHANGELOG.md)
+for previous changes.

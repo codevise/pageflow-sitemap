@@ -9,9 +9,8 @@ Gem::Specification.new do |s|
   s.version     = Pageflow::Sitemap::VERSION
   s.authors     = ['Codevise Solutions Ltd.']
   s.email       = ['info@codevise.de']
-  s.homepage    = 'http://pageflow.io'
-  s.summary     = 'Summary of PageflowSitemap.'
-  s.description = 'Description of PageflowSitemap.'
+  s.homepage    = 'https://github.com/codevise/pageflow-sitemap'
+  s.summary     = 'Interactive sitemap view in editor-'
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split($/)
@@ -26,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'teaspoon-mocha', '~> 2.3'
 
   # Semantic versioning rake tasks
-  s.add_development_dependency 'semmy', '~> 0.2'
+  s.add_development_dependency 'semmy', '~> 1.0'
 end
