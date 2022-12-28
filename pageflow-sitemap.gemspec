@@ -19,9 +19,9 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '~> 2.1'
 
-  s.add_runtime_dependency 'pageflow', ['>= 0.10', '< 16']
+  s.add_runtime_dependency 'pageflow', ['>= 0.10', '< 17']
 
-  s.add_development_dependency 'pageflow-support', ['>= 0.10', '< 16']
+  s.add_development_dependency 'pageflow-support', ['>= 0.10', '< 17']
   s.add_development_dependency 'teaspoon-mocha', '~> 2.3'
 
   # Semantic versioning rake tasks
