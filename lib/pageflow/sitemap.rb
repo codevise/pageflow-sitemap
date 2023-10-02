@@ -1,4 +1,5 @@
 require "pageflow/sitemap/engine"
+require "pageflow/sitemap/version"
 
 module Pageflow
   module Sitemap
